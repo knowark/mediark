@@ -1,0 +1,13 @@
+summary: Create image.
+
+tags:
+  - Images
+
+parameters:
+  - in: body
+    schema: 
+      $ref: "#/definitions/Image"
+
+responses:
+  201:
+    description: "Image created"

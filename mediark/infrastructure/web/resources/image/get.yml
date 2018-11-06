@@ -1,0 +1,39 @@
+summary: Return all images.
+
+tags:
+  - Images
+
+responses:
+  200:
+    description: "Succesful reponse"
+    produces: 
+      - application/json
+    schema:
+      type: array
+      items:
+        $ref:  "#/definitions/Image"
+
+definitions:
+  Image:
+    id: Image
+    title: Image
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: "637250d6-dc57-4d96-9f8a-2697ca5c55c3"
+      url:
+        type: string
+        example: "General Notifications"
+        readOnly: true
+      data:
+        type: byte
+        example: "aGVsbG8="
+        writeOnly: true
+    required:
+      - url
+      - data
+
+
+
