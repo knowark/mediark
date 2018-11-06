@@ -13,4 +13,4 @@ coverage-infrastructure:
 	--cov-report term-missing -s
 
 coverage: 
-pytest -x --cov=mediark tests/ --cov-report term-missing -s
+	pytest -x --cov=mediark tests/ --cov-report term-missing -s
