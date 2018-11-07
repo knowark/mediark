@@ -8,10 +8,11 @@ class ImageResource(Resource):
 
     def __init__(self, **kwargs: Any) -> None:
         self.image_storage_coordinator = kwargs['image_storage_coordinator']
+        self.mediark_reporter = kwargs['mediark_reporter']
 
     @swag_from('get.yml')
     def get(self) -> str:
-        pass
+        return self.mediark_reporter.search_images([])
 
     @swag_from('post.yml')
     def post(self) -> Tuple[str, int]:

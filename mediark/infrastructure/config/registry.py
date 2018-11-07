@@ -4,6 +4,7 @@ from ...application.repositories import (
     ExpressionParser, MemoryImageRepository)
 from ...application.services import StandardIdService
 from ...application.coordinators import ImageStorageCoordinator
+from ...application.reporters import MemoryMediarkReporter
 
 
 class Registry(dict, ABC):
@@ -25,4 +26,7 @@ class MemoryRegistry(Registry):
         image_storage_coordinator = ImageStorageCoordinator(
             image_repository, id_service)
 
+        mediark_reporter = MemoryMediarkReporter(image_repository)
+
         self['image_storage_coordinator'] = image_storage_coordinator
+        self['mediark_reporter'] = mediark_reporter

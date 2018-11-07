@@ -10,9 +10,10 @@ def main():  # pragma: no cover
 
     config = ConfigClass()
     context = Context(config, RegistryClass(config))
+    gunicorn_config = config['gunicorn']
 
     app = create_app(context)
-    ServerApplication(app).run()
+    ServerApplication(app, gunicorn_config).run()
 
 
 if __name__ == '__main__':  # pragma: no cover

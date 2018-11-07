@@ -21,5 +21,7 @@ class DevelopmentConfig(Config):
         super().__init__()
         self['mode'] = 'DEV'
         self['gunicorn'].update({
-            'debug': True
+            'debug': True,
+            'acesslog': '-',
+            'loglevel': 'debug'
         })
