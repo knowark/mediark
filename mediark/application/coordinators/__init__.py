@@ -1,1 +1,1 @@
-from .storage_coordinator import StorageCoordinator
+from .image_storage_coordinator import ImageStorageCoordinator
