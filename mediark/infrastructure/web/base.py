@@ -10,7 +10,7 @@ def create_app(context: Context):
     app = Flask(__name__)
     CORS(app)
     app.config['SWAGGER'] = {
-        'title': 'Instark'
+        'title': 'Mediark'
     }
 
     create_api(app, registry)
