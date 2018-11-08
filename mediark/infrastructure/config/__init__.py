@@ -1,3 +1,5 @@
 from .config import Config, DevelopmentConfig
-from .context import Context
-from .registry import Registry, MemoryRegistry
+
+
+def build_config(config_path: str) -> Config:
+    return DevelopmentConfig()

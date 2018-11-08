@@ -14,14 +14,4 @@ class Config(dict, ABC):
             'worker_class': 'gevent',
             'debug': False
         }
-
-
-class DevelopmentConfig(Config):
-    def __init__(self):
-        super().__init__()
-        self['mode'] = 'DEV'
-        self['gunicorn'].update({
-            'debug': True,
-            'acesslog': '-',
-            'loglevel': 'debug'
-        })
+        self['providers'] = []
