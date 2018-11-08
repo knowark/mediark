@@ -7,8 +7,8 @@ from flasgger import swag_from
 class ImageResource(Resource):
 
     def __init__(self, **kwargs: Any) -> None:
-        self.image_storage_coordinator = kwargs['image_storage_coordinator']
-        self.mediark_reporter = kwargs['mediark_reporter']
+        self.image_storage_coordinator = kwargs['ImageStorageCoordinator']
+        self.mediark_reporter = kwargs['MediarkReporter']
 
     @swag_from('get.yml')
     def get(self) -> str:

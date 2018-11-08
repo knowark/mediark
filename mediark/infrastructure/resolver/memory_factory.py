@@ -26,6 +26,6 @@ class MemoryFactory:
                                   ) -> ImageStorageCoordinator:
         return ImageStorageCoordinator(image_repository, id_service)
 
-    def memory_mediark_repository(self, image_repository: ImageRepository
-                                  ) -> MemoryMediarkReporter:
+    def memory_mediark_reporter(self, image_repository: ImageRepository
+                                ) -> MemoryMediarkReporter:
         return MemoryMediarkReporter(image_repository)

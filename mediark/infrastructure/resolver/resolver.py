@@ -1,7 +1,6 @@
 from ..config import Config
 from .memory_factory import MemoryFactory
-from .registry import Registry
-from .types import ProviderDict, ProvidersDict, ProvidersList
+from .types import ProviderDict, ProvidersDict, ProvidersList, Registry
 
 
 class Resolver:
@@ -10,13 +9,12 @@ class Resolver:
         self.factories = {
             'MemoryFactory': MemoryFactory(self.config)
         }
-        self.default_factory = self.config.get(
-            'default_factory', 'MemoryFactory')
+        self.default_factory = self.config.get('factory', 'MemoryFactory')
 
     def resolve(self, providers: ProvidersDict) -> Registry:
         providers_list = self._resolve_dependencies(providers)
-        
-        registry = Registry()
+
+        registry = {}  # type: Registry
         for provider in providers_list:
             if provider['name'] in registry:
                 continue
@@ -37,10 +35,10 @@ class Resolver:
                 providers[value.__name__] for key, value in
                 annotations.items() if key != 'return']
 
-        return providers.values()
+        return list(providers.values())
 
     def _resolve_instance(self, provider: ProviderDict,
-                        registry: Registry) -> object:
+                          registry: Registry) -> object:
 
         arguments = []
         for dependency in provider['dependencies']:

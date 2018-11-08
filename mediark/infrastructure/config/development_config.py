@@ -10,24 +10,22 @@ class DevelopmentConfig(Config):
             'acesslog': '-',
             'loglevel': 'debug'
         })
-        self['default_factory'] = 'MemoryFactory'
-        self['providers'] = PROVIDERS
+        self['factory'] = 'MemoryFactory'
 
-
-PROVIDERS = {
-    "ExpressionParser": {
-        "method": "expression_parser"
-    },
-    "IdService": {
-        "method": "standard_id_service"
-    },
-    "ImageRepository": {
-        "method": "memory_image_repository",
-    },
-    "ImageStorageCoordinator": {
-        "method": "image_storage_coordinator",
-    },
-    "MediarkRepository": {
-        "method": "memory_mediark_repository",
-    }
-}
+        self['providers'] = {
+            "ExpressionParser": {
+                "method": "expression_parser"
+            },
+            "IdService": {
+                "method": "standard_id_service"
+            },
+            "ImageRepository": {
+                "method": "memory_image_repository",
+            },
+            "ImageStorageCoordinator": {
+                "method": "image_storage_coordinator",
+            },
+            "MediarkReporter": {
+                "method": "memory_mediark_reporter",
+            }
+        }

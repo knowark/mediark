@@ -1,12 +1,11 @@
 from flask import Flask
 from flask_cors import CORS
-# from ..config import Context
+from ..config import Config
+from ..resolver import Registry
 from .api import create_api
 
 
-def create_app(context):
-    registry = context.registry
-
+def create_app(config: Config, registry: Registry):
     app = Flask(__name__)
     CORS(app)
     app.config['SWAGGER'] = {

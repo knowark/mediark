@@ -1,5 +1,1 @@
-
-
-def execute():
-    print(argv)
-    print(type(argv))
+from .cli import Cli
