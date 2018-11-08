@@ -1,1 +1,1 @@
-from .shelve import ShelveRepository
+from .shelve import ShelveRepository, ShelveImageRepository
