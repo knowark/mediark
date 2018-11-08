@@ -14,28 +14,20 @@ class DevelopmentConfig(Config):
         self['providers'] = PROVIDERS
 
 
-PROVIDERS = [
-    {
-        "provide": "ExpressionParser",
+PROVIDERS = {
+    "ExpressionParser": {
         "method": "expression_parser"
     },
-    {
-        "provide": "IdService",
+    "IdService": {
         "method": "standard_id_service"
     },
-    {
-        "provide": "ImageRepository",
+    "ImageRepository": {
         "method": "memory_image_repository",
-        # "dependencies": ["ExpressionParser"]
     },
-    {
-        "provide": "ImageStorageCoordinator",
+    "ImageStorageCoordinator": {
         "method": "image_storage_coordinator",
-        # "dependencies": ["ImageRepository", "IdService"]
     },
-    {
-        "provide": "MediarkRepository",
+    "MediarkRepository": {
         "method": "memory_mediark_repository",
-        # "dependencies": ["ImageRepository"]
     }
-]
+}

@@ -1,7 +1,7 @@
 from ..config import Config
 from .memory_factory import MemoryFactory
 from .registry import Registry
-from .types import ProviderDict, ProvidersDict
+from .types import ProviderDict, ProvidersDict, ProvidersList
 
 
 class Resolver:
@@ -14,70 +14,48 @@ class Resolver:
             'default_factory', 'MemoryFactory')
 
     def resolve(self, providers: ProvidersDict) -> Registry:
-        providers = self._resolve_dependencies(providers)
-        print('DEPENDENCIES_DICT', providers)
-
+        providers_list = self._resolve_dependencies(providers)
+        
         registry = Registry()
-        for name in providers.keys():
-            if name in registry:
+        for provider in providers_list:
+            if provider['name'] in registry:
                 continue
-            self._build_instance(name, providers, registry)
-
-        print('REGISTRY===>>>', registry)
+            self._resolve_instance(provider, registry)
 
         return registry
 
     def _resolve_dependencies(self, providers: ProvidersDict
-                              ) -> ProvidersDict:
+                              ) -> ProvidersList:
 
         for key, value in providers.items():
             factory = value.get('factory', self.default_factory)
             method = value.get('method')
             annotations = getattr(
                 self.factories[factory], method).__annotations__
+            providers[key]['name'] = key
             providers[key]['dependencies'] = [
-                value.__name__ for key, value in
+                providers[value.__name__] for key, value in
                 annotations.items() if key != 'return']
 
-        return providers
+        return providers.values()
 
-    # def _build_registry(self, providers: ProvidersDict, current: str,
-    #                     registry: Registry) -> None:
-    #     provider = providers[current]
-    #     dependencies = provider['dependencies']
-
-    #     parameters = []
-    #     for dependency in dependencies:
-    #         parameters.append()
-
-    #         instance = registry.get('')
-    #         self._build_registry(providers, dependency, registry)
-    #         break
-    #     else:
-    #         factory = provider.get('factory', self.default_factory)
-    #         method = provider['method']
-    #         registry[current] = getattr(self.factories[factory], method)()
-
-    def _build_instance(self, name: str, providers: ProvidersDict,
+    def _resolve_instance(self, provider: ProviderDict,
                         registry: Registry) -> object:
 
-        provider = providers['name']
-        dependencies = provider['dependencies']
-
         arguments = []
-        for dependency in dependencies:
-            if dependency in registry:
-                dependency_instance = registry[dependency]
+        for dependency in provider['dependencies']:
+            if dependency['name'] in registry:
+                dependency_instance = registry[dependency['name']]
             else:
-                dependency_instance = self._build_instance(
-                    dependency, dependencies, registry)
+                dependency_instance = self._resolve_instance(
+                    dependency, registry)
             arguments.append(dependency_instance)
 
         factory = provider.get('factory', self.default_factory)
         method = provider['method']
+        name = provider['name']
 
         instance = getattr(self.factories[factory], method)(*arguments)
-
         registry[name] = instance
 
         return instance
