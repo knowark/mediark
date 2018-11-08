@@ -9,6 +9,7 @@ chardet==3.0.4
 Click==7.0
 coverage==4.5.1
 docutils==0.14
+flasgger==0.9.1
 Flask==1.0.2
 Flask-Cors==3.0.6
 Flask-RESTful==0.3.6
@@ -19,8 +20,10 @@ idna==2.7
 imagesize==1.1.0
 itsdangerous==1.1.0
 Jinja2==2.10
+jsonschema==2.6.0
 livereload==2.5.2
 MarkupSafe==1.1.0
+mistune==0.8.4
 more-itertools==4.3.0
 packaging==18.0
 pathtools==0.1.2
