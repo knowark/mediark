@@ -1,10 +1,10 @@
 from flask import Flask
 from flask_cors import CORS
-from ..config import Context
+# from ..config import Context
 from .api import create_api
 
 
-def create_app(context: Context):
+def create_app(context):
     registry = context.registry
 
     app = Flask(__name__)

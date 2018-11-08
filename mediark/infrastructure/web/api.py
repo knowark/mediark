@@ -1,5 +1,5 @@
 from flask import Flask
-from ..config import Registry
+from ..resolver import Registry
 from flask_restful import Api, Resource
 from flasgger import Swagger, swag_from
 from .resources import (

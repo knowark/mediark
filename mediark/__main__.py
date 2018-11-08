@@ -1,6 +1,6 @@
 import os
 # from .infrastructure.config import build_context
-from .infrastructure.config import Config
+from .infrastructure.config import Config, build_config
 from .infrastructure.resolver import Resolver, Registry
 from .infrastructure.web import create_app, ServerApplication
 from .infrastructure.cli import cli
@@ -17,13 +17,21 @@ def main():  # pragma: no cover
 
     config = build_config(config_path)
 
-    resolver = Resolve
+    resolver = Resolver(config)
+
+    providers = config['providers']
+
+    print('PROVIDERS', providers)
+
+    registry = resolver.resolve(providers)
+
+    print('REGISTRY', registry)
 
     # app = create_app(context)
 
     # ServerApplication(app, gunicorn_config).run()
 
-    Cli(config)
+    # Cli(config)
 
 
 if __name__ == '__main__':  # pragma: no cover

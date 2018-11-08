@@ -1,6 +1,6 @@
-from typing import Dict, List
+from typing import Dict, List, Any
 
 
-ProviderDict = Dict[str, str]
+ProviderDict = Dict[str, Any]
 
-ProviderList = List[ProviderDict]
+ProvidersDict = Dict[str, ProviderDict]
