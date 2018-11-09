@@ -29,12 +29,12 @@ class Cli:
 
     def setup(self, args: Namespace) -> None:
         print('SETUP SHELVE DIRECTORY')
-        image_shelve_directory = self.config['shelve']['images']
-        print(image_shelve_directory)
-        DirectoryArranger.make_directory(image_shelve_directory)
+        shelve_directory = self.config['environment']['shelve']
+        print(shelve_directory)
+        DirectoryArranger.make_directory(shelve_directory)
 
         print('SETUP IMAGE MEDIA DIRECTORIES')
-        images_media_directory = self.config['media']['images']
+        images_media_directory = self.config['images']['media']
         print(images_media_directory)
         DirectoryArranger(images_media_directory).setup()
 
