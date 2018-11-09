@@ -55,11 +55,11 @@ def test_storage_coordinator_store_file(image_storage_coordinator):
     called = False
 
     class MockFileStoreService:
-        def store(self, locator: str, content: str):
+        def store(self, locator: str, content: str, extension: str = None):
             nonlocal called
             called = True
             file_store_service = MemoryFileStoreService()
-            return file_store_service.store(locator, content)
+            return file_store_service.store(locator, content, extension)
 
     image_storage_coordinator.file_store_service = MockFileStoreService()
     image_storage_coordinator.store(image_dict)
