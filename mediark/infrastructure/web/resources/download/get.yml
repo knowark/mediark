@@ -1,7 +1,7 @@
 summary: Return all media.
 
 tags:
-  - Media
+  - Download
 
 responses:
   200:

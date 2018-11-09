@@ -13,10 +13,12 @@ class DirectoryFactory(ShelveFactory):
             DirectoryImageFileStoreService):
         directory = self.config['images']['media']
         extension = self.config['images']['extension']
-        return DirectoryImageFileStoreService(directory, extension)
+        download = self.config['images']['download']
+        return DirectoryImageFileStoreService(directory, extension, download)
 
     def directory_audio_file_store_service(self) -> (
             DirectoryAudioFileStoreService):
         directory = self.config['audios']['media']
         extension = self.config['audios']['extension']
-        return DirectoryAudioFileStoreService(directory, extension)
+        download = self.config['audios']['download']
+        return DirectoryAudioFileStoreService(directory, extension, download)

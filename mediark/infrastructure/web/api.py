@@ -2,7 +2,7 @@ from flask import Flask
 from ..resolver import Registry
 from flask_restful import Api, Resource
 from flasgger import Swagger, swag_from
-from .resources import ImageResource, AudioResource, MediaResource
+from .resources import ImageResource, AudioResource, DownloadResource
 
 
 def create_api(app: Flask, registry: Registry) -> Api:
@@ -32,9 +32,8 @@ def create_api(app: Flask, registry: Registry) -> Api:
     api.add_resource(AudioResource, '/audios',
                      resource_class_kwargs=registry)
 
-    # Media Resource
-    api.add_resource(MediaResource,
-                     '/media/<string:type>/<path:uri>',
+    # Download Resource
+    api.add_resource(DownloadResource,
                      '/download/<string:type>/<path:uri>',
                      resource_class_kwargs={
                          'MEDIA_DIRECTORY': app.config['MEDIA']})

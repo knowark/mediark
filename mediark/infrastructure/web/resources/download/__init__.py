@@ -5,7 +5,7 @@ from flask_restful import Resource
 from flasgger import swag_from
 
 
-class MediaResource(Resource):
+class DownloadResource(Resource):
 
     def __init__(self, **kwargs: Any) -> None:
         self.media_directory = kwargs['MEDIA_DIRECTORY']

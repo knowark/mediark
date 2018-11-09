@@ -7,9 +7,11 @@ class Config(dict, ABC):
     def __init__(self):
         self['mode'] = 'BASE'
         self['home'] = str(Path.home())
+        self['domain'] = 'http://0.0.0.0:8080'
         self['environment'] = {
             'media': self['home'] + '/media',
-            'shelve': self['home'] + '/shelve'
+            'shelve': self['home'] + '/shelve',
+            'download': self['domain'] + '/download',
         }
         self['gunicorn'] = {
             'bind': '%s:%s' % ('0.0.0.0', '8080'),
@@ -19,11 +21,13 @@ class Config(dict, ABC):
         }
         self['images'] = {
             'media': self['environment']['media'] + '/images',
+            'download': self['environment']['download'] + '/images',
             'shelve':  self['environment']['shelve'] + '/images.db',
             'extension': 'jpg'
         }
         self['audios'] = {
             'media': self['environment']['media'] + '/audios',
+            'download': self['environment']['download'] + '/audios',
             'shelve':  self['environment']['shelve'] + '/audios.db',
             'extension': 'mp3'
         }
