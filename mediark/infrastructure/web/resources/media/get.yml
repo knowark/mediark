@@ -1,0 +1,8 @@
+summary: Return all media.
+
+tags:
+  - Media
+
+responses:
+  200:
+    description: "Succesful reponse"
