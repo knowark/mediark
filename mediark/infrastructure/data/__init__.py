@@ -1,2 +1,2 @@
 from .shelve import ShelveRepository, ShelveImageRepository
-from .filestore import FilestoreArranger
+from .directory import DirectoryArranger

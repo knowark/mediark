@@ -1,1 +1,1 @@
-from .filestore_arranger import FilestoreArranger
+from .directory_arranger import DirectoryArranger
