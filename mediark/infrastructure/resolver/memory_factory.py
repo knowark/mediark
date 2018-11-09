@@ -1,7 +1,8 @@
 from ...application.repositories import (
     ExpressionParser,  ImageRepository, MemoryImageRepository)
 from ...application.services import (
-    IdService, StandardIdService, FileStoreService, MemoryFileStoreService)
+    IdService, StandardIdService, FileStoreService, MemoryFileStoreService,
+    ImageFileStoreService, MemoryImageFileStoreService)
 from ...application.coordinators import ImageStorageCoordinator
 from ...application.reporters import MediarkReporter, MemoryMediarkReporter
 from ..config import Config
@@ -17,8 +18,8 @@ class MemoryFactory:
     def standard_id_service(self) -> StandardIdService:
         return StandardIdService()
 
-    def memory_file_store_service(self) -> MemoryFileStoreService:
-        return MemoryFileStoreService()
+    def memory_image_file_store_service(self) -> MemoryImageFileStoreService:
+        return MemoryImageFileStoreService()
 
     def memory_image_repository(self, expression_parser: ExpressionParser
                                 ) -> MemoryImageRepository:
@@ -26,7 +27,7 @@ class MemoryFactory:
 
     def image_storage_coordinator(self, image_repository: ImageRepository,
                                   id_service: IdService,
-                                  file_store_service: FileStoreService
+                                  file_store_service: ImageFileStoreService
                                   ) -> ImageStorageCoordinator:
         return ImageStorageCoordinator(image_repository, id_service,
                                        file_store_service)

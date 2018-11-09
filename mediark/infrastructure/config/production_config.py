@@ -10,10 +10,13 @@ class ProductionConfig(DevelopmentConfig):
             'acesslog': '-',
             'loglevel': 'debug'
         })
-        self['factory'] = 'ShelveFactory'
+        self['factory'] = 'DirectoryFactory'
 
         self['providers'].update({
             "ImageRepository": {
                 "method": "shelve_image_repository",
-            }
+            },
+            "ImageFileStoreService": {
+                "method": "directory_image_file_store_service"
+            },
         })
