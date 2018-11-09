@@ -8,8 +8,12 @@ class DirectoryArranger:
         self.base_path = base_path
         self.matrix_dimensions = list('0123456789abcdef')
 
-    def setup(self):
-        Path(self.base_path).mkdir(parents=True, exist_ok=True)
+    @staticmethod
+    def make_directory(path: str) -> None:
+        Path(path).mkdir(parents=True, exist_ok=True)
+
+    def setup(self) -> None:
+        self.make_directory(self.base_path)
         self._create_sub_directories(self.base_path)
         root_dirs = [x for x in Path(self.base_path).iterdir() if x.is_dir()]
         for subdir in root_dirs:

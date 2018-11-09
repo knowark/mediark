@@ -16,7 +16,7 @@ def directory_arranger(tmpdir_factory):
 
 
 @fixture
-def base64_image() -> str:
+def base64_image() -> bytes:
     filename = os.path.join(
         os.path.dirname(__file__), "assets/locked-padlock.png")
     with open(filename, "rb") as f:

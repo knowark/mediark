@@ -18,5 +18,5 @@ class ProductionConfig(DevelopmentConfig):
             },
             "ImageFileStoreService": {
                 "method": "directory_image_file_store_service"
-            },
+            }
         })

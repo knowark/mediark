@@ -1,6 +1,7 @@
 from argparse import ArgumentParser, Namespace
 from ..config import Config
 from ..resolver import Registry
+from ..data import DirectoryArranger
 from ..web import create_app, ServerApplication
 
 
@@ -27,7 +28,15 @@ class Cli:
         return parser.parse_args()
 
     def setup(self, args: Namespace) -> None:
-        print('...SETUP:::', args)
+        print('SETUP SHELVE DIRECTORY')
+        image_shelve_directory = self.config['shelve']['images']
+        print(image_shelve_directory)
+        DirectoryArranger.make_directory(image_shelve_directory)
+
+        print('SETUP IMAGE MEDIA DIRECTORIES')
+        images_media_directory = self.config['media']['images']
+        print(images_media_directory)
+        DirectoryArranger(images_media_directory).setup()
 
     def serve(self, args: Namespace) -> None:
         print('...SERVE:::', args)
