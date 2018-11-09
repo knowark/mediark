@@ -18,5 +18,11 @@ class ProductionConfig(DevelopmentConfig):
             },
             "ImageFileStoreService": {
                 "method": "directory_image_file_store_service"
+            },
+            "AudioRepository": {
+                "method": "shelve_audio_repository",
+            },
+            "AudioFileStoreService": {
+                "method": "directory_audio_file_store_service"
             }
         })

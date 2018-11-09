@@ -1,2 +1,3 @@
 from .shelve_repository import ShelveRepository
-from .shelve_image_repository import ShelveImageRepository
+from .shelve_model_repository import (
+    ShelveImageRepository, ShelveAudioRepository)

@@ -1,6 +1,7 @@
 from pathlib import Path
 from ...application.repositories import ExpressionParser
-from ...infrastructure.data import ShelveImageRepository
+from ...infrastructure.data import (
+    ShelveImageRepository, ShelveAudioRepository)
 from ..config import Config
 from .memory_factory import MemoryFactory
 
@@ -13,3 +14,8 @@ class ShelveFactory(MemoryFactory):
                                 ) -> ShelveImageRepository:
         filename = self.config['images']['shelve']
         return ShelveImageRepository(expression_parser, filename)
+
+    def shelve_audio_repository(self, expression_parser: ExpressionParser
+                                ) -> ShelveAudioRepository:
+        filename = self.config['audios']['shelve']
+        return ShelveAudioRepository(expression_parser, filename)

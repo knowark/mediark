@@ -28,6 +28,15 @@ class DevelopmentConfig(Config):
             "ImageStorageCoordinator": {
                 "method": "image_storage_coordinator",
             },
+            "AudioFileStoreService": {
+                "method": "memory_audio_file_store_service"
+            },
+            "AudioRepository": {
+                "method": "memory_audio_repository",
+            },
+            "AudioStorageCoordinator": {
+                "method": "audio_storage_coordinator",
+            },
             "MediarkReporter": {
                 "method": "memory_mediark_reporter",
             }

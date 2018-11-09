@@ -38,6 +38,16 @@ class Cli:
         print(images_media_directory)
         DirectoryArranger(images_media_directory).setup()
 
+        print('SETUP AUDIO SHELVE FILE')
+        audio_shelve_file = self.config['audios']['shelve']
+        print(audio_shelve_file)
+        ShelveArranger.make_shelve(audio_shelve_file)
+
+        print('SETUP AUDIO MEDIA DIRECTORIES')
+        audios_media_directory = self.config['audios']['media']
+        print(audios_media_directory)
+        DirectoryArranger(audios_media_directory).setup()
+
     def serve(self, args: Namespace) -> None:
         print('...SERVE:::', args)
 

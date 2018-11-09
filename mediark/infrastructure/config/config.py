@@ -22,4 +22,9 @@ class Config(dict, ABC):
             'shelve':  self['environment']['shelve'] + '/images.db',
             'extension': 'jpg'
         }
+        self['audios'] = {
+            'media': self['environment']['media'] + '/audios',
+            'shelve':  self['environment']['shelve'] + '/audios.db',
+            'extension': 'mp3'
+        }
         self['providers'] = []
