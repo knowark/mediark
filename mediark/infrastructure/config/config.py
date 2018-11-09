@@ -17,10 +17,9 @@ class Config(dict, ABC):
             'worker_class': 'gevent',
             'debug': False
         }
-        self['media'] = {
-            'images': self['environment']['media'] + '/images'
-        }
-        self['shelve'] = {
-            'images': self['environment']['shelve'] + '/images'
+        self['images'] = {
+            'media': self['environment']['media'] + '/images',
+            'shelve':  self['environment']['shelve'] + '/images.db',
+            'extension': 'jpg'
         }
         self['providers'] = []
