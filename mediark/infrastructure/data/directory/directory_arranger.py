@@ -4,9 +4,8 @@ from base64 import decodebytes
 
 
 class DirectoryArranger:
-    def __init__(self, base_path: str, extension: str) -> None:
+    def __init__(self, base_path: str) -> None:
         self.base_path = base_path
-        self.extension = extension
         self.matrix_dimensions = list('0123456789abcdef')
 
     def setup(self):
