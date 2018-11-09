@@ -19,6 +19,9 @@ class DevelopmentConfig(Config):
             "IdService": {
                 "method": "standard_id_service"
             },
+            "FileStoreService": {
+                "method": "memory_file_store_service"
+            },
             "ImageRepository": {
                 "method": "memory_image_repository",
             },
