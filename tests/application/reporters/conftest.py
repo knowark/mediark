@@ -4,7 +4,7 @@ from mediark.application.repositories import (
     ExpressionParser, MemoryImageRepository,
     MemoryAudioRepository)
 from mediark.application.reporters import (
-    MediarkReporter, MemoryMediarkReporter)
+    MediarkReporter, StandardMediarkReporter)
 
 
 @fixture
@@ -31,4 +31,4 @@ def audio_repository():
 
 @fixture
 def mediark_reporter(image_repository, audio_repository):
-    return MemoryMediarkReporter(image_repository, audio_repository)
+    return StandardMediarkReporter(image_repository, audio_repository)

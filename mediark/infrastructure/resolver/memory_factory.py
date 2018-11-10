@@ -7,7 +7,7 @@ from ...application.services import (
     AudioFileStoreService, MemoryAudioFileStoreService)
 from ...application.coordinators import (
     ImageStorageCoordinator, AudioStorageCoordinator)
-from ...application.reporters import MediarkReporter, MemoryMediarkReporter
+from ...application.reporters import MediarkReporter, StandardMediarkReporter
 from ..config import Config
 
 
@@ -63,5 +63,5 @@ class MemoryFactory:
 
     def memory_mediark_reporter(self, image_repository: ImageRepository,
                                 audio_repository: AudioRepository
-                                ) -> MemoryMediarkReporter:
-        return MemoryMediarkReporter(image_repository, audio_repository)
+                                ) -> StandardMediarkReporter:
+        return StandardMediarkReporter(image_repository, audio_repository)

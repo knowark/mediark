@@ -1,1 +1,1 @@
-from .mediark_reporter import MediarkReporter, MemoryMediarkReporter
+from .mediark_reporter import MediarkReporter, StandardMediarkReporter

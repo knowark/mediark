@@ -10,7 +10,7 @@ class MediarkReporter(ABC):
         """Search Mediark's Images"""
 
 
-class MemoryMediarkReporter(MediarkReporter):
+class StandardMediarkReporter(MediarkReporter):
 
     def __init__(self, image_repository: ImageRepository,
                  audio_repository: AudioRepository) -> None:
