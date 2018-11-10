@@ -67,4 +67,4 @@ def test_storage_coordinator_store_file(audio_storage_coordinator):
     assert called is True
     audio = next(
         iter(audio_storage_coordinator.audio_repository.items.values()))
-    assert audio.url == audio.id
+    assert audio.uri == audio.id

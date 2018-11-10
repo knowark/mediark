@@ -16,7 +16,7 @@ def test_memory_file_store_service_store() -> None:
     content = 'BASE64_ENCODED_CONTENT'
 
     file_store_service = MemoryFileStoreService()
-    url = file_store_service.store(locator, content)
+    uri = file_store_service.store(locator, content)
 
-    assert isinstance(url, str)
-    assert url == locator
+    assert isinstance(uri, str)
+    assert uri == locator

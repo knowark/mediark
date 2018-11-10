@@ -1,8 +1,7 @@
 from ..config import Config
-from .memory_factory import MemoryFactory
-from .shelve_factory import ShelveFactory
-from .directory_factory import DirectoryFactory
 from .types import ProviderDict, ProvidersDict, ProvidersList, Registry
+from .factories import (MemoryFactory, ShelveFactory,
+                        DirectoryFactory, HttpFactory)
 
 
 class Resolver:
@@ -11,8 +10,8 @@ class Resolver:
         self.factories = {
             'MemoryFactory': MemoryFactory(self.config),
             'ShelveFactory': ShelveFactory(self.config),
-            'DirectoryFactory': DirectoryFactory(self.config)
-        }
+            'DirectoryFactory': DirectoryFactory(self.config),
+            'HttpFactory': HttpFactory(self.config)}
         self.default_factory = self.config.get('factory', 'MemoryFactory')
 
     def resolve(self, providers: ProvidersDict) -> Registry:

@@ -1,14 +1,14 @@
-from ...application.repositories import (
+from ....application.repositories import (
     ExpressionParser,  ImageRepository, MemoryImageRepository,
     AudioRepository, MemoryAudioRepository)
-from ...application.services import (
+from ....application.services import (
     IdService, StandardIdService, FileStoreService, MemoryFileStoreService,
     ImageFileStoreService, MemoryImageFileStoreService,
     AudioFileStoreService, MemoryAudioFileStoreService)
-from ...application.coordinators import (
+from ....application.coordinators import (
     ImageStorageCoordinator, AudioStorageCoordinator)
-from ...application.reporters import MediarkReporter, StandardMediarkReporter
-from ..config import Config
+from ....application.reporters import MediarkReporter, StandardMediarkReporter
+from ...config import Config
 
 
 class MemoryFactory:

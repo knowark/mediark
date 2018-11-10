@@ -67,4 +67,4 @@ def test_storage_coordinator_store_file(image_storage_coordinator):
     assert called is True
     image = next(
         iter(image_storage_coordinator.image_repository.items.values()))
-    assert image.url == image.id
+    assert image.uri == image.id

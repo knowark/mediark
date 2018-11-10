@@ -1,8 +1,8 @@
 from pathlib import Path
-from ...application.repositories import ExpressionParser
-from ...infrastructure.data import (
+from ....application.repositories import ExpressionParser
+from ....infrastructure.data import (
     ShelveImageRepository, ShelveAudioRepository)
-from ..config import Config
+from ...config import Config
 from .memory_factory import MemoryFactory
 
 

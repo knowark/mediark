@@ -23,8 +23,8 @@ class AudioStorageCoordinator:
         content = audio_dict.pop('data')
         extension = audio_dict.get('extension')
 
-        url = self.file_store_service.store(locator, content, extension)
-        audio_dict['url'] = url
+        uri = self.file_store_service.store(locator, content, extension)
+        audio_dict['uri'] = uri
         audio = Audio(**audio_dict)
 
         self.audio_repository.add(audio)

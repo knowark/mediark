@@ -4,4 +4,4 @@ class Image:
         self.namespace = attributes.get('namespace', '')
         self.reference = attributes.get('reference', '')
         self.extension = attributes.get('extension', 'jpg')
-        self.url = attributes.get('url', '')
+        self.uri = attributes.get('uri', '')

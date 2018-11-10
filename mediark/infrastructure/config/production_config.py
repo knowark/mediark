@@ -10,7 +10,7 @@ class ProductionConfig(DevelopmentConfig):
             'acesslog': '-',
             'loglevel': 'debug'
         })
-        self['factory'] = 'DirectoryFactory'
+        self['factory'] = 'HttpFactory'
 
         self['providers'].update({
             "ImageRepository": {
@@ -24,5 +24,8 @@ class ProductionConfig(DevelopmentConfig):
             },
             "AudioFileStoreService": {
                 "method": "directory_audio_file_store_service"
+            },
+            "MediarkReporter": {
+                "method": "http_mediark_reporter",
             }
         })

@@ -1,8 +1,8 @@
 from pathlib import Path
-from ...infrastructure.data import (
+from ....infrastructure.data import (
     DirectoryImageFileStoreService, DirectoryAudioFileStoreService)
+from ...config import Config
 from .shelve_factory import ShelveFactory
-from ..config import Config
 
 
 class DirectoryFactory(ShelveFactory):

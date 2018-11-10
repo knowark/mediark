@@ -8,7 +8,7 @@ def test_audio_instantiation():
     assert audio.namespace == ''
     assert audio.reference == ''
     assert audio.extension == 'mp3'
-    assert audio.url == ''
+    assert audio.uri == ''
 
 
 def test_audio_attributes():
@@ -16,12 +16,12 @@ def test_audio_attributes():
                   namespace='https://example.com',
                   reference='00648c29-eca2-4112-8a1a-4deedb443188',
                   extension='png',
-                  url=('https://mediark.knowark.com/media/audios/'
+                  uri=('https://mediark.knowark.com/media/audios/'
                        '00648c29-eca2-4112-8a1a-4deedb443188.png'))
 
     assert audio.id == '63b0e6ff-42b9-444d-9a3a-483564b493bc'
     assert audio.namespace == 'https://example.com'
     assert audio.reference == '00648c29-eca2-4112-8a1a-4deedb443188'
     assert audio.extension == 'png'
-    assert audio.url == ('https://mediark.knowark.com/media/audios/'
+    assert audio.uri == ('https://mediark.knowark.com/media/audios/'
                          '00648c29-eca2-4112-8a1a-4deedb443188.png')
