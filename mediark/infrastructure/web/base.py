@@ -12,6 +12,7 @@ def create_app(config: Config, registry: Registry):
         'title': 'Mediark'
     }
     app.config['MEDIA'] = config['environment']['media']
+    app.config.update(config['flask'])
 
     create_api(app, registry)
 

@@ -13,6 +13,9 @@ class Config(dict, ABC):
             'shelve': self['home'] + '/shelve',
             'download': self['domain'] + '/download',
         }
+        self['flask'] = {
+            'USE_X_SENDFILE': True
+        }
         self['gunicorn'] = {
             'bind': '%s:%s' % ('0.0.0.0', '8080'),
             'workers': 1,
