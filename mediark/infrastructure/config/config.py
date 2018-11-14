@@ -11,8 +11,8 @@ class Config(dict, ABC):
         self['environment'] = {
             'media': self['home'] + '/media',
             'shelve': self['home'] + '/shelve',
-            'download': self['domain'] + '/download',
         }
+        self['download'] = self['domain'] + '/download'
         self['flask'] = {
             'USE_X_SENDFILE': False
         }
@@ -24,13 +24,13 @@ class Config(dict, ABC):
         }
         self['images'] = {
             'media': self['environment']['media'] + '/images',
-            'download': self['environment']['download'] + '/images',
+            'download': self['download'] + '/images',
             'shelve':  self['environment']['shelve'] + '/images.db',
             'extension': 'jpg'
         }
         self['audios'] = {
             'media': self['environment']['media'] + '/audios',
-            'download': self['environment']['download'] + '/audios',
+            'download': self['download'] + '/audios',
             'shelve':  self['environment']['shelve'] + '/audios.db',
             'extension': 'mp4'
         }
