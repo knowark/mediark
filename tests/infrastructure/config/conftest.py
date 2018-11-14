@@ -9,11 +9,8 @@ def config_file(tmpdir_factory):
 
     data = {
         'domain': 'mediark.knowark.com',
-        'environment': {
-            'media': '/var/opt/mediark/media',
-            'shelve': '/var/opt/mediark/shelve'
-        },
-        'download': 'mediark.knowark.com/download',
+        'media': '/var/opt/mediark/media',
+        'shelve': '/var/opt/mediark/shelve'
     }
 
     with open(config_file, 'w') as f:

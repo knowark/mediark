@@ -15,6 +15,7 @@ class Config(dict, ABC):
             'worker_class': 'gevent',
             'debug': False
         }
+        self['flask'] = {}
         self['images'] = {
             'media': '/images',
             'shelve': '/images.db',

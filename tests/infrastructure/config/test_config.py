@@ -19,9 +19,8 @@ def test_build_config_production(config_file):
 
     assert isinstance(result, ProductionConfig)
     assert result['domain'] == 'mediark.knowark.com'
-    assert result['download'] == 'mediark.knowark.com/download'
-    assert result['environment']['media'] == '/var/opt/mediark/media'
-    assert result['environment']['shelve'] == '/var/opt/mediark/shelve'
+    assert result['media'] == '/var/opt/mediark/media'
+    assert result['shelve'] == '/var/opt/mediark/shelve'
 
 
 def test_build_config_production_no_file():
@@ -29,6 +28,4 @@ def test_build_config_production_no_file():
     result = build_config(path, 'PROD')
 
     assert isinstance(result, ProductionConfig)
-    assert result['download'] == result['domain'] + '/download'
-    assert result['environment']['media'] == result['home'] + '/media'
-    assert result['environment']['shelve'] == result['home'] + '/shelve'
+    assert result['domain'] == 'http://0.0.0.0:8080'
