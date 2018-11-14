@@ -25,7 +25,7 @@ def test_storage_coordinator_store_no_data(audio_storage_coordinator):
     audio_dict = {
         'namespace': 'https://example.com',
         'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
-        'extension': 'mp3'}
+        'extension': 'mp4'}
 
     audio_storage_coordinator.store(audio_dict)
 
@@ -37,7 +37,7 @@ def test_storage_coordinator_store_data(audio_storage_coordinator):
         'namespace': 'https://example.com',
         'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
         'data': 'BASE64_DATA',
-        'extension': 'mp3'}
+        'extension': 'mp4'}
 
     audio_storage_coordinator.store(audio_dict)
 

@@ -11,6 +11,6 @@ class DownloadResource(Resource):
         self.media_directory = kwargs['MEDIA_DIRECTORY']
 
     @swag_from('get.yml')
-    def get(self, type: str, uri: str) -> str:
+    def get(self, type: str, uri: str) -> Any:
         directory = Path(self.media_directory).joinpath(type)
         return send_from_directory(directory, uri)

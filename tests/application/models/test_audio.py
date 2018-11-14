@@ -7,7 +7,7 @@ def test_audio_instantiation():
     assert audio.id == ''
     assert audio.namespace == ''
     assert audio.reference == ''
-    assert audio.extension == 'mp3'
+    assert audio.extension == 'mp4'
     assert audio.uri == ''
 
 
