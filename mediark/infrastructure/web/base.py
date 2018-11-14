@@ -11,7 +11,7 @@ def create_app(config: Config, registry: Registry):
     app.config['SWAGGER'] = {
         'title': 'Mediark'
     }
-    app.config['MEDIA'] = config['environment']['media']
+    app.config['MEDIA'] = config['media']
 
     create_api(app, registry)
 
