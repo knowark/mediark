@@ -14,7 +14,7 @@ class Config(dict, ABC):
             'download': self['domain'] + '/download',
         }
         self['flask'] = {
-            'USE_X_SENDFILE': True
+            'USE_X_SENDFILE': False
         }
         self['gunicorn'] = {
             'bind': '%s:%s' % ('0.0.0.0', '8080'),
