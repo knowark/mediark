@@ -32,6 +32,6 @@ class Config(dict, ABC):
             'media': self['environment']['media'] + '/audios',
             'download': self['environment']['download'] + '/audios',
             'shelve':  self['environment']['shelve'] + '/audios.db',
-            'extension': 'mp3'
+            'extension': 'mp4'
         }
         self['providers'] = []
