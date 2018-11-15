@@ -12,12 +12,10 @@ class ShelveFactory(MemoryFactory):
 
     def shelve_image_repository(self, expression_parser: ExpressionParser
                                 ) -> ShelveImageRepository:
-        filename = "{}/{}".format(self.config['shelve'],
-                                  self.config['images']['shelve'])
+        filename = self.config['shelve'] + self.config['images']['shelve']
         return ShelveImageRepository(expression_parser, filename)
 
     def shelve_audio_repository(self, expression_parser: ExpressionParser
                                 ) -> ShelveAudioRepository:
-        filename = "{}/{}".format(self.config['shelve'],
-                                  self.config['audios']['shelve'])
+        filename = self.config['shelve'] + self.config['audios']['shelve']
         return ShelveAudioRepository(expression_parser, filename)
