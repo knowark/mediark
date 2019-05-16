@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, TypeVar, Optional, Generic, Union
 from .repository import Repository
-from .expression_parser import ExpressionParser
-from .types import T, QueryDomain
+from ..utilities.expression_parser import ExpressionParser
 
 
 class MemoryRepository(Repository, Generic[T]):

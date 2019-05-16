@@ -1,41 +1,25 @@
-from flask import Flask
+from flask import Flask, jsonify
 from ..resolver import Registry
-from flask_restful import Api, Resource
-from flasgger import Swagger, swag_from
-from .resources import ImageResource, AudioResource, DownloadResource
+from .resources import (RootResource, ImageResource, AudioResource)
+from .spec import create_spec
 
 
-def create_api(app: Flask, registry: Registry) -> Api:
+def create_api(app: Flask, registry: Registry) -> None:
 
-    # REST API
-    api = Api(app)
+    # Restful API
+    spec = create_spec()
+    registry['spec'] = spec
 
-    # Swagger
-    Swagger(app, template_file="api.yml", config={
-        "specs_route": "/",
-        "headers": [],
-        "specs": [{
-            "endpoint": 'apispec_1',
-            "route": '/apispec_1.json',
-            "rule_filter": lambda rule: True,
-            "model_filter": lambda tag: True,
-        }],
-        "static_url_path": "/flasgger_static",
-        "swagger_ui": True
-    })
+    # Root Resource (Api Specification)
+    root_view = RootResource.as_view('root', registry=registry)
+    app.add_url_rule("/", view_func=root_view)
 
-    # Images Resource
-    api.add_resource(ImageResource, '/images',
-                     resource_class_kwargs=registry)
+    # Audio Resource
+    spec.path(path="/audios/", resource=AudioResource)
+    audio_view = AudioResource.as_view('audios', registry=registry)
+    app.add_url_rule("/audios/", view_func=audio_view)
 
-    # Audios Resource
-    api.add_resource(AudioResource, '/audios',
-                     resource_class_kwargs=registry)
-
-    # Download Resource
-    api.add_resource(DownloadResource,
-                     '/download/<string:type>/<path:uri>',
-                     resource_class_kwargs={
-                         'MEDIA_DIRECTORY': app.config['MEDIA']})
-
-    return api
+    # Image Resource
+    spec.path(path="/images/", resource=ImageResource)
+    image_view = ImageResource.as_view('images', registry=registry)
+    app.add_url_rule("/images/", view_func=image_view)

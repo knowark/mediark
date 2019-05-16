@@ -2,7 +2,8 @@ from argparse import ArgumentParser, Namespace
 from ..config import Config
 from ..resolver import Registry
 from ..data import DirectoryArranger, ShelveArranger
-from ..web import create_app, ServerApplication
+from ..web import ServerApplication
+from mediark.infrastructure.web.base import create_app
 
 
 class Cli:
@@ -11,7 +12,7 @@ class Cli:
         self.config = config
 
         args = self.parse()
-        args.func(args)
+        # args.func(args)
 
     def parse(self) -> Namespace:
         parser = ArgumentParser('Mediark')
