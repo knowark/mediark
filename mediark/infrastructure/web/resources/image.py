@@ -2,42 +2,65 @@ from typing import Tuple
 from flask import request, jsonify
 from flask.views import MethodView
 from marshmallow import ValidationError
+from ..helpers import get_request_filter
 from ..schemas import ImageSchema
 
 
 class ImageResource(MethodView):
     
-    def __init__(self, registry) -> None:
-        self.image_storage_coordinator = registry['image_storage_coordinator']
-        self.spec = registry['spec']
+    def __init__(self, resolver) -> None:
+        self.image_storage_coordinator = resolver['ImageStorageCoordinator']
+        self.mediark_reporter = resolver['MediarkReporter']
 
     def post(self) -> Tuple[str, int]:
         """
         ---
-        summary: Create image.
+        summary: Register image.
         tags:
-          - Images
+          - images
         requestBody:
           required: true
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Images'
+                $ref: '#/components/schemas/Image'
         responses:
           201:
-            description: "Image created"
+            description: "image created"
         """
 
-        try:
-            data = ImageSchema().loads(request.data or '{}')
-        except ValidationError as error:
-            return jsonify(code=400, error=error.messages), 400
-        image = self.image_storage_coordinator.store(data)
-        print('Image', image)
-        # response = 'Audio Post: \n name<{0}> - locator<{1}>'.format(
-        #     device.name,
-        #     device.locator,
-        # )
+        data = ImageSchema().loads(request.data)
 
-        # return response, 201
-        return 201
+        image = self.image_storage_coordinator.store(data)
+        
+        response = 'image Post: \n name<{0}> - code<{1}>'.format(
+            image.namespace,
+            image.reference,
+        )
+
+        return response, 201
+        
+
+    def get(self) -> Tuple[str, int]:
+        """
+        ---
+        summary: Return all images.
+        tags:
+          - images
+        responses:
+          200:
+            description: "Successful response"
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Image'
+        """
+
+        domain, limit, offset = get_request_filter(request)
+
+        images = ImageSchema().dump(
+            self.mediark_reporter.search_images(domain), many=True)
+        
+        return jsonify(images)

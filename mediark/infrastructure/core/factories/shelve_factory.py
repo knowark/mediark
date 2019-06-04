@@ -2,7 +2,7 @@ from pathlib import Path
 from ....application.utilities.expression_parser import ExpressionParser
 from ....infrastructure.data import (
     ShelveImageRepository, ShelveAudioRepository)
-from ...config import Config
+from ..configuration import Config
 from .memory_factory import MemoryFactory
 
 

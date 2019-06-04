@@ -13,7 +13,6 @@ from ....application.services import (
 from ....application.coordinators import (
     ImageStorageCoordinator, AudioStorageCoordinator, SessionCoordinator)
 from ....application.reporters import MediarkReporter, StandardMediarkReporter
-from ...config import Config
 from ....application.utilities import (
     ExpressionParser, TenantProvider, StandardTenantProvider)
 

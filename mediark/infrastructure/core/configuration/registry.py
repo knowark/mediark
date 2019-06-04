@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from ...application.repositories import (
+from ....application.repositories import (
     MemoryAudioRepository, MemoryImageRepository, MemoryAudioRepository)
-from ...application.utilities.expression_parser import ExpressionParser 
-from ...application.services import (StandardIdService, MemoryFileStoreService,
+from ....application.utilities.expression_parser import ExpressionParser 
+from ....application.services import (StandardIdService, MemoryFileStoreService,
                                      FileStoreService)
-from ...application.coordinators import (
+from ....application.coordinators import (
     AudioStorageCoordinator, ImageStorageCoordinator)
-from ...application.reporters import StandardMediarkReporter
+from ....application.reporters import StandardMediarkReporter
 from .config import Config
 
 

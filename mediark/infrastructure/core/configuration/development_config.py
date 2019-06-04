@@ -1,9 +1,9 @@
 import multiprocessing
+from .config import Config
 from collections import defaultdict
 from typing import Dict, Any
 from abc import ABC, abstractmethod
 from json import loads, JSONDecodeError
-from .config import Config
 from pathlib import Path
 
 

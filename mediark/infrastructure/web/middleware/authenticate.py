@@ -18,8 +18,8 @@ class Authenticate:
         @wraps(method)
         def decorator(*args, **kwargs):
             
-            tenant_dict = {"name": "Knowark"}
-            self.session_coordinator.set_tenant(tenant_dict)
+            # tenant_dict = {"name": "Servagro"}
+            # self.session_coordinator.set_tenant(tenant_dict)
 
             authorization = request.headers.get('Authorization', "")
             token = authorization.replace('Bearer ', '')
