@@ -5,9 +5,21 @@ class ProductionConfig(DevelopmentConfig):
     def __init__(self):
         super().__init__()
         self['mode'] = 'PROD'
+        self['gunicorn'].update({
+            'debug': True,
+            'accesslog': '-',
+            'loglevel': 'debug'
+        })
+        self['authentication'] = {
+            "type": "jwt",
+            "secret_file": str(Path.home().joinpath('sign.txt'))
+        }
+        self['secrets'] = {
+            "jwt": str(Path.home().joinpath('sign.txt'))
+        }
         self['factory'] = 'HttpFactory'
 
-        self['providers'].update({
+        self['strategy'].update({
             "ImageRepository": {
                 "method": "shelve_image_repository",
             },
@@ -22,5 +34,11 @@ class ProductionConfig(DevelopmentConfig):
             },
             "MediarkReporter": {
                 "method": "http_mediark_reporter",
-            }
+            },
+            "JwtSupplier": {
+                "method": "jwt_supplier"
+            },
+            "Authenticate": {
+                "method": "middleware_authenticate"
+            },
         })

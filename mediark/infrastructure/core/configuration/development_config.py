@@ -29,8 +29,14 @@ class DevelopmentConfig(Config):
             "ExpressionParser": {
                 "method": "expression_parser"
             },
+            "CatalogService": {
+                "method": "memory_catalog_service"
+            },
             "TenantSupplier": {
                 "method": "tenant_supplier"
+            },
+            "ProvisionService": {
+                "method": "memory_provision_service"
             },
             "IdService": {
                 "method": "standard_id_service"
@@ -55,5 +61,17 @@ class DevelopmentConfig(Config):
             },
             "MediarkReporter": {
                 "method": "memory_mediark_reporter",
-            }
+            },
+            "TenantProvider": {
+                "method": "standard_tenant_provider"
+            },
+            "AuthService": {
+                "method": "memory_auth_service"
+            },
+            "SessionCoordinator": {
+                "method": "session_coordinator"
+            },
+            "TenantSupplier": {
+                "method": "memory_tenant_supplier"
+            },
         })
