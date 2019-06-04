@@ -1,8 +1,8 @@
 from pytest import fixture
 from mediark.application.models import Image, Audio
 from mediark.application.repositories import (
-    ExpressionParser, MemoryImageRepository,
-    MemoryAudioRepository)
+    MemoryImageRepository, MemoryAudioRepository)
+from mediark.application.utilities.expression_parser import ExpressionParser
 from mediark.application.reporters import (
     MediarkReporter, StandardMediarkReporter)
 

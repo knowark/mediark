@@ -3,4 +3,4 @@ from .file_store_service import (
     FileStoreService, MemoryFileStoreService, ImageFileStoreService,
     MemoryImageFileStoreService, AudioFileStoreService,
     MemoryAudioFileStoreService)
-from .tenancy import *
+from .auth import *

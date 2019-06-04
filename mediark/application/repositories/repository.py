@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, TypeVar, Optional, Generic
-from .types import T, QueryDomain
+from ..utilities.types import T, QueryDomain
 
 
 class Repository(ABC, Generic[T]):

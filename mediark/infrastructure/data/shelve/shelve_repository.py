@@ -2,7 +2,7 @@ import shelve
 from abc import ABC, abstractmethod
 from typing import List, Dict, TypeVar, Optional, Generic, Union
 from ....application.repositories import Repository
-from ....application.repositories import ExpressionParser
+from ....application.utilities.expression_parser import ExpressionParser
 from ....application.repositories import T, QueryDomain
 
 

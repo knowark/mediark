@@ -1,6 +1,6 @@
 from pytest import fixture
-from mediark.application.repositories import (
-    MemoryImageRepository, ExpressionParser)
+from mediark.application.repositories import MemoryImageRepository
+from mediark.application.utilities.expression_parser import ExpressionParser
 from mediark.application.services import (
     StandardIdService, MemoryFileStoreService)
 from mediark.application.coordinators import ImageStorageCoordinator

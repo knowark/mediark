@@ -1,5 +1,5 @@
 from ....application.repositories import (
-    ExpressionParser,  ImageRepository, MemoryImageRepository,
+    ImageRepository, MemoryImageRepository,
     AudioRepository, MemoryAudioRepository)
 from ....application.services import (
     IdService, StandardIdService, FileStoreService, MemoryFileStoreService,
@@ -9,6 +9,7 @@ from ....application.coordinators import (
     ImageStorageCoordinator, AudioStorageCoordinator)
 from ....application.reporters import MediarkReporter, StandardMediarkReporter
 from ...config import Config
+from ....application.utilities.expression_parser import ExpressionParser
 
 
 class MemoryFactory:
