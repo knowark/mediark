@@ -1,8 +1,12 @@
+import multiprocessing
+from collections import defaultdict
 from pathlib import Path
+from json import loads, JSONDecodeError
 from abc import ABC, abstractmethod
+from typing import Dict, Any
 
 
-class Config(dict, ABC):
+class Config(defaultdict, ABC):
     @abstractmethod
     def __init__(self):
         self['mode'] = 'BASE'
@@ -16,6 +20,10 @@ class Config(dict, ABC):
             'debug': False
         }
         self['flask'] = {}
+        self['database'] = {}
+        self['tenancy'] = {
+            'json': Path.home() / 'tenants.json'
+        }
         self['images'] = {
             'media': '/images',
             'shelve': '/images.db',
@@ -27,3 +35,5 @@ class Config(dict, ABC):
             'extension': 'mp4'
         }
         self['providers'] = []
+        self['secrets'] = {}
+        self['strategy'] = {}

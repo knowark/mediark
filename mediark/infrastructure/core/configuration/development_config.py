@@ -1,4 +1,10 @@
+import multiprocessing
+from collections import defaultdict
+from typing import Dict, Any
+from abc import ABC, abstractmethod
+from json import loads, JSONDecodeError
 from .config import Config
+from pathlib import Path
 
 
 class DevelopmentConfig(Config):
@@ -10,11 +16,21 @@ class DevelopmentConfig(Config):
             'acesslog': '-',
             'loglevel': 'debug'
         })
+        self['authentication'] = {
+            "type": "jwt",
+            "secret_file": str(Path.home().joinpath('sign.txt'))
+        }
+        self['secrets'] = {
+            "jwt": str(Path.home().joinpath('sign.txt'))
+        }
         self['factory'] = 'MemoryFactory'
 
-        self['providers'] = {
+        self['strategy'].update({
             "ExpressionParser": {
                 "method": "expression_parser"
+            },
+            "TenantSupplier": {
+                "method": "tenant_supplier"
             },
             "IdService": {
                 "method": "standard_id_service"
@@ -40,4 +56,4 @@ class DevelopmentConfig(Config):
             "MediarkReporter": {
                 "method": "memory_mediark_reporter",
             }
-        }
+        })

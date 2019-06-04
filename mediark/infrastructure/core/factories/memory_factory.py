@@ -1,8 +1,13 @@
+from pathlib import Path
+from .factory import Factory
+from ..configuration import Config
 from ....application.repositories import (
     ImageRepository, MemoryImageRepository,
     AudioRepository, MemoryAudioRepository)
 from ....application.services import (
-    IdService, StandardIdService, FileStoreService, MemoryFileStoreService,
+    AuthService, StandardAuthService,
+    IdService, StandardIdService,
+    FileStoreService, MemoryFileStoreService,
     ImageFileStoreService, MemoryImageFileStoreService,
     AudioFileStoreService, MemoryAudioFileStoreService)
 from ....application.coordinators import (
@@ -13,7 +18,7 @@ from ....application.utilities import (
     ExpressionParser, TenantProvider, StandardTenantProvider)
 
 
-class MemoryFactory:
+class MemoryFactory(Factory):
     def __init__(self, config: Config) -> None:
         self.config = config
 
