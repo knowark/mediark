@@ -1,6 +1,6 @@
 from typing import Dict
 from pytest import fixture
-from mediark.application.repositories import Repository, MemoryRepository
+from mediark.application.repositories.repository import Repository, MemoryRepository
 from mediark.application.utilities.expression_parser import ExpressionParser
 
 

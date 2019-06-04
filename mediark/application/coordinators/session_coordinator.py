@@ -1,5 +1,6 @@
 from typing import Dict, Any
-from ..utilities import TenantProvider, Tenant
+from ..utilities.tenancy import Tenant
+from ..utilities.tenancy import TenantProvider, Tenant
 from ..services import AuthService, User
 
 

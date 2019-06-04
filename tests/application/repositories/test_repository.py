@@ -1,4 +1,4 @@
-from mediark.application.repositories import Repository
+from mediark.application.repositories.repository import Repository
 
 
 def test_repository_methods() -> None:

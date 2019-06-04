@@ -1,2 +1,2 @@
 from .tenant import Tenant
-from .tenant_service import TenantService, StandardTenantService
+from .tenant_provider import TenantProvider, StandardTenantProvider
