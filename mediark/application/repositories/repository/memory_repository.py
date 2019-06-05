@@ -24,9 +24,6 @@ class MemoryRepository(Repository, Generic[T]):
         return self.items.get(id)
 
     def add(self, item: T) -> T:
-        # id = getattr(item, 'id')
-        # self.items[id] = item
-        # return True
         item.id = item.id or str(uuid4())
         self.data[self._location][item.id] = item
         return item
@@ -39,7 +36,6 @@ class MemoryRepository(Repository, Generic[T]):
         for item in list(self.data[self._location].values()):
             if filter_function(item):
                 items.append(item)
-
         items = items[:limit]
         items = items[offset:]
 
