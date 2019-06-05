@@ -20,7 +20,6 @@ class ImageStorageCoordinator:
             image_dict['id'] = self.id_service.generate_id()
 
         locator = image_dict.get('id')
-        # content = 'aGVsbG8='
         content = image_dict.pop('data')
         extension = image_dict.get('extension')
 

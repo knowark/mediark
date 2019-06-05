@@ -21,7 +21,6 @@ class AudioStorageCoordinator:
         
         locator = audio_dict.get('id')
         content = audio_dict.pop('data')
-        # content = 'aGVsbG8='
         extension = audio_dict.get('extension')
 
         uri = self.file_store_service.store(locator, content, extension)
