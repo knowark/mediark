@@ -57,9 +57,8 @@ class ImageResource(MethodView):
 
         image = self.image_storage_coordinator.store(data)
         
-        response = 'Image Post: \n name<{0}> - code<{1}>'.format(
-            image.id,
-            image.namespace,
+        response = 'Image Post: \n name<{0}>'.format(
+            image
         )
 
         return response, 201

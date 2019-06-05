@@ -52,14 +52,12 @@ class AudioResource(MethodView):
           201:
             description: "Audio created"
         """
-
+        print(':::::::Request:::::::', request.data)
         data = AudioSchema().loads(request.data)
-
         audio = self.audio_storage_coordinator.store(data)
         
-        response = 'Audio Post: \n name<{0}> - code<{1}>'.format(
-            audio.id,
-            audio.namespace,
+        response = 'Audio Post: \n namespace<{0}>'.format(
+            audio
         )
 
         return response, 201

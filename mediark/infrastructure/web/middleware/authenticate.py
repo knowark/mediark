@@ -32,14 +32,11 @@ class Authenticate:
                     token, verify=False)
                 # tenant_dict = self.tenant_supplier.get_tenant(
                 #     token_payload['tid'])
-                print('token_payload>>>>>>>>>>>>>>', token_payload, '\n')
                 tenant_dict = {"name": "Servagro"}
                 # token_payload = self.jwt_supplier.decode(token, secret=None)
                 
                 self.session_coordinator.set_tenant(tenant_dict)
-                print('UserSchema()', UserSchema())
                 user_dict = UserSchema().load(token_payload)
-                print('User', user_dict)
                 self.session_coordinator.set_user(user_dict)
             except Exception as e:
                 raise AuthenticationError(
