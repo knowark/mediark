@@ -6,11 +6,12 @@ from .http_factory import HttpFactory
 from .directory_factory import DirectoryFactory
 from .shelve_factory import ShelveFactory
 
+
 def build_factory(config: Config) -> Factory:
     factory = config['factory']
     return {
         'MemoryFactory': lambda config: MemoryFactory(config),
         'HttpFactory': lambda config: HttpFactory(config),
-        'DirectoryFactory': lambda config: DirectoryFactory(MemoryFactory),
         'ShelveFactory': lambda config: ShelveFactory(MemoryFactory),
+        'DirectoryFactory': lambda config: DirectoryFactory(ShelveFactory),
     }[factory](config)

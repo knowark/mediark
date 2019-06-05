@@ -12,6 +12,30 @@ class AudioResource(MethodView):
         self.audio_storage_coordinator = resolver['AudioStorageCoordinator']
         self.mediark_reporter = resolver['MediarkReporter']
 
+    def get(self) -> Tuple[str, int]:
+        """
+        ---
+        summary: Return all audios.
+        tags:
+          - Audios
+        responses:
+          200:
+            description: "Successful response"
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Audio'
+        """
+
+        domain, limit, offset = get_request_filter(request)
+
+        audios = AudioSchema().dump(
+            self.mediark_reporter.search_audios(domain), many=True)
+
+        return jsonify(audios)
+
     def post(self) -> Tuple[str, int]:
         """
         ---
@@ -34,33 +58,8 @@ class AudioResource(MethodView):
         audio = self.audio_storage_coordinator.store(data)
         
         response = 'Audio Post: \n name<{0}> - code<{1}>'.format(
+            audio.id,
             audio.namespace,
-            audio.reference,
         )
 
         return response, 201
-        
-
-    def get(self) -> Tuple[str, int]:
-        """
-        ---
-        summary: Return all audios.
-        tags:
-          - Audios
-        responses:
-          200:
-            description: "Successful response"
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Audio'
-        """
-
-        domain, limit, offset = get_request_filter(request)
-
-        audios = AudioSchema().dump(
-            self.mediark_reporter.search_audios(domain), many=True)
-        
-        return jsonify(audios)

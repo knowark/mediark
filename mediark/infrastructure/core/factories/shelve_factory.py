@@ -1,5 +1,5 @@
 from pathlib import Path
-from ....application.utilities.expression_parser import ExpressionParser
+from ....application.utilities import ExpressionParser
 from ....infrastructure.data import (
     ShelveImageRepository, ShelveAudioRepository)
 from ..configuration import Config

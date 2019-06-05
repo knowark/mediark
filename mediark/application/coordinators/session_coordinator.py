@@ -1,8 +1,6 @@
 from typing import Dict, Any
-from ..utilities.tenancy import Tenant
-from ..utilities.tenancy import TenantProvider, Tenant
+from ..utilities import TenantProvider, Tenant
 from ..services import AuthService, User
-
 
 class SessionCoordinator:
     def __init__(self, tenant_provider: TenantProvider,

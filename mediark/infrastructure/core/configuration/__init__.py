@@ -1,11 +1,10 @@
-from json import load
 from pathlib import Path
+from json import load
 from typing import Optional
 from .config import *
 from .development_config import *
 from .production_config import *
-from .context import *
-from .registry import *
+
 
 def build_config(config_path: str, mode: str) -> Config:
     if mode == 'DEV':
@@ -26,5 +25,5 @@ def load_config(config_path: str) -> Optional[Config]:
         if not path.exists():
             return None
 
-    with open(config_path) as f:
+    with path.open() as f:
         return load(f)

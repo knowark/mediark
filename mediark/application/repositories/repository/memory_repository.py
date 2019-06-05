@@ -1,32 +1,32 @@
 from abc import ABC, abstractmethod
+from uuid import uuid4
+from collections import defaultdict
 from typing import List, Dict, TypeVar, Optional, Generic, Union
-from ..repository import Repository
-from ...utilities.expression_parser import ExpressionParser
+from .repository import Repository
 from ...utilities.tenancy import TenantProvider
-from ...utilities.types import *
+from ...utilities.expression_parser import ExpressionParser
+from ...utilities.types import T, QueryDomain
+from ...utilities.exceptions import EntityNotFoundError
 
 
 class MemoryRepository(Repository, Generic[T]):
     def __init__(self,  parser: ExpressionParser,
                 tenant_provider: TenantProvider) -> None:
-        self.items = {}  # type: Dict[str, T]
+        self.data: Dict[str, Dict[str, T]] = defaultdict(dict)
         self.parser = parser
         self.tenant_provider = tenant_provider
 
-    # def get(self, id: str) -> Optional[T]:
-    #     return self.items.get(id)
     def get(self, id: str) -> T:
         item = self.data[self._location].get(id)
         if not item:
             raise EntityNotFoundError(
                 f"The entity with id {id} was not found.")
-        return item
+        return self.items.get(id)
 
-    # def add(self, item: T) -> bool:
-    #     id = getattr(item, 'id')
-    #     self.items[id] = item
-    #     return True
     def add(self, item: T) -> T:
+        # id = getattr(item, 'id')
+        # self.items[id] = item
+        # return True
         item.id = item.id or str(uuid4())
         self.data[self._location][item.id] = item
         return item
@@ -52,12 +52,9 @@ class MemoryRepository(Repository, Generic[T]):
         del self.items[id]
         return True
 
-    # def load(self, items: Dict[str, T]) -> None:
-    #     self.items = items
-    
-    def load(self, data: Dict[str, Dict[str, T]]) -> None:
-        self.data = data
-    
+    def load(self, items: Dict[str, T]) -> None:
+        self.items = items
+
     @property
     def _location(self) -> str:
         return self.tenant_provider.tenant.location

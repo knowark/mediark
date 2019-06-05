@@ -24,6 +24,7 @@ class JsonTenantSupplier(TenantSupplier):
         })
 
     def get_tenant(self, tenant_id: str) -> Dict[str, Any]:
+        print('Provider>>>>>>', self.provider.get_tenant(tenant_id))
         return self.provider.get_tenant(tenant_id)
 
     def create_tenant(self, tenant_dict: Dict[str, Any]) -> None:

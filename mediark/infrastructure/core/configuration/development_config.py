@@ -1,9 +1,9 @@
 import multiprocessing
-from .config import Config
 from collections import defaultdict
 from typing import Dict, Any
 from abc import ABC, abstractmethod
 from json import loads, JSONDecodeError
+from .config import Config
 from pathlib import Path
 
 
@@ -29,17 +29,17 @@ class DevelopmentConfig(Config):
             "ExpressionParser": {
                 "method": "expression_parser"
             },
-            "CatalogService": {
-                "method": "memory_catalog_service"
+            "IdService": {
+                "method": "standard_id_service"
             },
+            # "TenantSupplier": {
+            #     "method": "tenant_supplier"
+            # },
             "TenantSupplier": {
-                "method": "tenant_supplier"
+                "method": "memory_tenant_supplier"
             },
             "ProvisionService": {
                 "method": "memory_provision_service"
-            },
-            "IdService": {
-                "method": "standard_id_service"
             },
             "ImageFileStoreService": {
                 "method": "memory_image_file_store_service"
@@ -70,8 +70,5 @@ class DevelopmentConfig(Config):
             },
             "SessionCoordinator": {
                 "method": "session_coordinator"
-            },
-            "TenantSupplier": {
-                "method": "memory_tenant_supplier"
             },
         })

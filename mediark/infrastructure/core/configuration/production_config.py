@@ -1,11 +1,10 @@
 import multiprocessing
-from .development_config import DevelopmentConfig
 from collections import defaultdict
 from typing import Dict, Any
 from abc import ABC, abstractmethod
 from json import loads, JSONDecodeError
-from .config import Config
 from pathlib import Path
+from .development_config import DevelopmentConfig
 
 
 class ProductionConfig(DevelopmentConfig):
@@ -27,6 +26,12 @@ class ProductionConfig(DevelopmentConfig):
         self['factory'] = 'HttpFactory'
 
         self['strategy'].update({
+            "JwtSupplier": {
+                "method": "jwt_supplier"
+            },
+            "Authenticate": {
+                "method": "middleware_authenticate"
+            },
             "ImageRepository": {
                 "method": "shelve_image_repository",
             },
@@ -41,11 +46,5 @@ class ProductionConfig(DevelopmentConfig):
             },
             "MediarkReporter": {
                 "method": "http_mediark_reporter",
-            },
-            "JwtSupplier": {
-                "method": "jwt_supplier"
-            },
-            "Authenticate": {
-                "method": "middleware_authenticate"
-            },
+            }
         })

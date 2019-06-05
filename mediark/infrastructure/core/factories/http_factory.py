@@ -1,12 +1,11 @@
 from ....application.repositories import ImageRepository, AudioRepository
-from ....application.coordinators import SessionCoordinator
 from ...http import HttpMediarkReporter
 from ..configuration import Config
-from .directory_factory import DirectoryFactory
 from ...web.middleware import Authenticate
+from ....application.coordinators import SessionCoordinator
 from ...core.crypto import JwtSupplier
 from ..tenancy import TenantSupplier, MemoryTenantSupplier
-from .memory_factory import MemoryFactory
+from .directory_factory import DirectoryFactory
 
 
 class HttpFactory(DirectoryFactory):
@@ -19,11 +18,11 @@ class HttpFactory(DirectoryFactory):
             session_coordinator: SessionCoordinator) -> Authenticate:
         return Authenticate(
             jwt_supplier, tenant_supplier, session_coordinator)
-    
+
     def jwt_supplier(self) -> JwtSupplier:
         secret = self.access_config['secret']
         return JwtSupplier(secret)
-    
+
     def jwt_supplier(self) -> JwtSupplier:
         secret = 'secret'
         secret_file = self.config.get('secrets', {}).get('jwt')

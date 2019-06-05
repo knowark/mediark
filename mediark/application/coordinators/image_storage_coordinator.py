@@ -28,4 +28,3 @@ class ImageStorageCoordinator:
         image = Image(**image_dict)
 
         self.image_repository.add(image)
-        return image
