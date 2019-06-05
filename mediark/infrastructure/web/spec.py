@@ -1,7 +1,7 @@
 from apispec import APISpec, BasePlugin
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec.yaml_utils import load_yaml_from_docstring
-from .schemas import AudioSchema, ImageSchema
+from .schemas import AudioSchema, ImageSchema, DownloadSchema
 
 
 class ResourcePlugin(BasePlugin):
@@ -29,7 +29,7 @@ class ResourcePlugin(BasePlugin):
 def create_spec() -> APISpec:
     spec = APISpec(
         title="Mediark",
-        version="1.3.0",
+        version="1.1.0",
         openapi_version="3.0.2",
         plugins=[MarshmallowPlugin(), ResourcePlugin()],
         info=dict(
@@ -46,3 +46,4 @@ def create_spec() -> APISpec:
 def _register_schemas(spec):
     spec.components.schema("Audio", schema=AudioSchema)
     spec.components.schema("Image", schema=ImageSchema)
+    spec.components.schema("Download", schema=DownloadSchema)

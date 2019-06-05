@@ -1,7 +1,8 @@
 from flask import Flask, jsonify
 from injectark import Injectark
 from .middleware import Authenticate
-from .resources import RootResource, ImageResource, AudioResource
+from .resources import (RootResource, ImageResource,
+     AudioResource, DownloadResource)
 from .spec import create_spec
 
 
@@ -31,8 +32,7 @@ def create_api(app: Flask, resolver: Injectark) -> None:
     app.add_url_rule("/audios", view_func=audio_view)
 
     # Download Resource
-    # api.add_resource(DownloadResource,
-    #                  '/download/<string:type>/<path:uri>',
-    #                  resource_class_kwargs={
-    #                      'MEDIA_DIRECTORY': app.config['MEDIA']})
-
+    spec.path(path="/downloads", resource=DownloadResource)
+    download_view = authenticate(DownloadResource.as_view(
+         'downloads', resolver=resolver))
+    app.add_url_rule("/downloads", view_func=download_view)

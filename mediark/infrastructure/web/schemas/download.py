@@ -1,11 +1,7 @@
 from marshmallow import Schema, fields
 
 class DownloadSchema(Schema):
-   pass
-
-
- # Download Resource
-        # api.add_resource(DownloadResource,
-        #                  '/download/<string:type>/<path:uri>',
-        #                  resource_class_kwargs={
-        #                      'MEDIA_DIRECTORY': app.config['MEDIA']})
+   reference = fields.Str(
+        required=False, example="00648c29-eca2-4112-8a1a-4deedb443188")
+   type = fields.Str(
+        requiered=False, example="audio")

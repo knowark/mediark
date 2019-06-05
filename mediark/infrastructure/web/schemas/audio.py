@@ -6,9 +6,9 @@ class AudioSchema(Schema):
     namespace = fields.Str(
         required=False, example="https://example.com")
     extension = fields.Str(
-        required=False, example="webm")
+        required=True, example="webm")
     reference = fields.Str(
-        required=False, example="00648c29-eca2-4112-8a1a-4deedb443188")
+        required=True, example="00648c29-eca2-4112-8a1a-4deedb443188")
     uri = fields.Str(
         requiered=False, example="https://mediark.knowark/media/audios/00648c29-eca2-4112-8a1a-4deedb443188.webm"
     )

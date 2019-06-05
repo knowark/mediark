@@ -26,5 +26,4 @@ class ImageStorageCoordinator:
         uri = self.file_store_service.store(locator, content, extension)
         image_dict['uri'] = uri
         image = Image(**image_dict)
-
         self.image_repository.add(image)

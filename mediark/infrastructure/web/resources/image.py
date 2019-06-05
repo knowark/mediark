@@ -30,7 +30,6 @@ class ImageResource(MethodView):
         """
 
         domain, limit, offset = get_request_filter(request)
-
         images = ImageSchema().dump(
             self.mediark_reporter.search_images(domain), many=True)
 

@@ -7,30 +7,30 @@ from ..schemas import DownloadSchema
 
 
 class DownloadResource(MethodView):
-    # def __init__(self) -> None:
-            # self.image_storage_coordinator = resolver['ImageStorageCoordinator']
-            # self.mediark_reporter = resolver['MediarkReporter']
+    def __init__(self, resolver) -> None:
+        self.mediark_reporter = resolver['MediarkReporter']
 
     def get(self) -> Tuple[str, int]:
         """
         ---
         summary: Return all media.
         tags:
-        - Download
+          - Downloads
         responses:
-        200:
+          200:
             description: "Successful response"
             content:
-            application/json:
+              application/json:
                 schema:
-                type: array
-                items:
+                  type: array
+                  items:
                     $ref: '#/components/schemas/Download'
         """
+        
+        data = request.data
+        if data:
+            data['media'] == 'audio'
 
-        # domain, limit, offset = get_request_filter(request)
-
-        # images = ImageSchema().dump(
-        #     self.mediark_reporter.search_images(domain), many=True)
-
-        # return jsonify(images)
+        audio = DownloadSchema().dump(
+            self.mediark_reporter.search_audio(data['reference']))
+        return jsonify(audio)

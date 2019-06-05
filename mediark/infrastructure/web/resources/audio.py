@@ -52,7 +52,7 @@ class AudioResource(MethodView):
           201:
             description: "Audio created"
         """
-        print(':::::::Request:::::::', request.data)
+
         data = AudioSchema().loads(request.data)
         audio = self.audio_storage_coordinator.store(data)
         
