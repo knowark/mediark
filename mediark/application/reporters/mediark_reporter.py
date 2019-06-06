@@ -24,3 +24,4 @@ class StandardMediarkReporter(MediarkReporter):
     def search_audios(self, domain: SearchDomain) -> AudioDictList:
         return [vars(audio) for audio in
                 self.audio_repository.search(domain)]
+

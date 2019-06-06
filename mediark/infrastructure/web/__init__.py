@@ -1,5 +1,4 @@
-from gevent import monkey
-monkey.patch_all()  # noqa
-from ...application.reporters import SearchDomain
+# from gevent import monkey
+# monkey.patch_all()  # noqa
 from .base import create_app
 from .server import ServerApplication

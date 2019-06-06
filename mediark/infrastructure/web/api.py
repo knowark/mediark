@@ -1,41 +1,38 @@
-from flask import Flask
-from ..resolver import Registry
-from flask_restful import Api, Resource
-from flasgger import Swagger, swag_from
-from .resources import ImageResource, AudioResource, DownloadResource
+from flask import Flask, jsonify
+from injectark import Injectark
+from .middleware import Authenticate
+from .resources import (RootResource, ImageResource,
+     AudioResource, DownloadResource)
+from .spec import create_spec
 
 
-def create_api(app: Flask, registry: Registry) -> Api:
+def create_api(app: Flask, resolver: Injectark) -> None:
 
-    # REST API
-    api = Api(app)
+    # API
+    spec = create_spec()
 
-    # Swagger
-    Swagger(app, template_file="api.yml", config={
-        "specs_route": "/",
-        "headers": [],
-        "specs": [{
-            "endpoint": 'apispec_1',
-            "route": '/apispec_1.json',
-            "rule_filter": lambda rule: True,
-            "model_filter": lambda tag: True,
-        }],
-        "static_url_path": "/flasgger_static",
-        "swagger_ui": True
-    })
+    # Root Resource (Api Specification)
+    root_view = RootResource.as_view('root', spec=spec)
+    app.add_url_rule("/", view_func=root_view)
+
+    # Middleware
+    authenticate = resolver['Authenticate']
 
     # Images Resource
-    api.add_resource(ImageResource, '/images',
-                     resource_class_kwargs=registry)
+    spec.path(path="/images", resource=ImageResource)
+    image_view = authenticate(ImageResource.as_view(
+         'images', resolver=resolver))
+    app.add_url_rule("/images", view_func=image_view)
+
 
     # Audios Resource
-    api.add_resource(AudioResource, '/audios',
-                     resource_class_kwargs=registry)
+    spec.path(path="/audios", resource=AudioResource)
+    audio_view = authenticate(AudioResource.as_view(
+         'audios', resolver=resolver))
+    app.add_url_rule("/audios", view_func=audio_view)
 
     # Download Resource
-    api.add_resource(DownloadResource,
-                     '/download/<string:type>/<path:uri>',
-                     resource_class_kwargs={
-                         'MEDIA_DIRECTORY': app.config['MEDIA']})
-
-    return api
+    spec.path(path="/downloads", resource=DownloadResource)
+    download_view = authenticate(DownloadResource.as_view(
+         'downloads', resolver=resolver))
+    app.add_url_rule("/downloads", view_func=download_view)

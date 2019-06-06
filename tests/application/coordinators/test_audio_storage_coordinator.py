@@ -1,6 +1,7 @@
 from pytest import fixture
 from mediark.application.repositories import (
-    MemoryAudioRepository, ExpressionParser)
+    MemoryAudioRepository)
+from mediark.application.utilities.expression_parser import ExpressionParser
 from mediark.application.services import (
     StandardIdService, MemoryFileStoreService)
 from mediark.application.coordinators import AudioStorageCoordinator

@@ -1,20 +1,16 @@
 from flask import Flask
 from flask_cors import CORS
-from ..config import Config
-from ..resolver import Registry
+from injectark import Injectark
 from .api import create_api
+from .errors import register_error_handler
 
 
-def create_app(config: Config, registry: Registry):
+def create_app(config, resolver: Injectark):
     app = Flask(__name__)
     CORS(app)
-    app.config['SWAGGER'] = {
-        'title': 'Mediark'
-    }
-
-    app.config['MEDIA'] = config['media']
     app.config.update(config['flask'])
 
-    create_api(app, registry)
+    register_error_handler(app)
+    create_api(app, resolver)
 
     return app

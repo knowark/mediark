@@ -1,6 +1,6 @@
 from pytest import fixture
 from unittest.mock import Mock
-from mediark.application.repositories import ExpressionParser
+from mediark.application.utilities.expression_parser import ExpressionParser
 
 
 @fixture

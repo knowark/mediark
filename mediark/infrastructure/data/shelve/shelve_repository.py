@@ -2,8 +2,8 @@ import shelve
 from abc import ABC, abstractmethod
 from typing import List, Dict, TypeVar, Optional, Generic, Union
 from ....application.repositories import Repository
-from ....application.repositories import ExpressionParser
-from ....application.repositories import T, QueryDomain
+from ....application.utilities import ExpressionParser, T, QueryDomain
+# from ....application.repositories import T, QueryDomain
 
 
 class ShelveRepository(Repository, Generic[T]):

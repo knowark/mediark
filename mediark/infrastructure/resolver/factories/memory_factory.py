@@ -1,14 +1,16 @@
 from ....application.repositories import (
-    ExpressionParser,  ImageRepository, MemoryImageRepository,
+    ImageRepository, MemoryImageRepository,
     AudioRepository, MemoryAudioRepository)
 from ....application.services import (
     IdService, StandardIdService, FileStoreService, MemoryFileStoreService,
     ImageFileStoreService, MemoryImageFileStoreService,
     AudioFileStoreService, MemoryAudioFileStoreService)
 from ....application.coordinators import (
-    ImageStorageCoordinator, AudioStorageCoordinator)
+    ImageStorageCoordinator, AudioStorageCoordinator, SessionCoordinator)
 from ....application.reporters import MediarkReporter, StandardMediarkReporter
 from ...config import Config
+from ....application.utilities import (
+    ExpressionParser, TenantProvider, StandardTenantProvider)
 
 
 class MemoryFactory:
@@ -28,12 +30,18 @@ class MemoryFactory:
     def memory_audio_repository(self, expression_parser: ExpressionParser
                                 ) -> MemoryAudioRepository:
         return MemoryAudioRepository(expression_parser)
+    
+    def standard_tenant_provider(self) -> StandardTenantProvider:
+        return StandardTenantProvider()
 
     # Services
     ##########
 
     def standard_id_service(self) -> StandardIdService:
         return StandardIdService()
+    
+    def memory_auth_service(self) -> StandardAuthService:
+        return StandardAuthService()
 
     def memory_image_file_store_service(self) -> MemoryImageFileStoreService:
         return MemoryImageFileStoreService()
@@ -57,6 +65,11 @@ class MemoryFactory:
                                   ) -> AudioStorageCoordinator:
         return AudioStorageCoordinator(audio_repository, id_service,
                                        file_store_service)
+    
+    def session_coordinator(
+        self, tenant_provider: TenantProvider, auth_service: AuthService
+    ) -> SessionCoordinator:
+        return SessionCoordinator(tenant_provider, auth_service)
 
     # Reporters
     ##############
