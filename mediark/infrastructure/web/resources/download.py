@@ -36,8 +36,8 @@ class DownloadResource(MethodView):
         if type_media == 'audio':
           audios = DownloadSchema().dump(
               self.mediark_reporter.search_audios(domain), many=True)
-          return jsonify(audios) if audios else []
+          return jsonify(audios) if audios else jsonify([])
         else:
           images = DownloadSchema().dump(
               self.mediark_reporter.search_images(domain), many=True)
-          return jsonify(images) if images else []
+          return jsonify(images) if images else jsonify([])
