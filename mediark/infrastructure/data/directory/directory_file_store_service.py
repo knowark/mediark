@@ -16,11 +16,9 @@ class DirectoryFileStoreService(FileStoreService):
 
         uri = "{0}/{1}/{2}.{3}".format(
             first_dir, second_dir, locator, extension)
-
         file_path = Path(self.base_path).joinpath(uri)
         with file_path.open("wb") as f:
             f.write(binary_data)
-
         return uri
 
     def _get_subdirs(self, locator: str) -> Tuple[str, str]:

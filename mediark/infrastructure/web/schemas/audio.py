@@ -9,7 +9,7 @@ class AudioSchema(Schema):
         required=True, example="webm")
     reference = fields.Str(
         required=True, example="00648c29-eca2-4112-8a1a-4deedb443188")
-    uri = fields.Str(
+    url = fields.Str(
         requiered=False, example="https://mediark.knowark/media/audios/00648c29-eca2-4112-8a1a-4deedb443188.webm"
     )
     data = fields.Str(requiered=True, example="aGVsbG8=")

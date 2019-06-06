@@ -29,14 +29,15 @@ class DownloadResource(MethodView):
                     $ref: '#/components/schemas/Download'
         """
         
-        reference = '"349ab3b0-2abc-4e7b-af4d-73ccefeb905d"'
+        data = DownloadSchema().loads(request.data)
+        reference = data['reference']
+        type_media = data['type']
         domain = [('reference','=', reference)]
-        audio = DownloadSchema().dump(
-            self.mediark_reporter.search_audios(domain), many=True)
-        url_audio = 'https://mediark.nubark.cloud/audios?filter=[["reference","=",'
-        request_audio = url_audio + reference + ']]'
-        audio_request = requests.get(request_audio)
-        if audio_request.status_code == 200:
-            r_audio = audio_request.text
-        file_audio = literal_eval(r_audio)
-        return jsonify(file_audio[0]['url'])
+        if type_media == 'audio':
+          audios = DownloadSchema().dump(
+              self.mediark_reporter.search_audios(domain), many=True)
+          return jsonify(audios[0]['url']) if audios else '' 
+        else:
+          images = DownloadSchema().dump(
+              self.mediark_reporter.search_images(domain), many=True)
+          return jsonify(images[0]['url']) if images else ''
