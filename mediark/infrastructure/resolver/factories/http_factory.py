@@ -11,8 +11,8 @@ class HttpFactory(DirectoryFactory):
     def http_mediark_reporter(self, image_repository: ImageRepository,
                               audio_repository: AudioRepository
                               ) -> HttpMediarkReporter:
-        image_download = self.config['domain'] + '/download/images'
-        audio_download = self.config['domain'] + '/download/audios'
+        image_download = self.config['domain'] + '/downloads/images'
+        audio_download = self.config['domain'] + '/downloads/audios'
         return HttpMediarkReporter(
             image_download, audio_download,
             image_repository, audio_repository)

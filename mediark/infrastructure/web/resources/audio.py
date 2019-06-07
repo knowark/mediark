@@ -1,3 +1,4 @@
+import json
 from typing import Any, Dict, Tuple
 from flask import request, jsonify
 from flask.views import MethodView
@@ -54,10 +55,7 @@ class AudioResource(MethodView):
         """
 
         data = AudioSchema().loads(request.data)
-        audio = self.audio_storage_coordinator.store(data)
-        
-        response = 'Audio Post: \n namespace<{0}>'.format(
-            audio
-        )
+        self.audio_storage_coordinator.store(data)
+        json_audio = json.dumps(data, sort_keys=True, indent=4)
 
-        return response, 201
+        return json_audio, 201

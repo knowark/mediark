@@ -73,7 +73,7 @@ class Cli:
         print('END PROVISION |||||')
 
     def serve(self, args: Namespace) -> None:
-        print('...SERVE:::', args)
+        print('...:::SERVE:::...', args, '\n')
 
         app = create_app(self.config, self.resolver)
         gunicorn_config = self.config['gunicorn']

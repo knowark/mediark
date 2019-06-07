@@ -14,7 +14,6 @@ def build_config(config_path: str, mode: str) -> Config:
     loaded_config = load_config(config_path)
     if loaded_config is not None:
         production_config.update(loaded_config)
-
     return production_config
 
 

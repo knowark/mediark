@@ -14,9 +14,8 @@ class Config(defaultdict, ABC):
         self['environment'] = {
             'home': '/opt/mediark'
         }
-        self['domain'] = 'http://0.0.0.0:8080'
-        self['media'] = str(Path.home().joinpath('media'))
-        self['shelve'] = str(Path.home().joinpath('shelve'))
+        self['media'] = str(Path('/var/opt/mediark/data/templates/media'))
+        self['shelve'] = str(Path('/var/opt/mediark/data/templates/shelve'))
         self['gunicorn'] = {
             'bind': '%s:%s' % ('0.0.0.0', '8080'),
             'workers': 1,
@@ -37,7 +36,7 @@ class Config(defaultdict, ABC):
         self['audios'] = {
             'media': '/audios',
             'shelve':  '/audios.db',
-            'extension': 'mp4'
+            'extension': 'webm'
         }
         self['secrets'] = {}
         self['strategy'] = {}

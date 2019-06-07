@@ -1,3 +1,4 @@
+import json
 from typing import Any, Dict, Tuple
 from flask import request, jsonify
 from flask.views import MethodView
@@ -53,11 +54,7 @@ class ImageResource(MethodView):
         """
 
         data = ImageSchema().loads(request.data)
+        self.image_storage_coordinator.store(data)
+        json_image = json.dumps(data, sort_keys=True, indent=4)
 
-        image = self.image_storage_coordinator.store(data)
-        
-        response = 'Image Post: \n name<{0}>'.format(
-            image
-        )
-
-        return response, 201
+        return json_image, 201
