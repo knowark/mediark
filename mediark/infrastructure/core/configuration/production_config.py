@@ -16,7 +16,7 @@ class ProductionConfig(DevelopmentConfig):
             'accesslog': '-',
             'loglevel': 'debug'
         })
-        self['domain'] = 'http://mediark.dev.nubark.cloud'
+        self['domain'] = 'https://mediark.dev.nubark.cloud'
         self['authentication'] = {
             "type": "jwt",
             "secret_file": str(Path.home().joinpath('sign.txt'))
