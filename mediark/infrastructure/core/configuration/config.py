@@ -14,8 +14,8 @@ class Config(defaultdict, ABC):
         self['environment'] = {
             'home': '/opt/mediark'
         }
-        self['media'] = str(Path('/var/opt/mediark/data/templates/media'))
-        self['shelve'] = str(Path('/var/opt/mediark/data/templates/shelve'))
+        self['media'] = str(Path('/opt/mediark/data/servagro/media'))
+        self['shelve'] = str(Path('/opt/mediark/data/servagro/shelve'))
         self['gunicorn'] = {
             'bind': '%s:%s' % ('0.0.0.0', '8080'),
             'workers': 1,
