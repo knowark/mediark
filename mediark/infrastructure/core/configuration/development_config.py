@@ -26,18 +26,22 @@ class DevelopmentConfig(Config):
         self['factory'] = 'MemoryFactory'
 
         self['strategy'].update({
-            "ExpressionParser": {
-                "method": "expression_parser"
+            # Query parser
+            "QueryParser": {
+                "method": "query_parser"
             },
             "IdService": {
                 "method": "standard_id_service"
             },
-            # "TenantSupplier": {
-            #     "method": "tenant_supplier"
-            # },
+            
+            # Tenancy
+            "TenantProvider": {
+                "method": "standard_tenant_provider"
+            },
             "TenantSupplier": {
                 "method": "memory_tenant_supplier"
             },
+            
             "ProvisionService": {
                 "method": "memory_provision_service"
             },
@@ -62,9 +66,7 @@ class DevelopmentConfig(Config):
             "StandardMediarkReporter": {
                 "method": "memory_mediark_reporter",
             },
-            "TenantProvider": {
-                "method": "standard_tenant_provider"
-            },
+            
             "AuthService": {
                 "method": "memory_auth_service"
             },

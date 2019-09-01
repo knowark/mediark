@@ -1,9 +1,11 @@
+import json
+from pathlib import Path
 from ....application.repositories import ImageRepository, AudioRepository
 from ...http import HttpMediarkReporter
 from ..configuration import Config
 from ...web.middleware import Authenticate
 from ....application.coordinators import SessionCoordinator
-from ...core.crypto import JwtSupplier
+from ...core import JwtSupplier, JsonTenantSupplier
 from ..tenancy import TenantSupplier, MemoryTenantSupplier
 from .directory_factory import DirectoryFactory
 
@@ -20,15 +22,17 @@ class HttpFactory(DirectoryFactory):
             jwt_supplier, tenant_supplier, session_coordinator)
 
     def jwt_supplier(self) -> JwtSupplier:
-        secret = self.access_config['secret']
-        return JwtSupplier(secret)
-
-    def jwt_supplier(self) -> JwtSupplier:
         secret = 'secret'
         secret_file = self.config.get('secrets', {}).get('jwt')
-        # if secret_file:
-        #     secret = Path(secret_file).read_text().strip()
+        if secret_file:
+            secret = Path(secret_file).read_text().strip()
         return JwtSupplier(secret)
+    
+    def json_tenant_supplier(self) -> TenantSupplier:
+        catalog_path = self.config['tenancy']['json']
+        # directory_data = self.config['data']['json']['default']
+        directory_data = ''
+        return JsonTenantSupplier(catalog_path, directory_data)
 
     def http_mediark_reporter(self, image_repository: ImageRepository,
                               audio_repository: AudioRepository

@@ -10,7 +10,7 @@ from ....application.coordinators import (
 from ....application.reporters import MediarkReporter, StandardMediarkReporter
 from ...config import Config
 from ....application.utilities import (
-    ExpressionParser, TenantProvider, StandardTenantProvider)
+    QueryParser, TenantProvider, StandardTenantProvider)
 
 
 class MemoryFactory:
@@ -20,16 +20,16 @@ class MemoryFactory:
     # Repositories
     ##############
 
-    def expression_parser(self) -> ExpressionParser:
-        return ExpressionParser()
+    def query_parser(self) -> QueryParser:
+        return QueryParser()
 
-    def memory_image_repository(self, expression_parser: ExpressionParser
+    def memory_image_repository(self, query_parser: QueryParser
                                 ) -> MemoryImageRepository:
-        return MemoryImageRepository(expression_parser)
+        return MemoryImageRepository(query_parser)
 
-    def memory_audio_repository(self, expression_parser: ExpressionParser
+    def memory_audio_repository(self, query_parser: QueryParser
                                 ) -> MemoryAudioRepository:
-        return MemoryAudioRepository(expression_parser)
+        return MemoryAudioRepository(query_parser)
     
     def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()

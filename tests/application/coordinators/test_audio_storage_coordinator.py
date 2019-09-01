@@ -1,16 +1,18 @@
 from pytest import fixture
 from mediark.application.repositories import (
     MemoryAudioRepository)
-from mediark.application.utilities.expression_parser import ExpressionParser
 from mediark.application.services import (
     StandardIdService, MemoryFileStoreService)
 from mediark.application.coordinators import AudioStorageCoordinator
+from mediark.application.utilities import (
+    QueryParser, StandardTenantProvider, Tenant)
 
 
 @fixture
 def audio_storage_coordinator():
-    parser = ExpressionParser()
-    audio_repository = MemoryAudioRepository(parser)
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
+    parser = QueryParser()
+    audio_repository = MemoryAudioRepository(parser, tenant_provider)
     id_service = StandardIdService()
     file_store_service = MemoryFileStoreService()
 
@@ -27,10 +29,9 @@ def test_storage_coordinator_store_no_data(audio_storage_coordinator):
         'namespace': 'https://example.com',
         'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
         'extension': 'mp4'}
-
     audio_storage_coordinator.store(audio_dict)
 
-    assert len(audio_storage_coordinator.audio_repository.items) == 0
+    assert len(audio_storage_coordinator.audio_repository.data) == 0
 
 
 def test_storage_coordinator_store_data(audio_storage_coordinator):
@@ -42,7 +43,7 @@ def test_storage_coordinator_store_data(audio_storage_coordinator):
 
     audio_storage_coordinator.store(audio_dict)
 
-    assert len(audio_storage_coordinator.audio_repository.items) == 1
+    assert len(audio_storage_coordinator.audio_repository.data) == 1
 
 
 def test_storage_coordinator_store_file(audio_storage_coordinator):
@@ -67,5 +68,4 @@ def test_storage_coordinator_store_file(audio_storage_coordinator):
 
     assert called is True
     audio = next(
-        iter(audio_storage_coordinator.audio_repository.items.values()))
-    assert audio.uri == audio.id
+        iter(audio_storage_coordinator.audio_repository.data.values()))

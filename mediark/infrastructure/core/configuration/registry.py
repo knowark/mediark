@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from ....application.repositories import (
     MemoryAudioRepository, MemoryImageRepository, MemoryAudioRepository)
-from ....application.utilities.expression_parser import ExpressionParser 
+from ....application.utilities.query_parser import QueryParser 
 from ....application.services import (StandardIdService, MemoryFileStoreService,
                                      FileStoreService)
 from ....application.coordinators import (
@@ -22,7 +22,7 @@ class MemoryRegistry(Registry):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
 
-        parser = ExpressionParser()
+        parser = QueryParser()
         audio_repository = MemoryAudioRepository(parser)
         image_repository = MemoryImageRepository(parser)
 

@@ -4,13 +4,13 @@ from collections import defaultdict
 from typing import List, Dict, TypeVar, Optional, Generic, Union
 from .repository import Repository
 from ...utilities.tenancy import TenantProvider
-from ...utilities.expression_parser import ExpressionParser
+from ...utilities.query_parser import QueryParser
 from ...utilities.types import T, QueryDomain
 from ...utilities.exceptions import EntityNotFoundError
 
 
 class MemoryRepository(Repository, Generic[T]):
-    def __init__(self,  parser: ExpressionParser,
+    def __init__(self,  parser: QueryParser,
                 tenant_provider: TenantProvider) -> None:
         self.data: Dict[str, Dict[str, T]] = defaultdict(dict)
         self.parser = parser
@@ -21,7 +21,7 @@ class MemoryRepository(Repository, Generic[T]):
         if not item:
             raise EntityNotFoundError(
                 f"The entity with id {id} was not found.")
-        return self.items.get(id)
+        return item
 
     def add(self, item: T) -> T:
         item.id = item.id or str(uuid4())
@@ -45,11 +45,11 @@ class MemoryRepository(Repository, Generic[T]):
         id = getattr(item, 'id')
         if id not in self.data[self._location]:
             return False
-        del self.items[id]
+        del self.data[self._location][item.id]
         return True
 
-    def load(self, items: Dict[str, T]) -> None:
-        self.items = items
+    def load(self, data: Dict[str, Dict[str, T]]) -> None:
+        self.data = data
 
     @property
     def _location(self) -> str:

@@ -16,16 +16,19 @@ class ProductionConfig(DevelopmentConfig):
             'accesslog': '-',
             'loglevel': 'debug'
         })
-        self['domain'] = 'https://mediark.dev.nubark.cloud'
+        # self['tenancy'] = {
+        #     'json':  Path.home() / 'tenants.json'
+        # },
         self['authentication'] = {
             "type": "jwt",
             "secret_file": str(Path.home().joinpath('sign.txt'))
         }
+        self['domain'] = 'https://mediark.dev.nubark.cloud'
+        
         self['secrets'] = {
             "jwt": str(Path.home().joinpath('sign.txt'))
         }
         self['factory'] = 'HttpFactory'
-
         self['strategy'].update({
             "JwtSupplier": {
                 "method": "jwt_supplier"
@@ -47,5 +50,15 @@ class ProductionConfig(DevelopmentConfig):
             },
             "MediarkReporter": {
                 "method": "http_mediark_reporter",
-            }
+            },
+
+            # Tenancy
+
+            "TenantProvider": {
+                "method": "standard_tenant_provider"
+            },
+
+            "TenantSupplier": {
+                "method": "json_tenant_supplier"
+            },
         })

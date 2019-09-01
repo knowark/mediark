@@ -1,15 +1,16 @@
 from pytest import fixture
 from mediark.application.repositories import MemoryImageRepository
-from mediark.application.utilities.expression_parser import ExpressionParser
 from mediark.application.services import (
     StandardIdService, MemoryFileStoreService)
 from mediark.application.coordinators import ImageStorageCoordinator
-
+from mediark.application.utilities import (
+    QueryParser, StandardTenantProvider, Tenant)
 
 @fixture
 def image_storage_coordinator():
-    parser = ExpressionParser()
-    image_repository = MemoryImageRepository(parser)
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
+    parser = QueryParser()
+    image_repository = MemoryImageRepository(parser, tenant_provider)
     id_service = StandardIdService()
     file_store_service = MemoryFileStoreService()
 
@@ -29,7 +30,7 @@ def test_storage_coordinator_store_no_data(image_storage_coordinator):
 
     image_storage_coordinator.store(image_dict)
 
-    assert len(image_storage_coordinator.image_repository.items) == 0
+    assert len(image_storage_coordinator.image_repository.data) == 0
 
 
 def test_storage_coordinator_store_data(image_storage_coordinator):
@@ -41,7 +42,7 @@ def test_storage_coordinator_store_data(image_storage_coordinator):
 
     image_storage_coordinator.store(image_dict)
 
-    assert len(image_storage_coordinator.image_repository.items) == 1
+    assert len(image_storage_coordinator.image_repository.data) == 1
 
 
 def test_storage_coordinator_store_file(image_storage_coordinator):
@@ -66,5 +67,4 @@ def test_storage_coordinator_store_file(image_storage_coordinator):
 
     assert called is True
     image = next(
-        iter(image_storage_coordinator.image_repository.items.values()))
-    assert image.uri == image.id
+        iter(image_storage_coordinator.image_repository.data.values()))

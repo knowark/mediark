@@ -54,7 +54,8 @@ class StandardAuthService(AuthService):
         if not self.is_authenticated():
             raise AuthenticationError(
                 "Authentication is required to get the user's roles.")
-        return [role.upper() for role in self.state.user.roles]
+        # return [role.upper() for role in self.state.user.roles]
+        return [role.upper() for role in dominion_dict.get('roles', [])]
 
     @property
     def user(self) -> User:

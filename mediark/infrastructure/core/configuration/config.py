@@ -8,9 +8,20 @@ from pathlib import Path
 
 
 class Config(defaultdict, ABC):
+
+    def number_of_workers(self):
+        return (multiprocessing.cpu_count() * 2) + 1
+
     @abstractmethod
     def __init__(self):
         self['mode'] = 'BASE'
+        self['flask'] = {}
+        self['database'] = {}
+        self['tenancy'] = {
+            'json': Path.home() / 'tenants.json'
+        }
+        self['secrets'] = {}
+        self['strategy'] = {}
         self['environment'] = {
             'home': '/opt/mediark'
         }
@@ -18,15 +29,11 @@ class Config(defaultdict, ABC):
         self['shelve'] = str(Path('/opt/mediark/data/servagro/shelve'))
         self['gunicorn'] = {
             'bind': '%s:%s' % ('0.0.0.0', '8080'),
-            'workers': 1,
+            'workers': self.number_of_workers(),
             'worker_class': 'gevent',
             'debug': False
         }
-        self['flask'] = {}
-        self['database'] = {}
-        self['tenancy'] = {
-            'json': Path.home() / 'tenants.json'
-        }
+        
         self['images'] = {
             'media': '/images',
             'shelve': '/images.db',
@@ -38,5 +45,3 @@ class Config(defaultdict, ABC):
             'shelve':  '/audios.db',
             'extension': 'webm'
         }
-        self['secrets'] = {}
-        self['strategy'] = {}

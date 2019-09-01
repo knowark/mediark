@@ -2,7 +2,7 @@ from typing import List, Union, Callable, Tuple
 from .types import TermTuple
 
 
-class ExpressionParser:
+class QueryParser:
     def __init__(self) -> None:
         self.comparison_dict = {
             '=': lambda field, value: (

@@ -6,7 +6,7 @@ from ....application.repositories import (
     ImageRepository, MemoryImageRepository,
     AudioRepository, MemoryAudioRepository)
 from ....application.utilities import (
-    ExpressionParser, TenantProvider, StandardTenantProvider)
+    QueryParser, TenantProvider, StandardTenantProvider)
 from ....application.services import (
     IdService, StandardIdService,
     FileStoreService, MemoryFileStoreService,
@@ -25,18 +25,18 @@ class MemoryFactory(Factory):
     # Repositories
     ##############
 
-    def expression_parser(self) -> ExpressionParser:
-        return ExpressionParser()
+    def query_parser(self) -> QueryParser:
+        return QueryParser()
 
-    def memory_image_repository(self, expression_parser: ExpressionParser,
+    def memory_image_repository(self, query_parser: QueryParser,
                                 tenant_provider: TenantProvider
                                 ) -> MemoryImageRepository:
-        return MemoryImageRepository(expression_parser, tenant_provider)
+        return MemoryImageRepository(query_parser, tenant_provider)
 
-    def memory_audio_repository(self, expression_parser: ExpressionParser,
+    def memory_audio_repository(self, query_parser: QueryParser,
                                 tenant_provider: TenantProvider
                                 ) -> MemoryAudioRepository:
-        return MemoryAudioRepository(expression_parser, tenant_provider)
+        return MemoryAudioRepository(query_parser, tenant_provider)
     
     def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()

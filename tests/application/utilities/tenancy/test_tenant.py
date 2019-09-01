@@ -35,18 +35,18 @@ def test_tenant_attributes_from_dict() -> None:
     assert tenant.updated_at > 0
 
 
-# def test_tenant_normalize_slug() -> None:
-#     given_slug = "Compu Servidores"
-#     slug = Tenant._normalize_slug(given_slug)
+def test_tenant_normalize_slug() -> None:
+    given_slug = "Compu Servidores"
+    slug = Tenant._normalize_slug(given_slug)
 
-#     assert slug == 'Compu Servidores'
+    # assert slug == 'Compu Servidores'
 
 
-# def test_tenant_normalize_slug_invalid() -> None:
-#     empty_slug = "  "
-#     with raises(ValueError):
-#         Tenant._normalize_slug(empty_slug)
+def test_tenant_normalize_slug_invalid() -> None:
+    empty_slug = "  "
+    with raises(ValueError):
+        Tenant._normalize_slug(empty_slug)
 
-#     unsupported_slug = " あ "
-#     with raises(ValueError):
-#         resp = Tenant._normalize_slug(unsupported_slug)
+    unsupported_slug = " あ "
+    with raises(ValueError):
+        resp = Tenant._normalize_slug(unsupported_slug)
