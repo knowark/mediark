@@ -27,6 +27,7 @@ class ShelveRepository(Repository, Generic[T]):
         offset = int(offset) if offset > 0 else 0
         filter_function = self.parser.parse(domain)
         with shelve.open(self.filename, 'r') as shelve_items:
+            print('shelve_items:::::::::', shelve_items)
             for item in list(shelve_items.values()):
                 if filter_function(item):
                     items.append(item)

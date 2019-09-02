@@ -16,14 +16,13 @@ class ProductionConfig(DevelopmentConfig):
             'accesslog': '-',
             'loglevel': 'debug'
         })
-        # self['tenancy'] = {
-        #     'json':  Path.home() / 'tenants.json'
-        # },
         self['authentication'] = {
             "type": "jwt",
             "secret_file": str(Path.home().joinpath('sign.txt'))
         }
-        self['domain'] = 'https://mediark.dev.nubark.cloud'
+        # self['domain'] = 'https://mediark.dev.nubark.cloud'
+        Path.home() / 'config.json'
+        self['domain'] = ''
         
         self['secrets'] = {
             "jwt": str(Path.home().joinpath('sign.txt'))

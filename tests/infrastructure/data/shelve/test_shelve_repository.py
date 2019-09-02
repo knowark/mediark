@@ -1,8 +1,8 @@
 import shelve
 from typing import Dict
 from pytest import fixture
-from mediark.application.repositories import (
-    ExpressionParser, Repository)
+from mediark.application.repositories import Repository
+from mediark.application.utilities import QueryParser
 from mediark.infrastructure.data import ShelveRepository
 
 
@@ -20,7 +20,7 @@ def test_shelve_repository_implementation() -> None:
 def shelve_repository(dummy_shelve) -> ShelveRepository:
     with shelve.open(dummy_shelve) as items:
         items.clear()
-    parser = ExpressionParser()
+    parser = QueryParser()
     entity_dict = {
         "1": DummyEntity('1', 'value_1'),
         "2": DummyEntity('2', 'value_2'),

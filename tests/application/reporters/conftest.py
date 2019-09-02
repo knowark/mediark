@@ -1,4 +1,5 @@
 from pytest import fixture
+from injectark import Injectark
 from mediark.application.models import Image, Audio
 from mediark.application.repositories import (
     MemoryImageRepository, MemoryAudioRepository)

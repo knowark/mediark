@@ -1,32 +1,66 @@
-from pytest import fixture
 from flask import Flask
+from pathlib import Path
+from pytest import fixture
+from injectark import Injectark
 from mediark.application.models import Image, Audio
-from mediark.infrastructure.config import DevelopmentConfig
-from mediark.infrastructure.resolver import Resolver, Registry
-from mediark.infrastructure.web import create_app
+from mediark.application.utilities import QueryParser
+from mediark.application.utilities.tenancy import (Tenant,
+    StandardTenantProvider)
+from mediark.application.repositories import (
+    MemoryImageRepository, MemoryAudioRepository)
+from mediark.infrastructure.core import (DevelopmentConfig,
+    build_config, Config, JwtSupplier)
+from mediark.infrastructure.core.factories import build_factory
+from mediark.infrastructure.web import create_app, ServerApplication
 
 
-def load_registry(registry: Registry) -> Registry:
-    registry['ImageRepository'].load({
-        "1": Image(id='1', reference='ABC'),
-        "2": Image(id='2', reference='XYZ')
+@fixture
+def load_registry():
+    parser = QueryParser()
+    tenant_service = StandardTenantProvider(Tenant(name="Origin"))
+    image_repository = MemoryImageRepository(parser, tenant_service)
+    image_repository.load({
+        'default':{
+            '001': Image(id='001', reference='ABC'),
+            '002': Image(id='002', reference='XYZ')
+        }
     })
-    registry['AudioRepository'].load({
-        "1": Audio(id='1', reference='ABC'),
-        "2": Audio(id='2', reference='XYZ')
-    })
-    return registry
-
+    return image_repository
 
 @fixture
 def app() -> Flask:
     config = DevelopmentConfig()
-    resolver = Resolver(config)
-    providers = config['providers']
-    registry = load_registry(resolver.resolve(providers))
+    
+    strategy = config['strategy']
+    factory = build_factory(config)
 
-    app = create_app(config, registry)
+    resolver = Injectark(strategy, factory)
+
+    app = create_app(config, resolver)
     app.testing = True
-    app = app.test_client()
+    app = cast(Flask, app.test_client())
 
     return app
+
+@fixture
+def headers() -> dict:
+
+    payload_dict = {
+        "tid": "c5934df0-cab9-4660-af14-c95272a92ab7",
+        "uid": "c4e47c69-b7ee-4a06-83bb-b59859478bec",
+        "name": "John Doe",
+        "email": "johndoe@nubark.com",
+        "attributes": {},
+        "authorization": {},
+        "exp": int(datetime.now().timestamp()) + 5
+    }
+
+    jwt_supplier = JwtSupplier('knowark')
+    token = jwt_supplier.encode(payload_dict)
+
+    return {"Authorization": (token)}
+
+
+@fixture
+def retrieve_production_conf() -> Config:
+    return build_config(Path.home() / 'Workspace/dev/github.com/Knowark/mediark/mediark', 'PROD')

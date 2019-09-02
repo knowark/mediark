@@ -19,10 +19,11 @@ def build_config(config_path: str, mode: str) -> Config:
 
 def load_config(config_path: str) -> Optional[Config]:
     path = Path(config_path)
+    print('path>>>>>>>>>> 1', path)
     if not path.exists():
         path = Path(Path.home() / 'config.json')
         if not path.exists():
             return None
-
+    print('path>>>>>>>>>> 2', path)
     with path.open() as f:
         return load(f)

@@ -3,7 +3,6 @@ from flask.views import MethodView
 from .... import __version__
 from .image import ImageResource
 from .audio import AudioResource
-from .download import DownloadResource
 
 
 class RootResource(MethodView):
