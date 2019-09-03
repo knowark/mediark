@@ -7,7 +7,6 @@ from ..schemas import DownloadSchema
 
 
 class DownloadResource(MethodView):
-
     def __init__(self, **kwargs: Any) -> None:
         self.media_directory = kwargs['config']['media']
         self.kwargs = kwargs

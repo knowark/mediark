@@ -10,7 +10,6 @@ from ..core.configuration import Config
 def create_api(app: Flask, resolver: Injectark) -> None:
 
     # API
-    config = Config
     spec = create_spec()
 
     # Root Resource (Api Specification)
@@ -26,22 +25,18 @@ def create_api(app: Flask, resolver: Injectark) -> None:
          'images', resolver=resolver))
     app.add_url_rule("/images", view_func=image_view)
 
+
     # Audios Resource
     spec.path(path="/audios", resource=AudioResource)
     audio_view = authenticate(AudioResource.as_view(
          'audios', resolver=resolver))
     app.add_url_rule("/audios", view_func=audio_view)
 
-    # Download Resource
-#     spec.path(path="/downloads", resource=DownloadResource)
-#     download_view = authenticate(DownloadResource.as_view(
-#          'downloads', resolver=resolver))
-#     app.add_url_rule("/downloads", view_func=download_view)
 
     # Download Resource
     spec.path(path="/download/<string:type>/<path:uri>",
           resource=DownloadResource)
     download_view = DownloadResource.as_view(
-         'download', config=config)
+         'download', config=Config())
     app.add_url_rule("/download/<string:type>/<path:uri>",
           view_func=download_view)
