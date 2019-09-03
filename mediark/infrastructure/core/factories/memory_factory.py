@@ -13,6 +13,8 @@ from ....application.services import (
     ImageFileStoreService, MemoryImageFileStoreService,
     AudioFileStoreService, MemoryAudioFileStoreService,
     AuthService, StandardAuthService)
+from ...web.middleware import Authenticate
+from ...core import JwtSupplier, JsonTenantSupplier
 from ....application.coordinators import (
     SessionCoordinator, ImageStorageCoordinator, AudioStorageCoordinator)
 from ....application.reporters import MediarkReporter, StandardMediarkReporter
@@ -86,3 +88,13 @@ class MemoryFactory(Factory):
                                 audio_repository: AudioRepository
                                 ) -> StandardMediarkReporter:
         return StandardMediarkReporter(image_repository, audio_repository)
+    
+
+    # Last method Add
+
+    def middleware_authenticate(
+            self, jwt_supplier: JwtSupplier,
+            tenant_supplier: TenantSupplier,
+            session_coordinator: SessionCoordinator) -> Authenticate:
+        return Authenticate(
+            jwt_supplier, tenant_supplier, session_coordinator)

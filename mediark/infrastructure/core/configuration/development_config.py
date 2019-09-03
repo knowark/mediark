@@ -75,4 +75,9 @@ class DevelopmentConfig(Config):
             "SessionCoordinator": {
                 "method": "session_coordinator"
             },
+
+            # last add
+            "Authenticate": {
+                "method": "middleware_authenticate"
+            },
         })

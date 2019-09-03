@@ -23,18 +23,20 @@ class Authenticate:
 
             authorization = request.headers.get('Authorization', "")
             token = authorization.replace('Bearer ', '')
-            
             if not token:
                 token = request.args.get('access_token')
 
             try:
                 token_payload = self.jwt_supplier.decode(
                     token, verify=False)
+                print('\n\n\n')
+                print('token_payload>>>>>>', token_payload)
                 tenant_dict = self.tenant_supplier.get_tenant(
                     token_payload['tid']) 
                 # tenant_dict = {"name": "Servagro"}
                 token_payload = self.jwt_supplier.decode(token, secret=None)
-                
+                print('\n\n\n')
+                print('tenant_dict>>>>', tenant_dict)
                 self.session_coordinator.set_tenant(tenant_dict)
                 user_dict = UserSchema().load(token_payload)
                 self.session_coordinator.set_user(user_dict)

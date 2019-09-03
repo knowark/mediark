@@ -1,6 +1,8 @@
 from flask import Flask
 from pathlib import Path
 from pytest import fixture
+from datetime import datetime
+from typing import cast, List
 from injectark import Injectark
 from mediark.application.models import Image, Audio
 from mediark.application.utilities import QueryParser
@@ -35,7 +37,6 @@ def app() -> Flask:
     factory = build_factory(config)
 
     resolver = Injectark(strategy, factory)
-
     app = create_app(config, resolver)
     app.testing = True
     app = cast(Flask, app.test_client())
@@ -56,11 +57,11 @@ def headers() -> dict:
     }
 
     jwt_supplier = JwtSupplier('knowark')
-    token = jwt_supplier.encode(payload_dict)
+    token = jwt_supplier.encode()
 
     return {"Authorization": (token)}
 
 
 @fixture
 def retrieve_production_conf() -> Config:
-    return build_config(Path.home() / 'Workspace/dev/github.com/Knowark/mediark/mediark', 'PROD')
+    return build_config('', 'PROD')

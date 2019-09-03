@@ -14,12 +14,12 @@ class HttpFactory(DirectoryFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
     
-    def middleware_authenticate(
-            self, jwt_supplier: JwtSupplier,
-            tenant_supplier: TenantSupplier,
-            session_coordinator: SessionCoordinator) -> Authenticate:
-        return Authenticate(
-            jwt_supplier, tenant_supplier, session_coordinator)
+    # def middleware_authenticate(
+    #         self, jwt_supplier: JwtSupplier,
+    #         tenant_supplier: TenantSupplier,
+    #         session_coordinator: SessionCoordinator) -> Authenticate:
+    #     return Authenticate(
+    #         jwt_supplier, tenant_supplier, session_coordinator)
 
     def jwt_supplier(self) -> JwtSupplier:
         secret = 'secret'
