@@ -28,4 +28,4 @@ def test_build_config_production_no_file():
     result = build_config(path, 'PROD')
 
     assert isinstance(result, ProductionConfig)
-    # assert result['domain'] == 'http://0.0.0.0:8080'
+    assert result['domain'] == 'http://0.0.0.0:8080'

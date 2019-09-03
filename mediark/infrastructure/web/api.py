@@ -17,7 +17,6 @@ def create_api(app: Flask, resolver: Injectark) -> None:
     app.add_url_rule("/", view_func=root_view)
 
     # Middleware
-    print('resolver>>>>>>', type(resolver))
     authenticate = resolver['Authenticate']
 
     # Images Resource
