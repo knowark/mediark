@@ -7,15 +7,18 @@ from .development_config import *
 from .production_config import *
 
 def load_domain() -> str:
-    path_config = "/etc/opt/mediark/config.json"
-    with open(path_config, 'r') as f:
-        data = json.load(f)
-    return data['domain'] if data else ''
+    domain = ''
+    path_config = Path("/etc/opt/mediark/config.json")
+    if not path_config.exists():
+        return domain
+    else:
+        with open(path_config, 'r') as f:
+            data = json.load(f) if f else ''
+        return data['domain'] if data else ''
 
 def build_config(config_path: str, mode: str) -> Config:
     if mode == 'DEV':
         return DevelopmentConfig()
-
     production_config = ProductionConfig()
     production_config['domain'] = load_domain()
     loaded_config = load_config(config_path)
