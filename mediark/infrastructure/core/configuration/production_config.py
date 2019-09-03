@@ -20,10 +20,6 @@ class ProductionConfig(DevelopmentConfig):
             "type": "jwt",
             "secret_file": str(Path.home().joinpath('sign.txt'))
         }
-        # self['domain'] = 'https://mediark.dev.nubark.cloud'
-        Path.home() / 'config.json'
-        self['domain'] = ''
-        
         self['secrets'] = {
             "jwt": str(Path.home().joinpath('sign.txt'))
         }

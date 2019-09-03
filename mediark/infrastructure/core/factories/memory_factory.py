@@ -54,7 +54,8 @@ class MemoryFactory(Factory):
         return MemoryAudioFileStoreService()
     
     def memory_auth_service(self) -> StandardAuthService:
-        return StandardAuthService()
+        dominion = self.config['authorization']['dominion']
+        return StandardAuthService(dominion)
 
     # Coordinators
     ##############

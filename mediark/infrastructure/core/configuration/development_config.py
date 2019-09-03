@@ -23,6 +23,9 @@ class DevelopmentConfig(Config):
         self['secrets'] = {
             "jwt": str(Path.home().joinpath('sign.txt'))
         }
+        self['authorization'] = {
+            "dominion": "mediark"
+        }
         self['factory'] = 'MemoryFactory'
 
         self['strategy'].update({
@@ -33,7 +36,6 @@ class DevelopmentConfig(Config):
             "IdService": {
                 "method": "standard_id_service"
             },
-            
             # Tenancy
             "TenantProvider": {
                 "method": "standard_tenant_provider"
