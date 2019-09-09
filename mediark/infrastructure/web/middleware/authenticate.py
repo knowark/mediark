@@ -22,9 +22,9 @@ class Authenticate:
             # self.session_coordinator.set_tenant(tenant_dict)
 
             authorization = request.headers.get('Authorization', "")
-            token = authorization.replace('Bearer ', '')
+            token = str(authorization.replace('Bearer ', ''))
             if not token:
-                token = request.args.get('access_token')
+                token = str(request.args.get('access_token'))
 
             try:
                 token_payload = self.jwt_supplier.decode(

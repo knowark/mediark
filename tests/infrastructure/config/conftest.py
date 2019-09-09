@@ -7,8 +7,9 @@ from typing import cast, List
 from injectark import Injectark
 from flask.testing import FlaskClient
 from mediark.infrastructure.core import (
-    build_config, Config, JwtSupplier
+    build_config, build_factory, Config, JwtSupplier
 )
+from mediark.infrastructure.web import create_app
 from uuid import uuid4
 
 
@@ -28,23 +29,6 @@ def config_file(tmpdir_factory):
 
     return config_file
 
-@fixture
-def app() -> Flask:
-    """Create app testing client"""
-    config = build_config("", os.environ.get('PROD', 'DEV'))
-
-    # Configuration loading
-
-    strategy = config['strategy']
-    factory = build_factory(config)
-
-    resolver = Injectark(strategy, factory)
-
-    app = create_app(config, resolver)
-    app.testing = True
-    app = cast(Flask, app.test_client())
-
-    return app
 
 @fixture
 def app() -> Flask:
@@ -87,4 +71,3 @@ def headers() -> dict:
 @fixture
 def retrieve_production_conf() -> Config:
     return build_config("", 'PROD')
-

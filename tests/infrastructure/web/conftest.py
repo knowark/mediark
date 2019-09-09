@@ -1,4 +1,3 @@
-import jwt
 from flask import Flask
 from pathlib import Path
 from pytest import fixture
@@ -12,7 +11,7 @@ from mediark.application.utilities.tenancy import (
 from mediark.application.repositories import (
     MemoryImageRepository, MemoryAudioRepository)
 from mediark.infrastructure.core import (
-    DevelopmentConfig, build_config, Config)
+    DevelopmentConfig, build_config, Config, JwtSupplier)
 from mediark.infrastructure.core.factories import build_factory
 from mediark.infrastructure.web import create_app, ServerApplication
 
@@ -59,8 +58,8 @@ def headers() -> dict:
         "exp": int(datetime.now().timestamp()) + 5
     }
 
-    token = jwt.encode(
-        payload_dict, 'knowark', algorithm='HS256').decode('utf-8')
+    jwt_supplier = JwtSupplier('knowark')
+    token = jwt_supplier.encode(payload_dict)
 
     return {"Authorization": (token)}
 
