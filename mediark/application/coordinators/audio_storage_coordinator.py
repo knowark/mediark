@@ -18,8 +18,8 @@ class AudioStorageCoordinator:
 
         if 'id' not in audio_dict:
             audio_dict['id'] = self.id_service.generate_id()
-        
-        locator = audio_dict.get('id')
+
+        locator = str(audio_dict.get('id'))
         content = audio_dict.pop('data')
         extension = audio_dict.get('extension')
 
