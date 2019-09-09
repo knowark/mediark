@@ -11,7 +11,7 @@ from ...utilities.exceptions import EntityNotFoundError
 
 class MemoryRepository(Repository, Generic[T]):
     def __init__(self,  parser: QueryParser,
-                tenant_provider: TenantProvider) -> None:
+                 tenant_provider: TenantProvider) -> None:
         self.data: Dict[str, Dict[str, T]] = defaultdict(dict)
         self.parser = parser
         self.tenant_provider = tenant_provider
@@ -24,8 +24,8 @@ class MemoryRepository(Repository, Generic[T]):
         return item
 
     def add(self, item: T) -> T:
-        item.id = item.id or str(uuid4())
-        self.data[self._location][item.id] = item
+        setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
+        self.data[self._location][getattr(item, 'id')] = item
         return item
 
     def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
@@ -45,7 +45,7 @@ class MemoryRepository(Repository, Generic[T]):
         id = getattr(item, 'id')
         if id not in self.data[self._location]:
             return False
-        del self.data[self._location][item.id]
+        del self.data[self._location][id]
         return True
 
     def load(self, data: Dict[str, Dict[str, T]]) -> None:

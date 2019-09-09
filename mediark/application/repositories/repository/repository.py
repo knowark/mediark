@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, TypeVar, Optional, Generic
-from ...utilities.types import T, QueryDomain 
+from ...utilities.types import T, QueryDomain
+
 
 class Repository(ABC, Generic[T]):
 
@@ -9,7 +10,7 @@ class Repository(ABC, Generic[T]):
         "Get method to be implemented."
 
     @abstractmethod
-    def add(self, item: T) -> bool:
+    def add(self, item: T) -> T:
         "Add method to be implemented."
 
     @abstractmethod
