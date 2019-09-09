@@ -12,6 +12,6 @@ def build_factory(config: Config) -> Factory:
     return {
         'MemoryFactory': lambda config: MemoryFactory(config),
         'HttpFactory': lambda config: HttpFactory(config),
-        'ShelveFactory': lambda config: ShelveFactory(MemoryFactory),
-        'DirectoryFactory': lambda config: DirectoryFactory(ShelveFactory),
+        'ShelveFactory': lambda config: ShelveFactory(config),
+        'DirectoryFactory': lambda config: DirectoryFactory(config),
     }[factory](config)

@@ -17,7 +17,7 @@ class Authenticate:
     def __call__(self, method: Callable) -> Callable:
         @wraps(method)
         def decorator(*args, **kwargs):
-            
+
             # tenant_dict = {"name": "Knowark"}
             # self.session_coordinator.set_tenant(tenant_dict)
 
@@ -32,7 +32,7 @@ class Authenticate:
                 print('\n\n\n')
                 print('token_payload>>>>>>', token_payload)
                 tenant_dict = self.tenant_supplier.get_tenant(
-                    token_payload['tid']) 
+                    token_payload['tid'])
                 # tenant_dict = {"name": "Servagro"}
                 token_payload = self.jwt_supplier.decode(token, secret=None)
                 print('\n\n\n')
