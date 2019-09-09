@@ -6,7 +6,6 @@ from json import loads, JSONDecodeError
 from pathlib import Path
 
 
-
 class Config(defaultdict, ABC):
 
     def number_of_workers(self):
@@ -33,7 +32,7 @@ class Config(defaultdict, ABC):
             'worker_class': 'gevent',
             'debug': False
         }
-        
+
         self['images'] = {
             'media': '/images',
             'shelve': '/images.db',

@@ -3,12 +3,12 @@ from ....application.repositories import (
     AudioRepository, MemoryAudioRepository)
 from ....application.services import (
     IdService, StandardIdService, FileStoreService, MemoryFileStoreService,
-    ImageFileStoreService, MemoryImageFileStoreService,
-    AudioFileStoreService, MemoryAudioFileStoreService)
+    ImageFileStoreService, MemoryImageFileStoreService, AudioFileStoreService,
+    MemoryAudioFileStoreService, AuthService, StandardAuthService)
 from ....application.coordinators import (
     ImageStorageCoordinator, AudioStorageCoordinator, SessionCoordinator)
 from ....application.reporters import MediarkReporter, StandardMediarkReporter
-from ...config import Config
+from ...core import Config, TenantSupplier, MemoryTenantSupplier
 from ....application.utilities import (
     QueryParser, TenantProvider, StandardTenantProvider)
 
@@ -17,31 +17,36 @@ class MemoryFactory:
     def __init__(self, config: Config) -> None:
         self.config = config
 
-    # Repositories
-    ##############
-
     def query_parser(self) -> QueryParser:
         return QueryParser()
 
-    def memory_image_repository(self, query_parser: QueryParser
-                                ) -> MemoryImageRepository:
-        return MemoryImageRepository(query_parser)
+    # Tenancy
 
-    def memory_audio_repository(self, query_parser: QueryParser
-                                ) -> MemoryAudioRepository:
-        return MemoryAudioRepository(query_parser)
-    
+    def memory_tenant_supplier(self) -> MemoryTenantSupplier:
+        return MemoryTenantSupplier()
+
     def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
 
+    # Repositories
+
+    def memory_image_repository(
+        self, query_parser: QueryParser, tenant_provider: TenantProvider
+    ) -> MemoryImageRepository:
+        return MemoryImageRepository(query_parser, tenant_provider)
+
+    def memory_audio_repository(
+        self, query_parser: QueryParser, tenant_provider: TenantProvider
+    ) -> MemoryAudioRepository:
+        return MemoryAudioRepository(query_parser, tenant_provider)
+
     # Services
-    ##########
 
     def standard_id_service(self) -> StandardIdService:
         return StandardIdService()
-    
+
     def memory_auth_service(self) -> StandardAuthService:
-        return StandardAuthService()
+        return StandardAuthService("default")
 
     def memory_image_file_store_service(self) -> MemoryImageFileStoreService:
         return MemoryImageFileStoreService()
@@ -50,7 +55,6 @@ class MemoryFactory:
         return MemoryAudioFileStoreService()
 
     # Coordinators
-    ##############
 
     def image_storage_coordinator(self, image_repository: ImageRepository,
                                   id_service: IdService,
@@ -65,7 +69,7 @@ class MemoryFactory:
                                   ) -> AudioStorageCoordinator:
         return AudioStorageCoordinator(audio_repository, id_service,
                                        file_store_service)
-    
+
     def session_coordinator(
         self, tenant_provider: TenantProvider, auth_service: AuthService
     ) -> SessionCoordinator:

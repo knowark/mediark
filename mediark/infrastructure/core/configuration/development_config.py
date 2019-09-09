@@ -28,7 +28,21 @@ class DevelopmentConfig(Config):
         }
         self['factory'] = 'MemoryFactory'
 
-        self['strategy'].update({
+        self['strategy'] = {
+            # Security
+            "JwtSupplier": {
+                "method": "jwt_supplier"
+            },
+            "Authenticate": {
+                "method": "middleware_authenticate"
+            },
+            "AuthService": {
+                "method": "memory_auth_service"
+            },
+            "SessionCoordinator": {
+                "method": "session_coordinator"
+            },
+
             # Query parser
             "QueryParser": {
                 "method": "query_parser"
@@ -43,7 +57,7 @@ class DevelopmentConfig(Config):
             "TenantSupplier": {
                 "method": "memory_tenant_supplier"
             },
-            
+
             "ProvisionService": {
                 "method": "memory_provision_service"
             },
@@ -67,17 +81,5 @@ class DevelopmentConfig(Config):
             },
             "StandardMediarkReporter": {
                 "method": "memory_mediark_reporter",
-            },
-            
-            "AuthService": {
-                "method": "memory_auth_service"
-            },
-            "SessionCoordinator": {
-                "method": "session_coordinator"
-            },
-
-            # last add
-            "Authenticate": {
-                "method": "middleware_authenticate"
-            },
-        })
+            }
+        }
