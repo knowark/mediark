@@ -38,3 +38,6 @@ coverage:
 update:
 	pip-review --auto
 	pip freeze > requirements.txt
+
+serve:
+	python -m $(PROJECT) serve
