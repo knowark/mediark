@@ -16,18 +16,18 @@ from mediark.infrastructure.core.factories import build_factory
 from mediark.infrastructure.web import create_app, ServerApplication
 
 
-@fixture
-def load_registry():
-    parser = QueryParser()
-    tenant_service = StandardTenantProvider(Tenant(name="Origin"))
-    image_repository = MemoryImageRepository(parser, tenant_service)
-    image_repository.load({
-        'default': {
-            '001': Image(id='001', reference='ABC'),
-            '002': Image(id='002', reference='XYZ')
-        }
-    })
-    return image_repository
+# @fixture
+# def load_registry():
+#     parser = QueryParser()
+#     tenant_service = StandardTenantProvider(Tenant(name="Origin"))
+#     image_repository = MemoryImageRepository(parser, tenant_service)
+#     image_repository.load({
+#         'default': {
+#             '001': Image(id='001', reference='ABC'),
+#             '002': Image(id='002', reference='XYZ')
+#         }
+#     })
+#     return image_repository
 
 
 @fixture
@@ -49,10 +49,10 @@ def app() -> Flask:
 def headers() -> dict:
 
     payload_dict = {
-        "tid": "c5934df0-cab9-4660-af14-c95272a92ab7",
-        "uid": "c4e47c69-b7ee-4a06-83bb-b59859478bec",
-        "name": "John Doe",
-        "email": "johndoe@nubark.com",
+        "tid": "1",
+        "uid": "1",
+        "name": "jjalvarez",
+        "email": "jjalvarez@servagro.com.co",
         "attributes": {},
         "authorization": {},
         "exp": int(datetime.now().timestamp()) + 5

@@ -16,10 +16,6 @@ class DevelopmentConfig(Config):
             'acesslog': '-',
             'loglevel': 'debug'
         })
-        self['authentication'] = {
-            "type": "jwt",
-            "secret_file": str(Path.home().joinpath('sign.txt'))
-        }
         self['secrets'] = {
             "jwt": str(Path.home().joinpath('sign.txt'))
         }

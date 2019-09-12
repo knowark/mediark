@@ -14,16 +14,14 @@ class ResourcePlugin(BasePlugin):
             'delete', 'head', 'options', 'trace']
 
     def path_helper(self, path, operations=None, resource=None, **kwargs):
-        if not resource:
-            return
-
-        for method in self.methods:
-            function = getattr(resource, method, None)
-            if not function:
-                continue
-            operation = load_yaml_from_docstring(function.__doc__)
-            if operation:
-                operations[method] = operation
+        if resource:
+            for method in self.methods:
+                function = getattr(resource, method, None)
+                if not function:
+                    continue
+                operation = load_yaml_from_docstring(function.__doc__)
+                if operation:
+                    operations[method] = operation
 
 
 def create_spec() -> APISpec:
