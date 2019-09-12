@@ -8,10 +8,7 @@ from flask import jsonify
 def register_error_handler(app: Flask):
 
     def handle_error(error):
-        code = 500
-        if isinstance(error, HTTPException):
-            
-            code = error.code
+        code = error.code or 500
 
         exception = type(error).__name__
         traceback = format_tb(error.__traceback__)

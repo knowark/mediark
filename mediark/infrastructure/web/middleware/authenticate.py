@@ -1,12 +1,14 @@
-from typing import Callable
+from typing import Callable, Optional, Any
 from functools import wraps
-from flask import request
+from flask import request, jsonify
 from ....application.coordinators import SessionCoordinator
-from ...core import JwtSupplier, AuthenticationError, TenantSupplier
+from ...core import TenantSupplier, JwtSupplier, AuthenticationError
 from ..schemas import UserSchema
+import logging
 
 
 class Authenticate:
+
     def __init__(self, jwt_supplier: JwtSupplier,
                  tenant_supplier: TenantSupplier,
                  session_coordinator: SessionCoordinator) -> None:
@@ -17,32 +19,36 @@ class Authenticate:
     def __call__(self, method: Callable) -> Callable:
         @wraps(method)
         def decorator(*args, **kwargs):
-
-            # tenant_dict = {"name": "Knowark"}
-            # self.session_coordinator.set_tenant(tenant_dict)
-
             authorization = request.headers.get('Authorization', "")
-            token = str(authorization.replace('Bearer ', ''))
+            token = authorization.replace('Bearer ', '')
             if not token:
-                token = str(request.args.get('access_token'))
+                aux = request.args.get('access_token')
+                token = aux if aux is not None else ""
 
             try:
                 token_payload = self.jwt_supplier.decode(
                     token, verify=False)
-                print('\n\n\n')
-                print('token_payload>>>>>>', token_payload)
+
                 tenant_dict = self.tenant_supplier.get_tenant(
                     token_payload['tid'])
-                # tenant_dict = {"name": "Servagro"}
+
                 token_payload = self.jwt_supplier.decode(token, secret=None)
-                print('\n\n\n')
-                print('tenant_dict>>>>', tenant_dict)
+
                 self.session_coordinator.set_tenant(tenant_dict)
+
                 user_dict = UserSchema().load(token_payload)
+
                 self.session_coordinator.set_user(user_dict)
+
             except Exception as e:
-                raise AuthenticationError(
-                    "Couldn't authenticate the request.")
+                def error_function(*args, **kwargs):
+                    return jsonify(error={
+                        'exception': 'Unauthorized',
+                        'message': str(AuthenticationError),
+                        'trace': str(e)
+                    }), 401
+                logging.error(e)
+                return error_function(*args, **kwargs)
 
             return method(*args, **kwargs)
 
