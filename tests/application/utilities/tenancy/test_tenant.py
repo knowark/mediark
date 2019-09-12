@@ -1,5 +1,5 @@
 from pytest import fixture, raises
-from mediark.application.utilities import Tenant
+from mediark.application.utilities import Tenant, TenantLocationError
 
 
 @fixture
@@ -50,3 +50,8 @@ def test_tenant_normalize_slug_invalid() -> None:
     unsupported_slug = " あ "
     with raises(ValueError):
         resp = Tenant._normalize_slug(unsupported_slug)
+
+
+def test_tenant_location_error(tenant: tenant):
+    with raises(TenantLocationError):
+        tenant.location("non_memory", "non_default")

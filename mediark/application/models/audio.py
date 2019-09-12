@@ -3,7 +3,7 @@ from .entity import Entity
 
 class Audio(Entity):
     def __init__(self, **attributes):
-        self.id = attributes.get('id', '')
+        super().__init__(**attributes)
         self.namespace = attributes.get('namespace', '')
         self.reference = attributes.get('reference', '')
         self.extension = attributes.get('extension', 'mp4')

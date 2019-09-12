@@ -31,11 +31,7 @@ class MemoryRepository(Repository, Generic[T]):
         return item
 
     def update(self, item: T) -> bool:
-        if item.id not in self.data[self._location]:
-            return False
-        item.updated_at = int(time.time())
-        self.data[self._location][item.id] = item
-        return True
+        """Not implemented"""
 
     def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
         items = []
