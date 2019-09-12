@@ -9,11 +9,7 @@ def test_tenant_supplier_methods() -> None:
 
 def test_memory_tenant_supplier_create_get_search_tenant() -> None:
     tenant_supplier = MemoryTenantSupplier()
-    tenant_supplier.create_tenant({
-        'id': '001',
-        'name': 'Knowark'
-    })
 
-    assert tenant_supplier.get_tenant('001')['name'] == 'Knowark'
+    assert tenant_supplier.get_tenant('1')['name'] == 'origin'
 
-    assert len(tenant_supplier.search_tenants([["name", "=", "Knowark"]])) == 1
+    assert len(tenant_supplier.search_tenants([["name", "=", "origin"]])) == 1

@@ -29,6 +29,10 @@ class MemoryTenantSupplier(TenantSupplier):
         self.arranger = resolve_arranger({
             'cataloguer': cataloguer
         })
+        self.create_tenant({
+            'id': '1', 'name': 'origin',
+            'data': {'memory': {'default': 'default'}}
+        })
 
     def get_tenant(self, tenant_id: str) -> Dict[str, Any]:
         return self.provider.get_tenant(tenant_id)
