@@ -47,3 +47,6 @@ class ShelveRepository(Repository, Generic[T]):
     def load(self, items: Dict[str, T]) -> None:
         with shelve.open(self.filename) as db:
             db.update(items)
+
+    def update(self, item: T) -> bool:
+        """Not implemented"""

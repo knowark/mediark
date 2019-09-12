@@ -1,8 +1,8 @@
 from pytest import fixture, raises
 from mediark.application.services import (
     AuthService, StandardAuthService, User)
-from mediark.application.services import (AuthenticationError,
-                                            AuthorizationError)
+from mediark.application.services import (
+    AuthenticationError, AuthorizationError)
 
 
 def test_auth_service_repository_methods():

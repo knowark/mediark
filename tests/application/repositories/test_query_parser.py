@@ -106,7 +106,7 @@ def test_query_parser_parse_multiple_terms(parser):
 
 
 def test_expression_parser_with_empty_list(parser):
-    domain = []
+    domain: list = []
     result = parser.parse(domain)
     mock_object = Mock()
     mock_object.field = 7

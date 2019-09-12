@@ -1,4 +1,7 @@
-class Image:
+from .entity import Entity
+
+
+class Image(Entity):
     def __init__(self, **attributes):
         self.id = attributes.get('id', '')
         self.namespace = attributes.get('namespace', '')

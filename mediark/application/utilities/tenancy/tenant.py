@@ -1,5 +1,7 @@
 import time
 import unicodedata
+from typing import Mapping
+from .. import TenantLocationError
 
 
 class Tenant:
@@ -12,7 +14,19 @@ class Tenant:
         self.email = attributes.get('email', '')
         self.active = attributes.get('active', True)
         self.slug = self._normalize_slug(attributes.get('slug', self.name))
-        self.location = attributes.get('location', self.slug)
+        self.data: Mapping[str, Mapping[str, str]] = attributes.get('data', {
+            'memory': {
+                'default': self.slug
+            }
+        })
+
+    def location(self, type: str = 'memory',
+                 collection: str = 'default') -> str:
+        if type not in self.data:
+            raise TenantLocationError(
+                f"No location found for '{type}' type "
+                f"in tenant '{self.name}'.")
+        return self.data[type][collection]
 
     @staticmethod
     def _normalize_slug(slug: str) -> str:

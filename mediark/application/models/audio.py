@@ -1,4 +1,7 @@
-class Audio:
+from .entity import Entity
+
+
+class Audio(Entity):
     def __init__(self, **attributes):
         self.id = attributes.get('id', '')
         self.namespace = attributes.get('namespace', '')

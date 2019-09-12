@@ -1,6 +1,6 @@
 from ..models import Image
-from .repository.repository import Repository
-from .repository.memory_repository import MemoryRepository
+from .repository import Repository
+from .memory_repository import MemoryRepository
 
 
 class ImageRepository(Repository[Image]):
