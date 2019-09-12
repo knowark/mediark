@@ -31,8 +31,20 @@ from mediark.infrastructure.web import create_app, ServerApplication
 
 
 @fixture
-def app() -> Flask:
+def mock_secret_file(tmp_path):
+    mock_secret_file_path = str(tmp_path / "sign.txt")
+    with open(mock_secret_file_path, "w") as f:
+        f.write("123456")
+    return str(mock_secret_file_path)
+
+
+@fixture
+def app(mock_secret_file) -> Flask:
     config = DevelopmentConfig()
+
+    config['secrets'] = {
+        "jwt": mock_secret_file
+    }
 
     strategy = config['strategy']
     factory = build_factory(config)
@@ -58,7 +70,7 @@ def headers() -> dict:
         "exp": int(datetime.now().timestamp()) + 5
     }
 
-    jwt_supplier = JwtSupplier('knowark')
+    jwt_supplier = JwtSupplier('123456')
     token = jwt_supplier.encode(payload_dict)
 
     return {"Authorization": (token)}

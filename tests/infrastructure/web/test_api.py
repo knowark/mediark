@@ -30,20 +30,29 @@ def test_root_resource_request_none(app: Flask, headers: dict) -> None:
 def test_invalid_headers(app: Flask) -> None:
     response = app.get('/audio')
     data = loads(str(response.data, 'utf-8'))
-    assert data["error"] is not None
+    assert data["error"]
 
 
-def test_api_images_search(app: Flask) -> None:
-    response = app.get('/images?filter=[["reference", "=", "ABC"]]')
+def test_api_images_put_and_search(app: Flask, headers: dict) -> None:
+    audio = Audio(
+        id=str(uuid4()), reference="ABC", uri="http://example.com").__dict__
+    print("AUDIO:::: ", audio)
+    response = app.post('/images', data=dumps(audio), headers=headers,
+                        content_type='application/json')
+
+    print("RESPONSE:::: ", response.status)
+
+    response = app.get(
+        '/images?filter=[["reference", "=", "ABC"]]', headers=headers)
+    data = loads(str(response.data, 'utf-8'))
+    assert len(data) == 1
+
+
+def test_api_audios_search(app: Flask, headers: dict) -> None:
+    response = app.get(
+        '/audios?filter=[["reference", "=", "XYZ"]]', headers=headers)
     data = str(response.data, 'utf-8')
     data_dict = loads(data)
     assert data
-    assert len(data_dict) == 1
-
-
-def test_api_audios_search(app: Flask) -> None:
-    response = app.get('/audios?filter=[["reference", "=", "XYZ"]]')
-    data = str(response.data, 'utf-8')
-    data_dict = loads(data)
-    assert data
+    assert data_dict.get("error", None) is None
     assert len(data_dict) == 1

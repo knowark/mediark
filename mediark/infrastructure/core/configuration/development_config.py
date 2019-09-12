@@ -75,7 +75,7 @@ class DevelopmentConfig(Config):
             "AudioStorageCoordinator": {
                 "method": "audio_storage_coordinator",
             },
-            "StandardMediarkReporter": {
+            "MediarkReporter": {
                 "method": "memory_mediark_reporter",
             }
         }

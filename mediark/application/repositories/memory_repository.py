@@ -25,8 +25,8 @@ class MemoryRepository(Repository, Generic[T]):
 
     def add(self, item: T) -> T:
         item.id = item.id or str(uuid4())
-        item.created_at = int(time.time())
-        item.updated_at = item.created_at
+        # item.created_at = int(time.time())
+        # item.updated_at = item.created_at
         self.data[self._location][item.id] = item
         return item
 

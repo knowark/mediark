@@ -28,9 +28,6 @@ class ProductionConfig(DevelopmentConfig):
             "JwtSupplier": {
                 "method": "jwt_supplier"
             },
-            # "Authenticate": {
-            #     "method": "middleware_authenticate"
-            # },
             "ImageRepository": {
                 "method": "shelve_image_repository",
             },
