@@ -16,20 +16,6 @@ from mediark.infrastructure.core.factories import build_factory
 from mediark.infrastructure.web import create_app, ServerApplication
 
 
-# @fixture
-# def load_registry():
-#     parser = QueryParser()
-#     tenant_service = StandardTenantProvider(Tenant(name="Origin"))
-#     image_repository = MemoryImageRepository(parser, tenant_service)
-#     image_repository.load({
-#         'default': {
-#             '001': Image(id='001', reference='ABC'),
-#             '002': Image(id='002', reference='XYZ')
-#         }
-#     })
-#     return image_repository
-
-
 @fixture
 def mock_secret_file(tmp_path):
     mock_secret_file_path = str(tmp_path / "sign.txt")

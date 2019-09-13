@@ -12,16 +12,19 @@ class ProductionConfig(DevelopmentConfig):
         super().__init__()
         self['mode'] = 'PROD'
         self['gunicorn'].update({
-            'debug': True,
-            'accesslog': '-',
-            'loglevel': 'debug'
+            'workers': self.number_of_workers()
         })
         self['authentication'] = {
             "type": "jwt",
             "secret_file": str(Path.home().joinpath('sign.txt'))
         }
-        self['secrets'] = {
-            "jwt": str(Path.home().joinpath('sign.txt'))
+        self['tenancy'] = {
+            'json':  Path.home() / 'tenants.json'
+        }
+        self['data'] = {
+            "json": {
+                "default": str(Path.home().joinpath('data'))
+            }
         }
         self['factory'] = 'HttpFactory'
         self['strategy'].update({
@@ -54,3 +57,6 @@ class ProductionConfig(DevelopmentConfig):
                 "method": "json_tenant_supplier"
             },
         })
+
+    def number_of_workers(self):
+        return (multiprocessing.cpu_count() * 2) + 1

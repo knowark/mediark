@@ -11,7 +11,7 @@ from .infrastructure.web import create_app, ServerApplication
 
 def main():  # pragma: no cover
     mode = os.environ.get('MEDIARK_MODE', 'PROD')
-    config_path = os.environ.get('MEDIARK_CONFIG', 'mediark_config.json')
+    config_path = os.environ.get('MEDIARK_CONFIG', 'config.json')
     config = build_config(config_path, mode)
 
     factory = build_factory(config)

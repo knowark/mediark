@@ -1,4 +1,3 @@
-import multiprocessing
 from collections import defaultdict
 from typing import Dict, Any
 from abc import ABC, abstractmethod
@@ -7,9 +6,6 @@ from pathlib import Path
 
 
 class Config(defaultdict, ABC):
-
-    def number_of_workers(self):
-        return (multiprocessing.cpu_count() * 2) + 1
 
     @abstractmethod
     def __init__(self):
@@ -24,13 +20,12 @@ class Config(defaultdict, ABC):
         self['environment'] = {
             'home': '/opt/mediark'
         }
-        self['media'] = str(Path('/opt/mediark/data/servagro/media'))
-        self['shelve'] = str(Path('/opt/mediark/data/servagro/shelve'))
+        self['media'] = str(Path('/opt/mediark/data/origin/media'))
+        self['shelve'] = str(Path('/opt/mediark/data/origin/shelve'))
         self['gunicorn'] = {
             'bind': '%s:%s' % ('0.0.0.0', '8080'),
-            'workers': self.number_of_workers(),
+            'workers': 1,
             'worker_class': 'gevent',
-            'debug': False
         }
 
         self['images'] = {

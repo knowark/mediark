@@ -1,4 +1,3 @@
-import multiprocessing
 from collections import defaultdict
 from typing import Dict, Any
 from abc import ABC, abstractmethod
@@ -17,7 +16,8 @@ class DevelopmentConfig(Config):
             'loglevel': 'debug'
         })
         self['secrets'] = {
-            "jwt": str(Path.home().joinpath('sign.txt'))
+            "jwt": str(Path.home().joinpath('sign.txt')),
+            "domain": str(Path.home().joinpath('domain.txt'))
         }
         self['authorization'] = {
             "dominion": "mediark"

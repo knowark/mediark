@@ -34,16 +34,19 @@ def test_invalid_headers(app: Flask) -> None:
 
 
 def test_api_images_put_and_search(app: Flask, headers: dict) -> None:
-    audio = Audio(
-        id=str(uuid4()), reference="ABC", uri="http://example.com").__dict__
-    print("AUDIO:::: ", audio)
-    response = app.post('/images', data=dumps(audio), headers=headers,
+    image = Image(id=str(uuid4)).__dict__
+    image = {'id': str(uuid4()), 'namespace': '',
+             'reference': 'Sample-jpg-image-50kb', 'extension': 'jpg',
+             'url': 'https://sample-videos.com/img'}
+    print("IMAGE:::: ", image)
+    response = app.post('/images', data=dumps(image), headers=headers,
                         content_type='application/json')
 
-    print("RESPONSE:::: ", response.status)
+    assert response.status == "201 CREATED"
 
     response = app.get(
         '/images?filter=[["reference", "=", "ABC"]]', headers=headers)
+    print("RESPONSE DATA:::: ", response.data)
     data = loads(str(response.data, 'utf-8'))
     assert len(data) == 1
 
