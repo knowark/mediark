@@ -45,22 +45,8 @@ class Config(defaultdict, ABC):
                 },
             }
         }
-        self['media'] = str(Path('/opt/mediark/data/origin/media'))
-        self['shelve'] = str(Path('/opt/mediark/data/origin/shelve'))
         self['gunicorn'] = {
             'bind': '%s:%s' % ('0.0.0.0', '8080'),
             'workers': 1,
             'worker_class': 'gevent',
-        }
-
-        self['images'] = {
-            'media': '/images',
-            'shelve': '/images.db',
-            'extension': 'jpg'
-        }
-
-        self['audios'] = {
-            'media': '/audios',
-            'shelve':  '/audios.db',
-            'extension': 'webm'
         }

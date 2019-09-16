@@ -1,8 +1,8 @@
 from pathlib import Path
 from typing import Tuple
 from base64 import b64decode
-from pathlib import Path
-from mediark.application.utilities import TenantProvider
+from uuid import UUID
+from ....application.utilities import TenantProvider
 from ....application.services import FileStoreService
 
 
@@ -36,8 +36,7 @@ class DirectoryFileStoreService(FileStoreService):
         return uri
 
     def _get_subdirs(self, file_id: str) -> Tuple[str, str]:
-        if len(file_id) < 4:
-            raise ValueError("Invalid UUIDv4. Too short.")
+        UUID(hex=file_id, version=4)
         first_dir = file_id[:2]
         second_dir = file_id[2:4]
         return first_dir, second_dir
