@@ -31,7 +31,7 @@ class MemoryTenantSupplier(TenantSupplier):
         })
         self.create_tenant({
             'id': '1', 'name': 'origin',
-            'data': {'memory': {'default': 'default'}}
+            'data': {'memory': {'default': 'origin'}}
         })
 
     def get_tenant(self, tenant_id: str) -> Dict[str, Any]:

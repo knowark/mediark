@@ -30,7 +30,9 @@ class MemoryFactory(Factory):
     def memory_tenant_supplier(self) -> MemoryTenantSupplier:
         return MemoryTenantSupplier()
 
-    def standard_tenant_provider(self) -> StandardTenantProvider:
+    def standard_tenant_provider(
+            self, tenant_supplier: TenantSupplier
+    ) -> StandardTenantProvider:
         return StandardTenantProvider()
 
     # Security
@@ -66,11 +68,15 @@ class MemoryFactory(Factory):
     def standard_id_service(self) -> StandardIdService:
         return StandardIdService()
 
-    def memory_image_file_store_service(self) -> MemoryImageFileStoreService:
-        return MemoryImageFileStoreService()
+    def memory_image_file_store_service(
+            self, tenant_provider: TenantProvider
+    ) -> MemoryImageFileStoreService:
+        return MemoryImageFileStoreService(tenant_provider)
 
-    def memory_audio_file_store_service(self) -> MemoryAudioFileStoreService:
-        return MemoryAudioFileStoreService()
+    def memory_audio_file_store_service(
+        self, tenant_provider: TenantProvider
+    ) -> MemoryAudioFileStoreService:
+        return MemoryAudioFileStoreService(tenant_provider)
 
     def memory_auth_service(self) -> StandardAuthService:
         dominion = self.config['authorization']['dominion']

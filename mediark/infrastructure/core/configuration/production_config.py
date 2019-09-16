@@ -21,11 +21,6 @@ class ProductionConfig(DevelopmentConfig):
         self['tenancy'] = {
             'json':  Path.home() / 'tenants.json'
         }
-        self['data'] = {
-            "json": {
-                "default": str(Path.home().joinpath('data'))
-            }
-        }
         self['factory'] = 'HttpFactory'
         self['strategy'].update({
             "JwtSupplier": {

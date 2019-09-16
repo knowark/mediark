@@ -22,7 +22,7 @@ class HttpFactory(DirectoryFactory):
 
     def json_tenant_supplier(self) -> TenantSupplier:
         catalog_path = self.config['tenancy']['json']
-        directory_data = self.config['data']['json']['default']
+        directory_data = self.config['data']['dir_path']
         return JsonTenantSupplier(catalog_path, directory_data)
 
     def http_mediark_reporter(self, image_repository: ImageRepository,

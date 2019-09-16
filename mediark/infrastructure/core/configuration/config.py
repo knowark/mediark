@@ -20,6 +20,31 @@ class Config(defaultdict, ABC):
         self['environment'] = {
             'home': '/opt/mediark'
         }
+        self['data'] = {
+            'dir_path': str(Path.home() / 'data'),
+            'media': {
+                'dir_path': './media',
+                'audios': {
+                    'dir_path': './audios',
+                    'extension': 'webm'
+                },
+                'images': {
+                    'dir_path': './images',
+                    'extension': 'jpg'
+                },
+            },
+            'shelve':  {
+                'dir_path': './shelve',
+                'audios': {
+                    'dir_path': './audios',
+                    'database': 'audios.db'
+                },
+                'images': {
+                    'dir_path': './images',
+                    'database': 'images.db'
+                },
+            }
+        }
         self['media'] = str(Path('/opt/mediark/data/origin/media'))
         self['shelve'] = str(Path('/opt/mediark/data/origin/shelve'))
         self['gunicorn'] = {

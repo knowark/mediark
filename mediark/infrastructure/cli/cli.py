@@ -68,7 +68,7 @@ class Cli:
             self.config['media'] + self.config['audios']['media'])
         print(audios_media_directory)
         DirectoryArranger(audios_media_directory).setup()
-    
+
     def provision(self, args: Namespace) -> None:
         print('...PROVISION::::')
         tenant_supplier = self.resolver.resolve('TenantSupplier')
