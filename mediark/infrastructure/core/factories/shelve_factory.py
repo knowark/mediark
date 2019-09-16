@@ -20,6 +20,5 @@ class ShelveFactory(MemoryFactory):
     def shelve_audio_repository(
         self, query_parser: QueryParser, tenant_provider: TenantProvider
     ) -> ShelveAudioRepository:
-        filename = self.config['shelve'] + self.config['audios']['shelve']
         return ShelveAudioRepository(
             query_parser, tenant_provider, self.config['data'], 'audios')
