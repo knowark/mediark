@@ -4,14 +4,14 @@ from flask import request, jsonify, send_from_directory
 from flask.views import MethodView
 from marshmallow import ValidationError
 from ..schemas import DownloadSchema
+from ....application.utilities import TenantProvider
 
 
 class DownloadResource(MethodView):
-    def __init__(self, **kwargs: Any) -> None:
-        self.media_directory = kwargs['config']['media']
-        self.kwargs = kwargs
+    def __init__(self, data_path: str) -> None:
+        self.data_path = data_path
 
-    def get(self, type:str, uri:str) -> Any:
+    def get(self, type: str, uri: str) -> Any:
         """
         ---
         summary: Return all media.
@@ -28,5 +28,5 @@ class DownloadResource(MethodView):
                     $ref: '#/components/schemas/Download'
         """
 
-        directory = Path(self.media_directory).joinpath(type)
+        directory = Path(self.data_path).joinpath(type)
         return send_from_directory(directory, uri)

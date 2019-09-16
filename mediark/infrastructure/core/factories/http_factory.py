@@ -6,6 +6,7 @@ from ..configuration import Config
 from ...web.middleware import Authenticate
 from ....application.coordinators import SessionCoordinator
 from ...core import JwtSupplier, JsonTenantSupplier
+from ....application.utilities.tenancy import TenantProvider
 from ..tenancy import TenantSupplier, MemoryTenantSupplier
 from .directory_factory import DirectoryFactory
 
@@ -25,14 +26,17 @@ class HttpFactory(DirectoryFactory):
         directory_data = self.config['data']['dir_path']
         return JsonTenantSupplier(catalog_path, directory_data)
 
-    def http_mediark_reporter(self, image_repository: ImageRepository,
-                              audio_repository: AudioRepository
-                              ) -> HttpMediarkReporter:
+    def http_mediark_reporter(
+        self, tenant_provider: TenantProvider,
+        image_repository: ImageRepository, audio_repository: AudioRepository
+    ) -> HttpMediarkReporter:
         domain_file = self.config.get('secrets', {}).get('domain')
         domain = Path(domain_file).read_text().strip() \
             if domain_file else 'http://0.0.0.0:8080'
-        image_download = domain + '/download/images'
-        audio_download = domain + '/download/audios'
+        shared_path = str(Path('/download/'+tenant_provider.tenant.slug +
+                               '/'+self.config['data']['media']['dir_path']))
+        image_download = domain + shared_path + '/images'
+        audio_download = domain + shared_path + '/audios'
         return HttpMediarkReporter(
             image_download, audio_download,
             image_repository, audio_repository)
