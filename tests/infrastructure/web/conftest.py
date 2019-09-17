@@ -13,26 +13,29 @@ from mediark.application.utilities.tenancy import (
 from mediark.application.repositories import (
     MemoryImageRepository, MemoryAudioRepository)
 from mediark.infrastructure.core import (
-    DevelopmentConfig, build_config, Config, JwtSupplier)
+    ProductionConfig, build_config, Config, JwtSupplier)
 from mediark.infrastructure.core.factories import build_factory
 from mediark.infrastructure.web import create_app, ServerApplication
 
 
 @fixture
-def mock_secret_file(tmp_path):
+def app(tmp_path) -> Flask:
+    config = ProductionConfig()
+
     mock_secret_file_path = str(tmp_path / "sign.txt")
     with open(mock_secret_file_path, "w") as f:
         f.write("123456")
-    return str(mock_secret_file_path)
-
-
-@fixture
-def app(mock_secret_file) -> Flask:
-    config = DevelopmentConfig()
 
     config['secrets'] = {
-        "jwt": mock_secret_file
+        "jwt": mock_secret_file_path
     }
+    config['data']['dir_path'] = str(tmp_path / 'data')
+    config['tenancy']['json'] = str(tmp_path / 'tenants.json')
+
+    template_dir = Path(config['data']['dir_path']) / "__template__"
+    template_dir.mkdir(parents=True, exist_ok=True)
+    (template_dir / "images").mkdir(parents=True, exist_ok=True)
+    (template_dir / "audios").mkdir(parents=True, exist_ok=True)
 
     strategy = config['strategy']
     factory = build_factory(config)
@@ -65,25 +68,18 @@ def headers() -> dict:
 
 
 @fixture
-def retrieve_production_conf(tmp_path) -> Config:
-    config = build_config('', 'PROD')
-    config['data']['dir_path'] = tmp_path / 'data'
-    return config
-
-
-@fixture
-def encoded_image() -> bytes:
+def encoded_image() -> str:
     filename = os.path.join(
         os.path.dirname(__file__), "assets/SampleImage.png")
     with open(filename, "rb") as f:
         binary_data = f.read()
-    return b64encode(binary_data)
+    return str(b64encode(binary_data), "utf-8")
 
 
 @fixture
-def encoded_audio() -> bytes:
+def encoded_audio() -> str:
     filename = os.path.join(
         os.path.dirname(__file__), "assets/SampleAudio.mp3")
     with open(filename, "rb") as f:
         binary_data = f.read()
-    return b64encode(binary_data)
+    return str(b64encode(binary_data), "utf-8")

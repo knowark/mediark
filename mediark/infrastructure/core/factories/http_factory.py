@@ -33,8 +33,7 @@ class HttpFactory(DirectoryFactory):
         domain_file = self.config.get('secrets', {}).get('domain')
         domain = Path(domain_file).read_text().strip() \
             if domain_file else 'http://0.0.0.0:8080'
-        shared_path = str(Path('/download/'+tenant_provider.tenant.slug +
-                               '/'+self.config['data']['media']['dir_path']))
+        shared_path = str(Path('/download/'+tenant_provider.tenant.slug))
         image_download = domain + shared_path + '/images'
         audio_download = domain + shared_path + '/audios'
         return HttpMediarkReporter(

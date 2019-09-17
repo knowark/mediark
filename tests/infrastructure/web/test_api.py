@@ -11,10 +11,6 @@ from mediark.infrastructure.web.resources import RootResource
 from mediark.infrastructure.web.spec import create_spec
 
 
-def test_production_config_retrieve(retrieve_production_conf) -> None:
-    assert isinstance(retrieve_production_conf, ProductionConfig)
-
-
 def test_root_resource(app: Flask, headers: dict) -> None:
     response = app.get('/', headers=headers)
     data = str(response.data, 'utf-8')
@@ -33,10 +29,11 @@ def test_invalid_headers(app: Flask) -> None:
     assert data["error"]
 
 
-def test_api_images_put_and_search(
+def test_api_images_put_search_and_download(
     app: Flask, headers: dict, encoded_image: bytes
 ) -> None:
-    image = {'data': str(encoded_image), 'reference': 'ABC',
+    custom_uuid = str(uuid4())
+    image = {'data': encoded_image, 'reference': custom_uuid,
              'extension': 'jpg', 'namespace': 'https://example.org'}
     response = app.post('/images', data=dumps(image), headers=headers,
                         content_type='application/json')
@@ -44,18 +41,20 @@ def test_api_images_put_and_search(
     assert response.status == "201 CREATED"
 
     response = app.get(
-        '/images?filter=[["reference", "=", "ABC"]]', headers=headers)
-    print("RESPONSE DATA:::: ", response.data)
+        f'/images?filter=[["reference", "=", "{custom_uuid}"]]',
+        headers=headers)
     data = loads(str(response.data, 'utf-8'))
 
     assert len(data) == 1
+
+    print("URL:::: ", data[0]['url'])
 
 
 def test_api_audios_put_and_search(
     app: Flask, headers: dict, encoded_audio: bytes
 ) -> None:
 
-    audio = {'data': str(encoded_audio), 'reference': 'XYZ',
+    audio = {'data': encoded_audio, 'reference': 'XYZ',
              'extension': 'jpg', 'namespace': 'https://example.org'}
     response = app.post('/audios', data=dumps(audio), headers=headers,
                         content_type='application/json')

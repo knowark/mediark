@@ -3,8 +3,6 @@ from pathlib import Path
 from json import load
 from typing import Optional
 from .config import *
-from .directory_config import *
-from .shelve_config import *
 from .development_config import *
 from .production_config import *
 
