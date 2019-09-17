@@ -4,7 +4,7 @@ from .middleware import Authenticate
 from .resources import (RootResource, ImageResource,
                         AudioResource, DownloadResource)
 from .spec import create_spec
-from ..core.configuration import Config
+from ..core.configuration import DevelopmentConfig
 
 
 def create_api(app: Flask, resolver: Injectark) -> None:
@@ -35,6 +35,6 @@ def create_api(app: Flask, resolver: Injectark) -> None:
     spec.path(path="/download/<string:type>/<path:uri>",
               resource=DownloadResource)
     download_view = DownloadResource.as_view(
-        'download', data_path=Config()['data']['dir_path'])
+        'download', data_path=DevelopmentConfig()['data']['dir_path'])
     app.add_url_rule("/download/<string:type>/<path:uri>",
                      view_func=download_view)

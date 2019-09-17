@@ -33,12 +33,11 @@ def test_invalid_headers(app: Flask) -> None:
     assert data["error"]
 
 
-def test_api_images_put_and_search(app: Flask, headers: dict) -> None:
-    image = Image(id=str(uuid4)).__dict__
-    image = {'id': str(uuid4()), 'namespace': '',
-             'reference': 'Sample-jpg-image-50kb', 'extension': 'jpg',
-             'url': 'https://sample-videos.com/img'}
-    print("IMAGE:::: ", image)
+def test_api_images_put_and_search(
+    app: Flask, headers: dict, encoded_image: bytes
+) -> None:
+    image = {'data': str(encoded_image), 'reference': 'ABC',
+             'extension': 'jpg', 'namespace': 'https://example.org'}
     response = app.post('/images', data=dumps(image), headers=headers,
                         content_type='application/json')
 
@@ -48,14 +47,22 @@ def test_api_images_put_and_search(app: Flask, headers: dict) -> None:
         '/images?filter=[["reference", "=", "ABC"]]', headers=headers)
     print("RESPONSE DATA:::: ", response.data)
     data = loads(str(response.data, 'utf-8'))
+
     assert len(data) == 1
 
 
-def test_api_audios_search(app: Flask, headers: dict) -> None:
+def test_api_audios_put_and_search(
+    app: Flask, headers: dict, encoded_audio: bytes
+) -> None:
+
+    audio = {'data': str(encoded_audio), 'reference': 'XYZ',
+             'extension': 'jpg', 'namespace': 'https://example.org'}
+    response = app.post('/audios', data=dumps(audio), headers=headers,
+                        content_type='application/json')
+
+    assert response.status == "201 CREATED"
+
     response = app.get(
         '/audios?filter=[["reference", "=", "XYZ"]]', headers=headers)
-    data = str(response.data, 'utf-8')
-    data_dict = loads(data)
-    assert data
-    assert data_dict.get("error", None) is None
-    assert len(data_dict) == 1
+    data = loads(str(response.data, 'utf-8'))
+    assert len(data) == 1

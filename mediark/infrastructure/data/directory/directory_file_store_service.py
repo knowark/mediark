@@ -9,7 +9,7 @@ from ....application.services import FileStoreService
 class DirectoryFileStoreService(FileStoreService):
     def __init__(
         self, tenant_service: TenantProvider, data_config: dict,
-        data_type: str
+        data_type: str, extension: str = None
     ) -> None:
 
         base_path = Path("{0}/{1}/{2}/{3}".format(
@@ -20,7 +20,8 @@ class DirectoryFileStoreService(FileStoreService):
         base_path.mkdir(parents=True, exist_ok=True)
 
         self.base_path = str(base_path)
-        self.extension = data_config["media"][data_type]["extension"]
+        self.extension = extension or \
+            data_config["media"][data_type]["extension"]
 
     def store(self, file_id: str, content: str, extension: str = None) -> str:
         first_dir, second_dir = self._get_subdirs(file_id)

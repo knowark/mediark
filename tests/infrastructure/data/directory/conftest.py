@@ -4,6 +4,8 @@ from pytest import fixture
 from base64 import b64encode
 from mediark.infrastructure.data import (
     DirectoryArranger, DirectoryFileStoreService)
+from mediark.infrastructure.core.configuration import ProductionConfig
+from mediark.application.utilities import StandardTenantProvider, Tenant
 
 
 @fixture(scope='session')
@@ -16,19 +18,18 @@ def directory_arranger(tmpdir_factory):
 
 
 @fixture
-def base64_image() -> bytes:
+def encoded_image() -> bytes:
     filename = os.path.join(
-        os.path.dirname(__file__), "assets/locked-padlock.png")
+        os.path.dirname(__file__), "assets/SampleImage.png")
     with open(filename, "rb") as f:
         binary_data = f.read()
     return b64encode(binary_data)
 
 
-@fixture(scope='session')
-def directory_file_store_service(tmpdir_factory, directory_arranger):
-    directory_arranger.setup()
-    base_path = directory_arranger.base_path
-    extension = 'png'
-
-    filestore_manager = DirectoryFileStoreService(base_path, extension)
-    return filestore_manager
+@fixture
+def directory_file_store_service(tmp_path):
+    config = ProductionConfig()['data']
+    config['dir_path'] = tmp_path / 'data'
+    return DirectoryFileStoreService(
+        StandardTenantProvider(Tenant(name="custom-tenant")), config,
+        'images', 'png')

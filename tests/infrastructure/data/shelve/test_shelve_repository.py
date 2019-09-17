@@ -4,6 +4,8 @@ from pytest import fixture
 from mediark.application.repositories import Repository
 from mediark.application.utilities import QueryParser
 from mediark.infrastructure.data import ShelveRepository
+from mediark.application.utilities import StandardTenantProvider, Tenant
+from mediark.infrastructure.core.configuration import ProductionConfig
 
 
 class DummyEntity:
@@ -12,24 +14,25 @@ class DummyEntity:
         self.field_1 = field_1
 
 
-def test_shelve_repository_implementation() -> None:
-    assert issubclass(ShelveRepository, Repository)
-
-
 @fixture
-def shelve_repository(dummy_shelve) -> ShelveRepository:
-    with shelve.open(dummy_shelve) as items:
-        items.clear()
+def shelve_repository(tmp_path) -> ShelveRepository:
     parser = QueryParser()
+    tenant_provider = StandardTenantProvider(Tenant(name="custom-tenant"))
+    config = ProductionConfig()['data']
+    config['dir_path'] = tmp_path / 'data'
     entity_dict = {
         "1": DummyEntity('1', 'value_1'),
         "2": DummyEntity('2', 'value_2'),
         "3": DummyEntity('3', 'value_3')
     }
-    print('dummy_shelve', dummy_shelve)
-    repository = ShelveRepository[DummyEntity](parser, dummy_shelve)
+    repository = ShelveRepository[DummyEntity](
+        parser, tenant_provider, config, "images")
     repository.load(entity_dict)
     return repository
+
+
+def test_shelve_repository_implementation() -> None:
+    assert issubclass(ShelveRepository, Repository)
 
 
 def test_shelve_repository_get(shelve_repository) -> None:

@@ -1,7 +1,9 @@
+import os
 from flask import Flask
 from pathlib import Path
 from pytest import fixture
 from datetime import datetime
+from base64 import b64encode
 from typing import cast, List
 from injectark import Injectark
 from mediark.application.models import Image, Audio
@@ -63,5 +65,25 @@ def headers() -> dict:
 
 
 @fixture
-def retrieve_production_conf() -> Config:
-    return build_config('', 'PROD')
+def retrieve_production_conf(tmp_path) -> Config:
+    config = build_config('', 'PROD')
+    config['data']['dir_path'] = tmp_path / 'data'
+    return config
+
+
+@fixture
+def encoded_image() -> bytes:
+    filename = os.path.join(
+        os.path.dirname(__file__), "assets/SampleImage.png")
+    with open(filename, "rb") as f:
+        binary_data = f.read()
+    return b64encode(binary_data)
+
+
+@fixture
+def encoded_audio() -> bytes:
+    filename = os.path.join(
+        os.path.dirname(__file__), "assets/SampleAudio.mp3")
+    with open(filename, "rb") as f:
+        binary_data = f.read()
+    return b64encode(binary_data)
