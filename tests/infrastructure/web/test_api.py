@@ -5,6 +5,7 @@ from pytest import fixture, raises
 from json import loads, dumps
 from flask import Flask, request
 from marshmallow import ValidationError
+from base64 import b64encode
 from mediark.application.models import Audio, Image
 from mediark.infrastructure.core.configuration import ProductionConfig
 from mediark.infrastructure.web.resources import RootResource
@@ -47,7 +48,11 @@ def test_api_images_put_search_and_download(
 
     assert len(data) == 1
 
-    print("URL:::: ", data[0]['url'])
+    download_url = "/"+data[0]['url'].split('/', 3)[3]
+    response = app.get(download_url, headers=headers)
+    encoded_image_response = str(b64encode(response.data), 'utf-8')
+
+    assert encoded_image == encoded_image_response
 
 
 def test_api_audios_put_and_search(
@@ -64,4 +69,11 @@ def test_api_audios_put_and_search(
     response = app.get(
         '/audios?filter=[["reference", "=", "XYZ"]]', headers=headers)
     data = loads(str(response.data, 'utf-8'))
+
     assert len(data) == 1
+
+    download_url = "/"+data[0]['url'].split('/', 3)[3]
+    response = app.get(download_url, headers=headers)
+    encoded_audio_response = str(b64encode(response.data), 'utf-8')
+
+    assert encoded_audio == encoded_audio_response
