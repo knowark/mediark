@@ -1,5 +1,6 @@
 from mediark.application.services import (
     FileStoreService, MemoryFileStoreService)
+from mediark.application.utilities import Tenant, StandardTenantProvider
 
 
 def test_file_store_service() -> None:
@@ -12,11 +13,12 @@ def test_memory_file_store_service_implementation() -> None:
 
 
 def test_memory_file_store_service_store() -> None:
-    locator = 'ec892a1e-a05b-4152-b0e4-1be9b276005c'
+    file_id = 'ec892a1e-a05b-4152-b0e4-1be9b276005c'
     content = 'BASE64_ENCODED_CONTENT'
 
-    file_store_service = MemoryFileStoreService()
-    uri = file_store_service.store(locator, content)
+    file_store_service = MemoryFileStoreService(
+        StandardTenantProvider(Tenant(name="custom-tenant")))
+    uri = file_store_service.store(file_id, content)
 
     assert isinstance(uri, str)
-    assert uri == locator
+    assert uri == file_id

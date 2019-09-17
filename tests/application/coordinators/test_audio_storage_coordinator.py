@@ -1,3 +1,4 @@
+from uuid import UUID
 from mediark.application.services import MemoryFileStoreService
 
 
@@ -37,18 +38,6 @@ def test_storage_coordinator_store_file(audio_storage_coordinator):
         'extension': 'png'
     }
 
-    called = False
-
-    class MockFileStoreService:
-        def store(self, locator: str, content: str, extension: str = None):
-            nonlocal called
-            called = True
-            file_store_service = MemoryFileStoreService()
-            return file_store_service.store(locator, content, extension)
-
-    audio_storage_coordinator.file_store_service = MockFileStoreService()
     audio_storage_coordinator.store(audio_dict)
 
-    assert called is True
-    audio = next(
-        iter(audio_storage_coordinator.audio_repository.data.values()))
+    assert len(audio_storage_coordinator.audio_repository.data) == 1

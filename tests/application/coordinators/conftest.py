@@ -34,8 +34,8 @@ def standard_id_service():
 
 
 @fixture
-def file_store_service():
-    return MemoryFileStoreService()
+def file_store_service(tenant_provider):
+    return MemoryFileStoreService(tenant_provider)
 
 
 # Repositories

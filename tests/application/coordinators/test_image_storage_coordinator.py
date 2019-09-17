@@ -39,18 +39,6 @@ def test_storage_coordinator_store_file(image_storage_coordinator):
         'extension': 'png'
     }
 
-    called = False
-
-    class MockFileStoreService:
-        def store(self, locator: str, content: str, extension: str = None):
-            nonlocal called
-            called = True
-            file_store_service = MemoryFileStoreService()
-            return file_store_service.store(locator, content, extension)
-
-    image_storage_coordinator.file_store_service = MockFileStoreService()
     image_storage_coordinator.store(image_dict)
 
-    assert called is True
-    image = next(
-        iter(image_storage_coordinator.image_repository.data.values()))
+    assert len(image_storage_coordinator.image_repository.data) == 1
