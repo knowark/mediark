@@ -55,7 +55,7 @@ def test_api_images_put_search_and_download(
     assert encoded_image == encoded_image_response
 
 
-def test_api_audios_put_and_search(
+def test_api_audios_put_search_and_download(
     app: Flask, headers: dict, encoded_audio: bytes
 ) -> None:
 

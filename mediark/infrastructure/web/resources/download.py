@@ -31,5 +31,4 @@ class DownloadResource(MethodView):
 
         directory = Path(self.data_path).joinpath(
             tenant+"/"+self.media_dir+"/"+type+"/")
-        print("DIRECTORY URI:::: ", str(directory)+uri)
         return send_from_directory(directory, uri)
