@@ -16,15 +16,11 @@ class Cli:
         self.parser = ArgumentParser('Mediark')
 
     def run(self, argv: List[str]):
-        args = self.parse()
+        args = self.parse(argv)
         args.func(args)
 
-    def parse(self) -> Namespace:
+    def parse(self, argv: List[str]) -> Namespace:
         subparsers = self.parser.add_subparsers()
-
-        # Setup
-        setup_parser = subparsers.add_parser('setup')
-        setup_parser.set_defaults(func=self.setup)
 
         # Provision
         provision_parser = subparsers.add_parser(
@@ -33,48 +29,20 @@ class Cli:
         provision_parser.set_defaults(func=self.provision)
 
         # Serve
-        serve_parser = subparsers.add_parser('serve')
+        serve_parser = subparsers.add_parser(
+            'serve', help='Start HTTP server.')
         serve_parser.set_defaults(func=self.serve)
 
-        if len(sys.argv[1:]) == 0:
+        if len(argv) == 0:
             self.parser.print_help()
             self.parser.exit()
 
-        return self.parser.parse_args()
-
-    def setup(self, args: Namespace) -> None:
-        print('SETUP IMAGE SHELVE FILE')
-        # add tenant
-        image_shelve_file = (
-            self.config['shelve'] + self.config['images']['shelve'])
-        print(image_shelve_file)
-        ShelveArranger.make_shelve(image_shelve_file)
-
-        print('SETUP IMAGE MEDIA DIRECTORIES')
-        # add tenant
-        images_media_directory = (
-            self.config['media'] + self.config['images']['media'])
-        print(images_media_directory)
-        DirectoryArranger(images_media_directory).setup()
-
-        print('SETUP AUDIO SHELVE FILE')
-        # add tenant
-        audio_shelve_file = (
-            self.config['shelve'] + self.config['audios']['shelve'])
-        print(audio_shelve_file)
-        ShelveArranger.make_shelve(audio_shelve_file)
-
-        print('SETUP AUDIO MEDIA DIRECTORIES')
-        # add tenant
-        audios_media_directory = (
-            self.config['media'] + self.config['audios']['media'])
-        print(audios_media_directory)
-        DirectoryArranger(audios_media_directory).setup()
+        return self.parser.parse_args(argv)
 
     def provision(self, args: Namespace) -> None:
         print('...PROVISION::::')
         tenant_supplier = self.resolver.resolve('TenantSupplier')
-        tenant_dict = json.loads(args.data)
+        tenant_dict = {'name': args.name}
         tenant_supplier.create_tenant(tenant_dict)
         print('END PROVISION |||||')
 
