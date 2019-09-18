@@ -7,9 +7,13 @@ from flask import Flask, request
 from marshmallow import ValidationError
 from base64 import b64encode
 from mediark.application.models import Audio, Image
-from mediark.infrastructure.core.configuration import ProductionConfig
+from mediark.infrastructure.core.configuration import DevelopmentConfig
 from mediark.infrastructure.web.resources import RootResource
 from mediark.infrastructure.web.spec import create_spec
+
+
+def test_development_config_retrieve(retrieve_development_conf) -> None:
+    assert isinstance(retrieve_development_conf, DevelopmentConfig)
 
 
 def test_root_resource(app: Flask, headers: dict) -> None:
@@ -38,6 +42,8 @@ def test_api_images_put_search_and_download(
              'extension': 'jpg', 'namespace': 'https://example.org'}
     response = app.post('/images', data=dumps(image), headers=headers,
                         content_type='application/json')
+
+    print("RESPONSE:::: ", response.data)
 
     assert response.status == "201 CREATED"
 

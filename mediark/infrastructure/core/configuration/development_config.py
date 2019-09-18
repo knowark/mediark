@@ -16,8 +16,8 @@ class DevelopmentConfig(Config):
             'loglevel': 'debug'
         })
         self['secrets'] = {
-            "jwt": str(Path.home().joinpath('sign.txt')),
-            "domain": str(Path.home().joinpath('domain.txt'))
+            "jwt": Path.home() / 'sign.txt',
+            "domain": Path.home() / 'domain.txt'
         }
         self['authorization'] = {
             "dominion": "mediark"
@@ -54,9 +54,6 @@ class DevelopmentConfig(Config):
                 "method": "memory_tenant_supplier"
             },
 
-            "ProvisionService": {
-                "method": "memory_provision_service"
-            },
             "ImageFileStoreService": {
                 "method": "memory_image_file_store_service"
             },

@@ -21,7 +21,7 @@ class Config(defaultdict, ABC):
             'home': '/opt/mediark'
         }
         self['data'] = {
-            'dir_path': str(Path.home() / 'data'),
+            'dir_path': Path.home() / 'data',
             'media': {
                 'dir_path': './media',
                 'audios': {

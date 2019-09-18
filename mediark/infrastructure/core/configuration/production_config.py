@@ -16,10 +16,7 @@ class ProductionConfig(DevelopmentConfig):
         })
         self['authentication'] = {
             "type": "jwt",
-            "secret_file": str(Path.home().joinpath('sign.txt'))
-        }
-        self['tenancy'] = {
-            'json':  Path.home() / 'tenants.json'
+            "secret_file": Path.home().joinpath('sign.txt')
         }
         self['factory'] = 'HttpFactory'
         self['strategy'].update({

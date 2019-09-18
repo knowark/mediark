@@ -27,7 +27,8 @@ def app(tmp_path) -> Flask:
         f.write("123456")
 
     config['secrets'] = {
-        "jwt": mock_secret_file_path
+        "jwt": mock_secret_file_path,
+        "domain": str(tmp_path / "domain.txt")
     }
     config['data']['dir_path'] = str(tmp_path / 'data')
     config['tenancy']['json'] = str(tmp_path / 'tenants.json')
@@ -83,3 +84,8 @@ def encoded_audio() -> str:
     with open(filename, "rb") as f:
         binary_data = f.read()
     return str(b64encode(binary_data), "utf-8")
+
+
+@fixture
+def retrieve_development_conf() -> Config:
+    return build_config("", 'DEV')
