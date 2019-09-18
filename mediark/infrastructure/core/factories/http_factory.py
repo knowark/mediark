@@ -31,7 +31,6 @@ class HttpFactory(DirectoryFactory):
         image_repository: ImageRepository, audio_repository: AudioRepository
     ) -> HttpMediarkReporter:
         domain_file = Path(self.config.get('secrets', {}).get('domain'))
-        print("DOMAIN FILE::: ", domain_file)
         domain = domain_file.read_text().strip() if domain_file.exists() else \
             'http://0.0.0.0:8080'
         shared_path = str(Path('/download/'+tenant_provider.tenant.slug))

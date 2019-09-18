@@ -29,7 +29,7 @@ def test_root_resource_request_none(app: Flask, headers: dict) -> None:
 
 
 def test_invalid_headers(app: Flask) -> None:
-    response = app.get('/audio')
+    response = app.get('/audios')
     data = loads(str(response.data, 'utf-8'))
     assert data["error"]
 
@@ -42,8 +42,6 @@ def test_api_images_put_search_and_download(
              'extension': 'jpg', 'namespace': 'https://example.org'}
     response = app.post('/images', data=dumps(image), headers=headers,
                         content_type='application/json')
-
-    print("RESPONSE:::: ", response.data)
 
     assert response.status == "201 CREATED"
 
