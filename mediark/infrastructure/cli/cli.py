@@ -3,6 +3,7 @@ import json
 from argparse import ArgumentParser, Namespace
 from injectark import Injectark
 from ..core.configuration import Config
+from typing import List
 from ..data import DirectoryArranger, ShelveArranger
 from ..web import create_app, ServerApplication
 
@@ -12,13 +13,14 @@ class Cli:
         self.config = config
         self.resolver = resolver
         self.registry = resolver
+        self.parser = ArgumentParser('Mediark')
 
+    def run(self, argv: List[str]):
         args = self.parse()
         args.func(args)
 
     def parse(self) -> Namespace:
-        parser = ArgumentParser('Mediark')
-        subparsers = parser.add_subparsers()
+        subparsers = self.parser.add_subparsers()
 
         # Setup
         setup_parser = subparsers.add_parser('setup')
@@ -35,10 +37,10 @@ class Cli:
         serve_parser.set_defaults(func=self.serve)
 
         if len(sys.argv[1:]) == 0:
-            parser.print_help()
-            parser.exit()
+            self.parser.print_help()
+            self.parser.exit()
 
-        return parser.parse_args()
+        return self.parser.parse_args()
 
     def setup(self, args: Namespace) -> None:
         print('SETUP IMAGE SHELVE FILE')
@@ -80,5 +82,4 @@ class Cli:
         print('...:::SERVE:::...', args, '\n')
 
         app = create_app(self.config, self.resolver)
-        gunicorn_config = self.config['gunicorn']
-        ServerApplication(app, gunicorn_config).run()
+        ServerApplication(app, self.config['gunicorn']).run()
