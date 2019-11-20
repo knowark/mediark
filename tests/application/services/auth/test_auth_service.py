@@ -6,7 +6,7 @@ from mediark.application.services import (
 
 
 def test_auth_service_repository_methods():
-    abstract_methods = AuthService.__abstractmethods__
+    abstract_methods = str(getattr(AuthService, "__abstractmethods__"))
 
     assert 'setup' in abstract_methods
     assert 'is_authenticated' in abstract_methods

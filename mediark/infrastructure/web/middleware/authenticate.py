@@ -19,36 +19,22 @@ class Authenticate:
     def __call__(self, method: Callable) -> Callable:
         @wraps(method)
         def decorator(*args, **kwargs):
-            authorization = request.headers.get('Authorization', "")
-            token = authorization.replace('Bearer ', '')
-            if not token:
-                aux = request.args.get('access_token')
-                token = aux if aux is not None else ""
+            tenant_id = request.headers['TenantId']
+            user_id = request.headers.get('UserId')
+            email = request.headers.get('From', "@")
+            name = email.split('@')[0]
+            roles = request.headers.get('Roles', '').strip().split(',')
 
-            try:
-                token_payload = self.jwt_supplier.decode(
-                    token, verify=False)
+            user_dict = {
+                'id': user_id,
+                'name': name,
+                'email': email,
+                'roles': roles
+            }
+            self.session_coordinator.set_user(user_dict)
 
-                tenant_dict = self.tenant_supplier.get_tenant(
-                    token_payload['tid'])
-
-                token_payload = self.jwt_supplier.decode(token, secret=None)
-
-                self.session_coordinator.set_tenant(tenant_dict)
-
-                user_dict = UserSchema().load(token_payload)
-
-                self.session_coordinator.set_user(user_dict)
-
-            except Exception as e:
-                def error_function(*args, **kwargs):
-                    return jsonify(error={
-                        'exception': 'Unauthorized',
-                        'message': str(AuthenticationError),
-                        'trace': str(e)
-                    }), 401
-                logging.error(e)
-                return error_function(*args, **kwargs)
+            tenant_dict = self.tenant_supplier.get_tenant(tenant_id)
+            self.session_coordinator.set_tenant(tenant_dict)
 
             return method(*args, **kwargs)
 

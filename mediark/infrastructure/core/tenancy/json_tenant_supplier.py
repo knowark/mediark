@@ -19,7 +19,7 @@ class JsonTenantSupplier(TenantSupplier):
             'cataloguer': cataloguer,
             'provisioner_kind': 'directory',
             'provision_template': (
-                directory_data + f"/{directory_template}"),
+                str(directory_data) + f"/{directory_template}"),
             'data_directory': directory_data,
         })
 
