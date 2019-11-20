@@ -3,13 +3,13 @@ from pathlib import Path
 
 
 def test_directory_file_store_service(
-        directory_file_store_service, base64_image):
+        directory_file_store_service, encoded_image):
     id_ = "abca8e11-0719-44ab-bd3f-ed5aa1bd2918"
     extension = "png"
     image_path = Path(directory_file_store_service.base_path).joinpath(
         "ab", "ca", "{0}.{1}".format(id_, extension))
 
-    uri = directory_file_store_service.store(id_, base64_image)
+    uri = directory_file_store_service.store(id_, encoded_image)
     assert image_path.is_file()
     assert uri == "ab/ca/abca8e11-0719-44ab-bd3f-ed5aa1bd2918.png"
 

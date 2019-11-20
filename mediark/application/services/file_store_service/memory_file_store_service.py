@@ -1,12 +1,20 @@
 import uuid
 from abc import ABC, abstractmethod
+from collections import defaultdict
+from typing import Dict
+from ...utilities import StandardTenantProvider
 from .file_store_service import FileStoreService
 
 
 class MemoryFileStoreService(FileStoreService):
-    def __init__(self):
-        self.files = {}
+    def __init__(self, tenant_service=StandardTenantProvider()):
+        self.files: Dict[str, Dict[str, str]] = defaultdict(dict)
+        self.tenant_service = tenant_service
 
-    def store(self, locator: str, content: str, extension: str = None) -> str:
-        self.files[locator] = content
-        return locator
+    def store(self, file_id: str, content: str, extension: str = None) -> str:
+        self.files[self._location][file_id] = content
+        return file_id
+
+    @property
+    def _location(self) -> str:
+        return self.tenant_service.tenant.location('memory')

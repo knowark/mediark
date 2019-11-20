@@ -1,15 +1,15 @@
 from pytest import fixture
 from unittest.mock import Mock
-from mediark.application.utilities.expression_parser import ExpressionParser
+from mediark.application.utilities.query_parser import QueryParser
 
 
 @fixture
-def parser() -> ExpressionParser:
-    return ExpressionParser()
+def parser() -> QueryParser:
+    return QueryParser()
 
 
 def test_expression_parser_object_creation(parser):
-    assert isinstance(parser, ExpressionParser)
+    assert isinstance(parser, QueryParser)
 
 
 def test_expression_parser_parse_tuple(parser):
@@ -75,7 +75,7 @@ def test_expression_parser_default_join(parser):
     assert result_stack[0](mock_object) is False
 
 
-def test_expression_parser_parse_multiple_terms(parser):
+def test_query_parser_parse_multiple_terms(parser):
     test_domains = [
         ([('field', '=', 7), ('field2', '!=', 8)],
             lambda obj: (obj.field2 != 8 and obj.field == 7),
@@ -106,7 +106,7 @@ def test_expression_parser_parse_multiple_terms(parser):
 
 
 def test_expression_parser_with_empty_list(parser):
-    domain = []
+    domain: list = []
     result = parser.parse(domain)
     mock_object = Mock()
     mock_object.field = 7

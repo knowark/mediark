@@ -6,13 +6,15 @@ from ....application.repositories import (
     ImageRepository, MemoryImageRepository,
     AudioRepository, MemoryAudioRepository)
 from ....application.utilities import (
-    ExpressionParser, TenantProvider, StandardTenantProvider)
+    QueryParser, TenantProvider, StandardTenantProvider)
 from ....application.services import (
     IdService, StandardIdService,
     FileStoreService, MemoryFileStoreService,
     ImageFileStoreService, MemoryImageFileStoreService,
     AudioFileStoreService, MemoryAudioFileStoreService,
     AuthService, StandardAuthService)
+from ...web.middleware import Authenticate
+from ...core import JwtSupplier, JsonTenantSupplier
 from ....application.coordinators import (
     SessionCoordinator, ImageStorageCoordinator, AudioStorageCoordinator)
 from ....application.reporters import MediarkReporter, StandardMediarkReporter
@@ -22,42 +24,65 @@ class MemoryFactory(Factory):
     def __init__(self, config: Config) -> None:
         self.config = config
 
-    # Repositories
-    ##############
+    def query_parser(self) -> QueryParser:
+        return QueryParser()
 
-    def expression_parser(self) -> ExpressionParser:
-        return ExpressionParser()
+    def memory_tenant_supplier(self) -> MemoryTenantSupplier:
+        return MemoryTenantSupplier()
 
-    def memory_image_repository(self, expression_parser: ExpressionParser,
-                                tenant_provider: TenantProvider
-                                ) -> MemoryImageRepository:
-        return MemoryImageRepository(expression_parser, tenant_provider)
-
-    def memory_audio_repository(self, expression_parser: ExpressionParser,
-                                tenant_provider: TenantProvider
-                                ) -> MemoryAudioRepository:
-        return MemoryAudioRepository(expression_parser, tenant_provider)
-    
-    def standard_tenant_provider(self) -> StandardTenantProvider:
+    def standard_tenant_provider(
+            self, tenant_supplier: TenantSupplier
+    ) -> StandardTenantProvider:
         return StandardTenantProvider()
 
+    # Security
+
+    def middleware_authenticate(
+            self, jwt_supplier: JwtSupplier,
+            tenant_supplier: TenantSupplier,
+            session_coordinator: SessionCoordinator) -> Authenticate:
+        return Authenticate(
+            jwt_supplier, tenant_supplier, session_coordinator)
+
+    def jwt_supplier(self) -> JwtSupplier:
+        secret = 'secret'
+        secret_file = self.config.get('secrets', {}).get('jwt')
+        if secret_file:
+            secret = Path(secret_file).read_text().strip()
+        return JwtSupplier(secret)
+
+    # Repositories
+
+    def memory_image_repository(self, query_parser: QueryParser,
+                                tenant_provider: TenantProvider
+                                ) -> MemoryImageRepository:
+        return MemoryImageRepository(query_parser, tenant_provider)
+
+    def memory_audio_repository(self, query_parser: QueryParser,
+                                tenant_provider: TenantProvider
+                                ) -> MemoryAudioRepository:
+        return MemoryAudioRepository(query_parser, tenant_provider)
+
     # Services
-    ##########
 
     def standard_id_service(self) -> StandardIdService:
         return StandardIdService()
 
-    def memory_image_file_store_service(self) -> MemoryImageFileStoreService:
-        return MemoryImageFileStoreService()
+    def memory_image_file_store_service(
+            self, tenant_provider: TenantProvider
+    ) -> MemoryImageFileStoreService:
+        return MemoryImageFileStoreService(tenant_provider)
 
-    def memory_audio_file_store_service(self) -> MemoryAudioFileStoreService:
-        return MemoryAudioFileStoreService()
-    
+    def memory_audio_file_store_service(
+        self, tenant_provider: TenantProvider
+    ) -> MemoryAudioFileStoreService:
+        return MemoryAudioFileStoreService(tenant_provider)
+
     def memory_auth_service(self) -> StandardAuthService:
-        return StandardAuthService()
+        dominion = self.config['authorization']['dominion']
+        return StandardAuthService(dominion)
 
     # Coordinators
-    ##############
 
     def session_coordinator(self, tenant_provider: TenantProvider,
                             auth_service: AuthService
@@ -79,7 +104,6 @@ class MemoryFactory(Factory):
                                        file_store_service)
 
     # Reporters
-    ##############
 
     def memory_mediark_reporter(self, image_repository: ImageRepository,
                                 audio_repository: AudioRepository

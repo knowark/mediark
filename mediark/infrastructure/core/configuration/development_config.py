@@ -1,4 +1,3 @@
-import multiprocessing
 from collections import defaultdict
 from typing import Dict, Any
 from abc import ABC, abstractmethod
@@ -16,31 +15,45 @@ class DevelopmentConfig(Config):
             'acesslog': '-',
             'loglevel': 'debug'
         })
-        self['authentication'] = {
-            "type": "jwt",
-            "secret_file": str(Path.home().joinpath('sign.txt'))
-        }
         self['secrets'] = {
-            "jwt": str(Path.home().joinpath('sign.txt'))
+            "jwt": Path.home() / 'sign.txt',
+            "domain": Path.home() / 'domain.txt'
+        }
+        self['authorization'] = {
+            "dominion": "mediark"
         }
         self['factory'] = 'MemoryFactory'
 
-        self['strategy'].update({
-            "ExpressionParser": {
-                "method": "expression_parser"
+        self['strategy'] = {
+            # Security
+            "JwtSupplier": {
+                "method": "jwt_supplier"
+            },
+            "Authenticate": {
+                "method": "middleware_authenticate"
+            },
+            "AuthService": {
+                "method": "memory_auth_service"
+            },
+            "SessionCoordinator": {
+                "method": "session_coordinator"
+            },
+
+            # Query parser
+            "QueryParser": {
+                "method": "query_parser"
             },
             "IdService": {
                 "method": "standard_id_service"
             },
-            # "TenantSupplier": {
-            #     "method": "tenant_supplier"
-            # },
+            # Tenancy
+            "TenantProvider": {
+                "method": "standard_tenant_provider"
+            },
             "TenantSupplier": {
                 "method": "memory_tenant_supplier"
             },
-            "ProvisionService": {
-                "method": "memory_provision_service"
-            },
+
             "ImageFileStoreService": {
                 "method": "memory_image_file_store_service"
             },
@@ -59,16 +72,7 @@ class DevelopmentConfig(Config):
             "AudioStorageCoordinator": {
                 "method": "audio_storage_coordinator",
             },
-            "StandardMediarkReporter": {
+            "MediarkReporter": {
                 "method": "memory_mediark_reporter",
-            },
-            "TenantProvider": {
-                "method": "standard_tenant_provider"
-            },
-            "AuthService": {
-                "method": "memory_auth_service"
-            },
-            "SessionCoordinator": {
-                "method": "session_coordinator"
-            },
-        })
+            }
+        }

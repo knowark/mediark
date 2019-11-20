@@ -1,5 +1,5 @@
 from mediark.application.reporters import MediarkReporter
-
+from .conftest import *
 
 def test_mediark_reporter_instantiation(mediark_reporter):
     assert isinstance(mediark_reporter, MediarkReporter)

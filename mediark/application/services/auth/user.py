@@ -5,4 +5,4 @@ class User:
         self.name = attributes.get('name', '')
         self.email = attributes.get('email', '')
         self.attributes = attributes.get('attributes', {})
-        self.authorization = attributes.get('attributes', {})
+        self.authorization = attributes.get('authorization', {})

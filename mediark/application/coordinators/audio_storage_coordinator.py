@@ -1,4 +1,5 @@
 from ..models import Audio
+from typing import Optional
 from ..repositories import AudioRepository
 from ..services import IdService, FileStoreService
 from .types import AudioDict
@@ -12,18 +13,18 @@ class AudioStorageCoordinator:
         self.id_service = id_service
         self.file_store_service = file_store_service
 
-    def store(self, audio_dict: AudioDict) -> None:
+    def store(self, audio_dict: AudioDict) -> Optional[Audio]:
         if 'data' not in audio_dict:
-            return
+            return None
 
         if 'id' not in audio_dict:
             audio_dict['id'] = self.id_service.generate_id()
-        
-        locator = audio_dict.get('id')
+
+        file_id = str(audio_dict.get('id'))
         content = audio_dict.pop('data')
         extension = audio_dict.get('extension')
 
-        uri = self.file_store_service.store(locator, content, extension)
+        uri = self.file_store_service.store(file_id, content, extension)
         audio_dict['uri'] = uri
         audio = Audio(**audio_dict)
-        self.audio_repository.add(audio)
+        return self.audio_repository.add(audio)

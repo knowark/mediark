@@ -12,26 +12,16 @@ class ProductionConfig(DevelopmentConfig):
         super().__init__()
         self['mode'] = 'PROD'
         self['gunicorn'].update({
-            'debug': True,
-            'accesslog': '-',
-            'loglevel': 'debug'
+            'workers': self.number_of_workers()
         })
-        self['domain'] = 'http://mediark.dev.nubark.cloud'
         self['authentication'] = {
             "type": "jwt",
-            "secret_file": str(Path.home().joinpath('sign.txt'))
-        }
-        self['secrets'] = {
-            "jwt": str(Path.home().joinpath('sign.txt'))
+            "secret_file": Path.home().joinpath('sign.txt')
         }
         self['factory'] = 'HttpFactory'
-
         self['strategy'].update({
             "JwtSupplier": {
                 "method": "jwt_supplier"
-            },
-            "Authenticate": {
-                "method": "middleware_authenticate"
             },
             "ImageRepository": {
                 "method": "shelve_image_repository",
@@ -47,5 +37,18 @@ class ProductionConfig(DevelopmentConfig):
             },
             "MediarkReporter": {
                 "method": "http_mediark_reporter",
-            }
+            },
+
+            # Tenancy
+
+            "TenantProvider": {
+                "method": "standard_tenant_provider"
+            },
+
+            "TenantSupplier": {
+                "method": "json_tenant_supplier"
+            },
         })
+
+    def number_of_workers(self):
+        return (multiprocessing.cpu_count() * 2) + 1

@@ -2,7 +2,7 @@ from typing import List, Union, Callable, Tuple
 from .types import TermTuple
 
 
-class ExpressionParser:
+class QueryParser:
     def __init__(self) -> None:
         self.comparison_dict = {
             '=': lambda field, value: (
@@ -71,6 +71,8 @@ class ExpressionParser:
 
     def _parse_term(self, term_tuple: TermTuple) -> Callable:
         field, operator, value = term_tuple
-        function = self.comparison_dict.get(operator)
+        validate = operator in self.comparison_dict
+        operator = operator if validate else '='
+        function = self.comparison_dict[operator]
         result = function(field, value)
         return result

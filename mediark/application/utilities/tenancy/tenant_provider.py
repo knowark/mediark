@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from threading import local
 from .tenant import Tenant
 
+
 class TenantProvider(ABC):
     """Tenant provider."""
 

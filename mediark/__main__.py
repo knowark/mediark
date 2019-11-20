@@ -11,14 +11,15 @@ from .infrastructure.web import create_app, ServerApplication
 
 def main():  # pragma: no cover
     mode = os.environ.get('MEDIARK_MODE', 'PROD')
-    config_path = os.environ.get('MEDIARK_CONFIG', 'mediark_config.json')
+    config_path = os.environ.get('MEDIARK_CONFIG', 'config.json')
     config = build_config(config_path, mode)
 
     factory = build_factory(config)
     strategy = config['strategy']
     resolver = Injectark(strategy=strategy, factory=factory)
 
-    Cli(config, resolver)
+    Cli(config, resolver).run(sys.argv[1:])
+
 
 if __name__ == '__main__':  # pragma: no cover
     main()

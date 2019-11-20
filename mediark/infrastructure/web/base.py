@@ -11,6 +11,6 @@ def create_app(config, resolver: Injectark):
     app.config.update(config['flask'])
 
     register_error_handler(app)
-    create_api(app, resolver)
+    create_api(app, config, resolver)
 
     return app

@@ -19,13 +19,13 @@ class AuthService(ABC):
 
     @property
     @abstractmethod
-    def roles(self) -> List[str]:
-        """Get current user roles"""
+    def user(self) -> User:
+        """Get the current request user"""
 
     @property
     @abstractmethod
-    def user(self) -> User:
-        """Get the current request user"""
+    def roles(self) -> List[str]:
+        """Get current user roles"""
 
     @abstractmethod
     def validate_roles(self, required_roles: List[str]=None):
@@ -38,27 +38,25 @@ class AuthService(ABC):
 
 class StandardAuthService(AuthService):
 
-    def __init__(self, user=None) -> None:
+    def __init__(self, dominion, user=None) -> None:
+        self.dominion = dominion
         self.state = local()
         self.state.__dict__.setdefault('user', user)
 
-        # self.authenticated = False
-        # self.roles = []  # type: List[str]
-        # self.user = User(name="User")
-
     def setup(self, user: User) -> None:
         self.state.user = user
+
+    @property
+    def user(self) -> User:
+        return self.state.user
 
     @property
     def roles(self) -> List[str]:
         if not self.is_authenticated():
             raise AuthenticationError(
                 "Authentication is required to get the user's roles.")
-        return [role.upper() for role in self.state.user.roles]
-
-    @property
-    def user(self) -> User:
-        return self.state.user
+        dominion_dict = self.state.user.authorization.get(self.dominion, {})
+        return [role.upper() for role in dominion_dict.get('roles', [])]
 
     def validate_roles(self, required_roles: List[str]=None) -> None:
         required_roles = required_roles or []

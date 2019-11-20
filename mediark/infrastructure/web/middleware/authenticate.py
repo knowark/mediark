@@ -1,12 +1,14 @@
-from typing import Callable
+from typing import Callable, Optional, Any
 from functools import wraps
-from flask import request
+from flask import request, jsonify
 from ....application.coordinators import SessionCoordinator
-from ...core import JwtSupplier, AuthenticationError, TenantSupplier
+from ...core import TenantSupplier, JwtSupplier, AuthenticationError
 from ..schemas import UserSchema
+import logging
 
 
 class Authenticate:
+
     def __init__(self, jwt_supplier: JwtSupplier,
                  tenant_supplier: TenantSupplier,
                  session_coordinator: SessionCoordinator) -> None:
@@ -17,30 +19,22 @@ class Authenticate:
     def __call__(self, method: Callable) -> Callable:
         @wraps(method)
         def decorator(*args, **kwargs):
-            
-            # tenant_dict = {"name": "Knowark"}
-            # self.session_coordinator.set_tenant(tenant_dict)
+            tenant_id = request.headers['TenantId']
+            user_id = request.headers.get('UserId')
+            email = request.headers.get('From', "@")
+            name = email.split('@')[0]
+            roles = request.headers.get('Roles', '').strip().split(',')
 
-            authorization = request.headers.get('Authorization', "")
-            token = authorization.replace('Bearer ', '')
-            
-            if not token:
-                token = request.args.get('access_token')
+            user_dict = {
+                'id': user_id,
+                'name': name,
+                'email': email,
+                'roles': roles
+            }
+            self.session_coordinator.set_user(user_dict)
 
-            try:
-                token_payload = self.jwt_supplier.decode(
-                    token, verify=False)
-                # tenant_dict = self.tenant_supplier.get_tenant(
-                #     token_payload['tid'])
-                tenant_dict = {"name": "Servagro"}
-                # token_payload = self.jwt_supplier.decode(token, secret=None)
-                
-                self.session_coordinator.set_tenant(tenant_dict)
-                user_dict = UserSchema().load(token_payload)
-                self.session_coordinator.set_user(user_dict)
-            except Exception as e:
-                raise AuthenticationError(
-                    "Couldn't authenticate the request.")
+            tenant_dict = self.tenant_supplier.get_tenant(tenant_id)
+            self.session_coordinator.set_tenant(tenant_dict)
 
             return method(*args, **kwargs)
 

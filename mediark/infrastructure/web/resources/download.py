@@ -1,23 +1,23 @@
-import requests
-from ast import literal_eval
-from typing import Any, Dict, Tuple
-from flask import request, jsonify
+from pathlib import Path
+from typing import Any
+from flask import request, jsonify, send_from_directory
 from flask.views import MethodView
 from marshmallow import ValidationError
-from ..helpers import get_request_filter
 from ..schemas import DownloadSchema
+from ....application.utilities import TenantProvider
 
 
 class DownloadResource(MethodView):
-    def __init__(self, resolver) -> None:
-        self.mediark_reporter = resolver['MediarkReporter']
+    def __init__(self, data_path: str, media_dir: str) -> None:
+        self.data_path = data_path
+        self.media_dir = media_dir
 
-    def get(self) -> Tuple[str, int]:
+    def get(self, tenant: str, type: str, uri: str) -> Any:
         """
         ---
         summary: Return all media.
         tags:
-          - Downloads
+          - Download
         responses:
           200:
             description: "Successful response"
@@ -28,16 +28,7 @@ class DownloadResource(MethodView):
                   items:
                     $ref: '#/components/schemas/Download'
         """
-        
-        data = DownloadSchema().loads(request.data)
-        reference = data['reference']
-        type_media = data['type']
-        domain = [('reference','=', reference)]
-        if type_media == 'audio':
-          audios = DownloadSchema().dump(
-              self.mediark_reporter.search_audios(domain), many=True)
-          return jsonify(audios) if audios else jsonify([])
-        else:
-          images = DownloadSchema().dump(
-              self.mediark_reporter.search_images(domain), many=True)
-          return jsonify(images) if images else jsonify([])
+
+        directory = Path(self.data_path).joinpath(
+            tenant+"/"+self.media_dir+"/"+type+"/")
+        return send_from_directory(directory, uri)
