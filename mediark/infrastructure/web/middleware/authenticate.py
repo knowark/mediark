@@ -19,10 +19,7 @@ class Authenticate:
     def __call__(self, method: Callable) -> Callable:
         @wraps(method)
         def decorator(*args, **kwargs):
-            tenant_id = request.headers.get('TenantId')
-            if not tenant_id:
-                tenant_id = request.args['tenant_id']
-
+            tenant_id = request.headers['TenantId']
             user_id = request.headers.get('UserId')
             email = request.headers.get('From', "@")
             name = email.split('@')[0]

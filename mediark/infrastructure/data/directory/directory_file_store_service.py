@@ -13,7 +13,8 @@ class DirectoryFileStoreService(FileStoreService):
     ) -> None:
 
         base_path = Path("{0}/{1}/{2}/{3}".format(
-            data_config["dir_path"], tenant_service.tenant.slug,
+            data_config["dir_path"],
+            tenant_service.tenant.slug,
             data_config["media"]["dir_path"],
             data_config["media"][data_type]["dir_path"]))
 
