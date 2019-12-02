@@ -41,3 +41,18 @@ update:
 
 serve:
 	python -m $(PROJECT) serve
+
+PART ?= patch
+
+version:
+	bump2version $(PART) mediark/__init__.py --tag --commit
+
+install-all:
+	pip install -r requirements.txt
+
+uninstall-all:
+	pip freeze | xargs pip uninstall -y
+
+upgrade:
+	pip-review --local --auto
+	pip freeze > requirements.txt
