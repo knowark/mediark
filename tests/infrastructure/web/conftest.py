@@ -13,7 +13,7 @@ from mediark.application.utilities.tenancy import (
 from mediark.application.repositories import (
     MemoryImageRepository, MemoryAudioRepository)
 from mediark.infrastructure.core import (
-    ProductionConfig, build_config, Config, JwtSupplier)
+    ProductionConfig, build_config, Config)
 from mediark.infrastructure.core.factories import build_factory
 from mediark.infrastructure.web import create_app, ServerApplication
 
@@ -22,14 +22,7 @@ from mediark.infrastructure.web import create_app, ServerApplication
 def app(tmp_path) -> Flask:
     config = ProductionConfig()
 
-    mock_secret_file_path = str(tmp_path / "sign.txt")
-    with open(mock_secret_file_path, "w") as f:
-        f.write("123456")
-
-    config['secrets'] = {
-        "jwt": mock_secret_file_path,
-        "domain": str(tmp_path / "domain.txt")
-    }
+    config['domain'] = 'https://mediark.dev.nubark.cloud'
     config['data']['dir_path'] = str(tmp_path / 'data')
     config['tenancy']['json'] = str(tmp_path / 'tenants.json')
 
@@ -51,21 +44,7 @@ def app(tmp_path) -> Flask:
 
 @fixture
 def headers() -> dict:
-
-    payload_dict = {
-        "tid": "1",
-        "uid": "1",
-        "name": "jjalvarez",
-        "email": "jjalvarez@servagro.com.co",
-        "attributes": {},
-        "authorization": {},
-        "exp": int(datetime.now().timestamp()) + 5
-    }
-
-    jwt_supplier = JwtSupplier('123456')
-    token = jwt_supplier.encode(payload_dict)
-
-    return {"Authorization": (token)}
+    return {"TenantId": "1"}
 
 
 @fixture

@@ -2,17 +2,16 @@ from typing import Callable, Optional, Any
 from functools import wraps
 from flask import request, jsonify
 from ....application.coordinators import SessionCoordinator
-from ...core import TenantSupplier, JwtSupplier, AuthenticationError
+from ...core import TenantSupplier, AuthenticationError
 from ..schemas import UserSchema
 import logging
 
 
 class Authenticate:
 
-    def __init__(self, jwt_supplier: JwtSupplier,
+    def __init__(self,
                  tenant_supplier: TenantSupplier,
                  session_coordinator: SessionCoordinator) -> None:
-        self.jwt_supplier = jwt_supplier
         self.tenant_supplier = tenant_supplier
         self.session_coordinator = session_coordinator
 

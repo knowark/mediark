@@ -25,9 +25,6 @@ class DevelopmentConfig(Config):
 
         self['strategy'] = {
             # Security
-            "JwtSupplier": {
-                "method": "jwt_supplier"
-            },
             "Authenticate": {
                 "method": "middleware_authenticate"
             },

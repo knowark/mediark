@@ -43,6 +43,8 @@ def test_api_images_put_search_and_download(
     response = app.post('/images', data=dumps(image), headers=headers,
                         content_type='application/json')
 
+    print("Response:::", response)
+
     assert response.status == "201 CREATED"
 
     response = app.get(

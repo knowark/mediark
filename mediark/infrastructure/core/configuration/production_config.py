@@ -20,9 +20,6 @@ class ProductionConfig(DevelopmentConfig):
         }
         self['factory'] = 'HttpFactory'
         self['strategy'].update({
-            "JwtSupplier": {
-                "method": "jwt_supplier"
-            },
             "ImageRepository": {
                 "method": "json_image_repository",
             },
