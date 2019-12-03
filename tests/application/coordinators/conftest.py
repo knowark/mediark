@@ -1,7 +1,7 @@
 from pytest import fixture
 from unittest import mock
 from mediark.application.utilities import (
-    QueryParser, Tenant, StandardTenantProvider)
+    QueryParser, Tenant, StandardTenantProvider, StandardAuthProvider)
 from mediark.application.services import (
     StandardIdService, MemoryFileStoreService)
 from mediark.application.repositories import (
@@ -34,8 +34,13 @@ def standard_id_service():
 
 
 @fixture
+def standard_auth_provider():
+    return StandardAuthProvider()
+
+
+@fixture
 def file_store_service(tenant_provider):
-    return MemoryFileStoreService(tenant_provider)
+    return MemoryFileStoreService(tenant_provider, standard_auth_provider)
 
 
 # Repositories
