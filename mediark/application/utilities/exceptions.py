@@ -5,6 +5,32 @@
 class ApplicationError(Exception):
     """Application's base error class."""
 
+# Providers
+
+
+class ProviderError(ApplicationError):
+    """Providers' base error class."""
+
+
+class TenantError(ProviderError):
+    """Tenancy base error class."""
+
+
+class TenantLocationError(TenantError):
+    """The tenant location type was not found."""
+
+
+class AuthError(ProviderError):
+    """Auth error"""
+
+
+class AuthenticationError(AuthError):
+    """Authentication error"""
+
+
+class AuthorizationError(ProviderError):
+    """Authorization error"""
+
 # Repository
 
 
@@ -19,22 +45,9 @@ class EntityNotFoundError(RepositoryError):
 class EntityValidationError(RepositoryError):
     """Entity consistency validation error"""
 
-# Services
-
-
-class ServiceError(ApplicationError):
-    """Services' base error class."""
-
-
-class TenantError(ServiceError):
-    """Tenancy base error class."""
-
-
-class TenantLocationError(TenantError):
-    """The tenant location type was not found."""
 
 # Coordinators
 
 
-class EntityCreationError(Exception):
+class EntityCreationError(ApplicationError):
     """Entity couldn't be created."""

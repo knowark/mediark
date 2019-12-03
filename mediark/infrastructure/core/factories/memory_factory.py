@@ -6,7 +6,8 @@ from ....application.repositories import (
     ImageRepository, MemoryImageRepository,
     AudioRepository, MemoryAudioRepository)
 from ....application.utilities import (
-    QueryParser, TenantProvider, StandardTenantProvider)
+    QueryParser, TenantProvider, StandardTenantProvider,
+    AuthProvider, StandardAuthProvider)
 from ....application.services import (
     IdService, StandardIdService,
     FileStoreService, MemoryFileStoreService,
@@ -30,10 +31,11 @@ class MemoryFactory(Factory):
     def memory_tenant_supplier(self) -> MemoryTenantSupplier:
         return MemoryTenantSupplier()
 
-    def standard_tenant_provider(
-            self, tenant_supplier: TenantSupplier
-    ) -> StandardTenantProvider:
+    def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
+
+    def standard_auth_provider(self) -> StandardAuthProvider:
+        return StandardAuthProvider()
 
     # Security
 
@@ -69,14 +71,16 @@ class MemoryFactory(Factory):
         return StandardIdService()
 
     def memory_image_file_store_service(
-            self, tenant_provider: TenantProvider
+            self, tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryImageFileStoreService:
-        return MemoryImageFileStoreService(tenant_provider)
+        return MemoryImageFileStoreService(tenant_provider, auth_provider)
 
     def memory_audio_file_store_service(
-        self, tenant_provider: TenantProvider
+        self, tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> MemoryAudioFileStoreService:
-        return MemoryAudioFileStoreService(tenant_provider)
+        return MemoryAudioFileStoreService(tenant_provider, auth_provider)
 
     def memory_auth_service(self) -> StandardAuthService:
         dominion = self.config['authorization']['dominion']
