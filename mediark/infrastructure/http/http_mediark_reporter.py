@@ -6,9 +6,8 @@ from ...application.reporters import (
 
 class HttpMediarkReporter(StandardMediarkReporter):
 
-    def __init__(self, domain: str,
-                 tenant_provider: TenantProvider,
-                 provider, *args) -> None:
+    def __init__(self, domain: str, tenant_provider: TenantProvider,
+                 *args) -> None:
         super().__init__(*args)
         self.domain = domain
         self.tenant_provider = tenant_provider
