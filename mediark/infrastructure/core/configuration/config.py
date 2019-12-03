@@ -20,12 +20,13 @@ class Config(defaultdict, ABC):
         self['environment'] = {
             'home': '/opt/mediark'
         }
+        self['domain'] = 'https://mediark.dev.nubark.cloud'
         self['data'] = {
             'dir_path': Path.home() / 'data',
             'media': {
-                'dir_path': './media',
+                'dir_path': 'media',
                 'audios': {
-                    'dir_path': './audios',
+                    'dir_path': 'audios',
                     'extension': 'webm'
                 },
                 'images': {
@@ -34,14 +35,25 @@ class Config(defaultdict, ABC):
                 },
             },
             'shelve':  {
-                'dir_path': './shelve',
+                'dir_path': 'shelve',
                 'audios': {
-                    'dir_path': './audios',
+                    'dir_path': 'audios',
                     'database': 'audios.db'
                 },
                 'images': {
-                    'dir_path': './images',
+                    'dir_path': 'images',
                     'database': 'images.db'
+                },
+            },
+            'json':  {
+                'dir_path': 'json',
+                'audios': {
+                    'dir_path': 'audios',
+                    'database': 'audios.json'
+                },
+                'images': {
+                    'dir_path': 'images',
+                    'database': 'images.json'
                 },
             }
         }

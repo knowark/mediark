@@ -12,26 +12,28 @@ class DirectoryFileStoreService(FileStoreService):
         data_type: str, extension: str = None
     ) -> None:
 
-        base_path = Path("{0}/{1}/{2}/{3}".format(
-            data_config["dir_path"],
-            tenant_service.tenant.slug,
-            data_config["media"]["dir_path"],
-            data_config["media"][data_type]["dir_path"]))
-
-        base_path.mkdir(parents=True, exist_ok=True)
-
-        self.base_path = str(base_path)
+        self.tenant_service = tenant_service
+        self.data_config = data_config
+        self.data_type = data_type
         self.extension = extension or \
-            data_config["media"][data_type]["extension"]
+            self.data_config["media"][self.data_type]["extension"]
 
     def store(self, file_id: str, content: str, extension: str = None) -> str:
         first_dir, second_dir = self._get_subdirs(file_id)
         extension = extension or self.extension
         binary_data = b64decode(content)
 
+        base_path = Path("{0}/{1}/{2}/{3}".format(
+            self.data_config["dir_path"],
+            self.tenant_service.tenant.slug,
+            self.data_config["media"]["dir_path"],
+            self.data_config["media"][self.data_type]["dir_path"]))
+
+        base_path.mkdir(parents=True, exist_ok=True)
+
         uri = "{0}/{1}/{2}.{3}".format(
             first_dir, second_dir, file_id, extension)
-        file_path = Path(self.base_path).joinpath(uri)
+        file_path = Path(base_path).joinpath(uri)
         file_path.absolute().parent.mkdir(parents=True, exist_ok=True)
         with file_path.open("wb") as f:
             f.write(binary_data)

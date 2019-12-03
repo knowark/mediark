@@ -16,10 +16,8 @@ class DevelopmentConfig(Config):
             'loglevel': 'debug'
         })
         self['secrets'] = {
-            "jwt": Path.home() / 'sign.txt',
-            "domain": Path.home() / 'domain.txt'
+            "jwt": Path.home() / 'sign.txt'
         }
-        self['domain'] = 'https://mediark.dev.nubark.cloud'
         self['authorization'] = {
             "dominion": "mediark"
         }
