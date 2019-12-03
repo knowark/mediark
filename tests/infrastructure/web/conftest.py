@@ -8,8 +8,6 @@ from typing import cast, List
 from injectark import Injectark
 from mediark.application.models import Image, Audio
 from mediark.application.utilities import QueryParser
-from mediark.application.utilities.tenancy import (
-    Tenant, StandardTenantProvider)
 from mediark.application.repositories import (
     MemoryImageRepository, MemoryAudioRepository)
 from mediark.infrastructure.core import (
@@ -28,8 +26,11 @@ def app(tmp_path) -> Flask:
 
     template_dir = Path(config['data']['dir_path']) / "__template__"
     template_dir.mkdir(parents=True, exist_ok=True)
-    (template_dir / "images").mkdir(parents=True, exist_ok=True)
-    (template_dir / "audios").mkdir(parents=True, exist_ok=True)
+    (template_dir / "json").mkdir(parents=True, exist_ok=True)
+    (template_dir / "json" / "audios.json").write_text('{"audios":{}}')
+    (template_dir / "json" / "images.json").write_text('{"images":{}}')
+    (template_dir / 'media' / "images").mkdir(parents=True, exist_ok=True)
+    (template_dir / 'media' / "audios").mkdir(parents=True, exist_ok=True)
 
     strategy = config['strategy']
     factory = build_factory(config)
