@@ -5,16 +5,20 @@ from typing import List, Dict, TypeVar, Optional, Type, Generic
 from ..models import T
 from ..utilities import (
     QueryParser, QueryDomain, EntityNotFoundError,
-    TenantProvider, StandardTenantProvider)
+    TenantProvider, StandardTenantProvider,
+    AuthProvider, StandardAuthProvider)
 from .repository import Repository
 
 
 class MemoryRepository(Repository, Generic[T]):
     def __init__(self,  parser=QueryParser(),
-                 tenant_service=StandardTenantProvider()) -> None:
+                 tenant_provider=StandardTenantProvider(),
+                 auth_provider=StandardAuthProvider()) -> None:
         self.data: Dict[str, Dict[str, T]] = defaultdict(dict)
-        self.parser = parser
-        self.tenant_service = tenant_service
+        self.parser: QueryParser = parser
+        self.tenant_provider: TenantProvider = tenant_provider
+        self.auth_provider: AuthProvider = auth_provider
+        self.max_items = 1000
 
     def get(self, id: str) -> T:
         item = self.data[self._location].get(id)
@@ -24,26 +28,36 @@ class MemoryRepository(Repository, Generic[T]):
         return item
 
     def add(self, item: T) -> T:
+        user = self.auth_provider.user
         item.id = item.id or str(uuid4())
-        # item.created_at = int(time.time())
-        # item.updated_at = item.created_at
+        item.created_at = int(time.time())
+        item.created_by = user and user.id or ""
+        item.updated_at = item.created_at
+        item.updated_by = item.created_by
         self.data[self._location][item.id] = item
         return item
 
     def update(self, item: T) -> bool:
-        """Not implemented"""
+        if item.id not in self.data[self._location]:
+            return False
+        user = self.auth_provider.user
+        item.updated_at = int(time.time())
+        item.updated_by = user and user.id or ""
+        self.data[self._location][item.id] = item
+        return True
 
-    def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
+    def search(self, domain: QueryDomain, limit=1000, offset=0) -> List[T]:
         items = []
-        limit = int(limit) if limit > 0 else 10000
-        offset = int(offset) if offset > 0 else 0
         filter_function = self.parser.parse(domain)
         for item in list(self.data[self._location].values()):
             if filter_function(item):
                 items.append(item)
 
-        items = items[:limit]
-        items = items[offset:]
+        if offset is not None:
+            items = items[offset:]
+
+        if limit is not None:
+            items = items[:min(limit, self.max_items)]
 
         return items
 
@@ -58,4 +72,4 @@ class MemoryRepository(Repository, Generic[T]):
 
     @property
     def _location(self) -> str:
-        return self.tenant_service.tenant.location('memory')
+        return self.tenant_provider.tenant.location('memory')

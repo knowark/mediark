@@ -4,10 +4,10 @@ from ....application.utilities import (
 from ....infrastructure.data import (
     DirectoryImageFileStoreService, DirectoryAudioFileStoreService)
 from ..configuration import Config
-from .shelve_factory import ShelveFactory
+from .json_factory import JsonFactory
 
 
-class DirectoryFactory(ShelveFactory):
+class DirectoryFactory(JsonFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
 

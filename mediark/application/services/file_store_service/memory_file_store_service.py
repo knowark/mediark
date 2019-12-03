@@ -2,12 +2,13 @@ import uuid
 from abc import ABC, abstractmethod
 from collections import defaultdict
 from typing import Dict
-from ...utilities import StandardTenantProvider
+from ...utilities import TenantProvider, AuthProvider
 from .file_store_service import FileStoreService
 
 
 class MemoryFileStoreService(FileStoreService):
-    def __init__(self, tenant_service=StandardTenantProvider()):
+    def __init__(self, tenant_service: TenantProvider,
+                 auth_provider: AuthProvider):
         self.files: Dict[str, Dict[str, str]] = defaultdict(dict)
         self.tenant_service = tenant_service
 

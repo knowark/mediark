@@ -1,5 +1,5 @@
-from .shelve import (
-    ShelveRepository, ShelveImageRepository, ShelveAudioRepository)
+from .json import (
+    JsonRepository, JsonAudioRepository, JsonImageRepository)
 from .setup import DirectoryArranger, ShelveArranger
 from .directory import (DirectoryFileStoreService,
                         DirectoryImageFileStoreService,

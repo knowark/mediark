@@ -45,6 +45,9 @@ class DevelopmentConfig(Config):
             "IdService": {
                 "method": "standard_id_service"
             },
+            "AuthProvider": {
+                "method": "standard_auth_provider"
+            },
             # Tenancy
             "TenantProvider": {
                 "method": "standard_tenant_provider"
