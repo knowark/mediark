@@ -22,11 +22,11 @@ class HttpMediarkReporter(StandardMediarkReporter):
     def search_images(self, domain: SearchDomain) -> ImageDictList:
         result = super().search_images(domain)
         tenant = self.tenant_provider.tenant.slug
-        image_download = f"{self.domain}/{tenant}"
+        image_download = f"{self.domain}/download/{tenant}/images"
         return self._prepend_download(image_download, result)
 
     def search_audios(self, domain: SearchDomain) -> AudioDictList:
         result = super().search_audios(domain)
         tenant = self.tenant_provider.tenant.slug
-        audio_download = f"{self.domain}/{tenant}"
+        audio_download = f"{self.domain}/download/{tenant}/audios"
         return self._prepend_download(audio_download, result)
