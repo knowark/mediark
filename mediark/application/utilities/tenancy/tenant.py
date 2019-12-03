@@ -26,7 +26,6 @@ class Tenant:
             raise TenantLocationError(
                 f"No location found for '{type}' type "
                 f"in tenant '{self.name}'.")
-        print(self.data, ">>><<<", type, collection)
         return self.data[type][collection]
 
     @staticmethod

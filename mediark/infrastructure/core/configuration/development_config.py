@@ -76,5 +76,8 @@ class DevelopmentConfig(Config):
             },
             "MediarkReporter": {
                 "method": "memory_mediark_reporter",
-            }
+            },
+            "DirectoryLoadSupplier": {
+                "method": "directory_load_supplier"
+            },
         }

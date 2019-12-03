@@ -19,6 +19,7 @@ from ...core import JwtSupplier, JsonTenantSupplier
 from ....application.coordinators import (
     SessionCoordinator, ImageStorageCoordinator, AudioStorageCoordinator)
 from ....application.reporters import MediarkReporter, StandardMediarkReporter
+from ...web.helpers import DirectoryLoadSupplier
 
 
 class MemoryFactory(Factory):
@@ -36,6 +37,11 @@ class MemoryFactory(Factory):
 
     def standard_auth_provider(self) -> StandardAuthProvider:
         return StandardAuthProvider()
+
+    def directory_load_supplier(self) -> DirectoryLoadSupplier:
+        return DirectoryLoadSupplier(
+            data_path=self.config['data']['dir_path'],
+            media_dir=self.config['data']['media']['dir_path'])
 
     # Security
 
