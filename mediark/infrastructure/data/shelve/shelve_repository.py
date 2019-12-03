@@ -13,7 +13,8 @@ class ShelveRepository(Repository, Generic[T]):
             data_config: dict, data_type: str
     ) -> None:
         filename = Path("{0}/{1}/{2}/{3}".format(
-            data_config["dir_path"], tenant_service.tenant.slug,
+            data_config["dir_path"],
+            tenant_service.tenant.slug,
             data_config["shelve"]["dir_path"],
             data_config["shelve"][data_type]["database"]))
 

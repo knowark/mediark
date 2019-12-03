@@ -19,6 +19,7 @@ class DevelopmentConfig(Config):
             "jwt": Path.home() / 'sign.txt',
             "domain": Path.home() / 'domain.txt'
         }
+        self['domain'] = 'https://mediark.dev.nubark.cloud'
         self['authorization'] = {
             "dominion": "mediark"
         }
