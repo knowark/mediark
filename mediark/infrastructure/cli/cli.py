@@ -4,7 +4,7 @@ from argparse import ArgumentParser, Namespace
 from injectark import Injectark
 from ..core.configuration import Config
 from typing import List
-from ..data import DirectoryArranger, ShelveArranger
+from ..data import DirectoryArranger
 from ..web import create_app, ServerApplication
 
 
