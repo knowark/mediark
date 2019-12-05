@@ -84,7 +84,7 @@ class MemoryFactory(Factory):
     # Coordinators
 
     def session_coordinator(self, tenant_provider: TenantProvider,
-                            auth_provicer: AuthProvider
+                            auth_provider: AuthProvider
                             ) -> SessionCoordinator:
         return SessionCoordinator(tenant_provider, auth_provider)
 
