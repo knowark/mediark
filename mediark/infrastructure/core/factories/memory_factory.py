@@ -12,8 +12,7 @@ from ....application.services import (
     IdService, StandardIdService,
     FileStoreService, MemoryFileStoreService,
     ImageFileStoreService, MemoryImageFileStoreService,
-    AudioFileStoreService, MemoryAudioFileStoreService,
-    AuthService, StandardAuthService)
+    AudioFileStoreService, MemoryAudioFileStoreService)
 from ...web.middleware import Authenticate
 from ...core import JsonTenantSupplier
 from ....application.coordinators import (
@@ -81,16 +80,12 @@ class MemoryFactory(Factory):
     ) -> MemoryAudioFileStoreService:
         return MemoryAudioFileStoreService(tenant_provider, auth_provider)
 
-    def memory_auth_service(self) -> StandardAuthService:
-        dominion = self.config['authorization']['dominion']
-        return StandardAuthService(dominion)
-
     # Coordinators
 
     def session_coordinator(self, tenant_provider: TenantProvider,
-                            auth_service: AuthService
+                            auth_provider: AuthProvider
                             ) -> SessionCoordinator:
-        return SessionCoordinator(tenant_provider, auth_service)
+        return SessionCoordinator(tenant_provider, auth_provider)
 
     def image_storage_coordinator(self, image_repository: ImageRepository,
                                   id_service: IdService,
