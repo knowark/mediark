@@ -32,7 +32,7 @@ class DevelopmentConfig(Config):
                 "method": "middleware_authenticate"
             },
             "AuthProvider": {
-                "method": "memory_auth_provider"
+                "method": "standard_auth_provider"
             },
             "SessionCoordinator": {
                 "method": "session_coordinator"
