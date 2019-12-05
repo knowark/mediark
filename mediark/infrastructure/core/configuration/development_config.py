@@ -31,8 +31,8 @@ class DevelopmentConfig(Config):
             "Authenticate": {
                 "method": "middleware_authenticate"
             },
-            "AuthService": {
-                "method": "memory_auth_service"
+            "AuthProvider": {
+                "method": "memory_auth_provider"
             },
             "SessionCoordinator": {
                 "method": "session_coordinator"
