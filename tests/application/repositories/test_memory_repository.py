@@ -32,10 +32,10 @@ def test_memory_repository_implementation() -> None:
 
 @fixture
 def memory_repository() -> MemoryRepository:
-    tenant_service = StandardTenantProvider(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     parser = QueryParser()
     repository: MemoryRepository = MemoryRepository(
-        parser=parser, tenant_service=tenant_service)
+        parser=parser, tenant_provider=tenant_provider)
     repository.load({"default": {}})
     return repository
 
@@ -52,9 +52,9 @@ def test_memory_repository_get_missing(filled_memory_repository) -> None:
 
 def test_memory_repository_add(filled_memory_repository) -> None:
     parser = QueryParser()
-    tenant_service = StandardTenantProvider(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     repository: MemoryRepository = MemoryRepository(
-        parser=parser, tenant_service=tenant_service)
+        parser=parser, tenant_provider=tenant_provider)
     item = DummyEntity("1", "value_1")
     is_saved = repository.add(item)
 

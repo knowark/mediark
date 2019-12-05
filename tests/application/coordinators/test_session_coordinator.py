@@ -23,4 +23,4 @@ def test_session_coordinator_set_user(session_coordinator) -> None:
 
     user = {'name': 'jdacevedo'}
     session_coordinator.set_user(user)
-    assert session_coordinator.auth_service.user.name == 'jdacevedo'
+    assert session_coordinator.auth_provider.user.name == 'jdacevedo'

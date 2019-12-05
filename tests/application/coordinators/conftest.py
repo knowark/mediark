@@ -1,15 +1,14 @@
 from pytest import fixture
 from unittest import mock
 from mediark.application.utilities import (
-    QueryParser, Tenant, StandardTenantProvider)
+    QueryParser, Tenant, StandardTenantProvider,
+    User,  StandardAuthProvider)
 from mediark.application.services import (
     StandardIdService, MemoryFileStoreService)
 from mediark.application.repositories import (
     MemoryAudioRepository, MemoryImageRepository)
 from mediark.application.coordinators import (
     ImageStorageCoordinator, AudioStorageCoordinator)
-from mediark.application.services import (
-    AuthService, StandardAuthService)
 from mediark.application.coordinators import SessionCoordinator
 
 
@@ -24,8 +23,8 @@ def tenant_provider():
 
 
 @fixture
-def auth_service() -> AuthService:
-    return StandardAuthService('maindominion')
+def auth_provider():
+    return StandardAuthProvider(User(id="1", name="John Doe"))
 
 
 @fixture
@@ -34,8 +33,8 @@ def standard_id_service():
 
 
 @fixture
-def file_store_service(tenant_provider):
-    return MemoryFileStoreService(tenant_provider)
+def file_store_service(tenant_provider, auth_provider):
+    return MemoryFileStoreService(tenant_provider, auth_provider)
 
 
 # Repositories
@@ -68,5 +67,5 @@ def image_storage_coordinator(
 
 
 @fixture
-def session_coordinator(tenant_provider, auth_service):
-    return SessionCoordinator(tenant_provider, auth_service)
+def session_coordinator(tenant_provider, auth_provider):
+    return SessionCoordinator(tenant_provider, auth_provider)
