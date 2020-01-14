@@ -9,6 +9,8 @@ from mediark.application.repositories import (
     MemoryAudioRepository, MemoryImageRepository)
 from mediark.application.coordinators import (
     ImageStorageCoordinator, AudioStorageCoordinator)
+from mediark.application.services import (
+    AuthService, StandardAuthService)
 from mediark.application.coordinators import SessionCoordinator
 
 

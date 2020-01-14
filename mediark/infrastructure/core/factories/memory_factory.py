@@ -14,10 +14,11 @@ from ....application.services import (
     ImageFileStoreService, MemoryImageFileStoreService,
     AudioFileStoreService, MemoryAudioFileStoreService)
 from ...web.middleware import Authenticate
-from ...core import JwtSupplier, JsonTenantSupplier
+from ...core import JsonTenantSupplier
 from ....application.coordinators import (
     SessionCoordinator, ImageStorageCoordinator, AudioStorageCoordinator)
 from ....application.reporters import MediarkReporter, StandardMediarkReporter
+from ...web.helpers import DirectoryLoadSupplier
 
 
 class MemoryFactory(Factory):
@@ -36,21 +37,19 @@ class MemoryFactory(Factory):
     def standard_auth_provider(self) -> StandardAuthProvider:
         return StandardAuthProvider()
 
+    def directory_load_supplier(self) -> DirectoryLoadSupplier:
+        return DirectoryLoadSupplier(
+            data_path=self.config['data']['dir_path'],
+            media_dir=self.config['data']['media']['dir_path'])
+
     # Security
 
     def middleware_authenticate(
-            self, jwt_supplier: JwtSupplier,
+            self,
             tenant_supplier: TenantSupplier,
             session_coordinator: SessionCoordinator) -> Authenticate:
         return Authenticate(
-            jwt_supplier, tenant_supplier, session_coordinator)
-
-    def jwt_supplier(self) -> JwtSupplier:
-        secret = 'secret'
-        secret_file = self.config.get('secrets', {}).get('jwt')
-        if secret_file:
-            secret = Path(secret_file).read_text().strip()
-        return JwtSupplier(secret)
+            tenant_supplier, session_coordinator)
 
     # Repositories
 

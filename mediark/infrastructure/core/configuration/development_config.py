@@ -25,9 +25,6 @@ class DevelopmentConfig(Config):
 
         self['strategy'] = {
             # Security
-            "JwtSupplier": {
-                "method": "jwt_supplier"
-            },
             "Authenticate": {
                 "method": "middleware_authenticate"
             },
@@ -76,5 +73,8 @@ class DevelopmentConfig(Config):
             },
             "MediarkReporter": {
                 "method": "memory_mediark_reporter",
-            }
+            },
+            "DirectoryLoadSupplier": {
+                "method": "directory_load_supplier"
+            },
         }

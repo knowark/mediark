@@ -1,6 +1,7 @@
 from mediark.application.services import (
     FileStoreService, MemoryFileStoreService)
-from mediark.application.utilities import Tenant, StandardTenantProvider
+from mediark.application.utilities import (
+    Tenant, StandardTenantProvider, StandardAuthProvider)
 
 
 def test_file_store_service() -> None:
@@ -17,7 +18,8 @@ def test_memory_file_store_service_store() -> None:
     content = 'BASE64_ENCODED_CONTENT'
 
     file_store_service = MemoryFileStoreService(
-        StandardTenantProvider(Tenant(name="custom-tenant")))
+        StandardTenantProvider(Tenant(name="custom-tenant")),
+        StandardAuthProvider())
     uri = file_store_service.store(file_id, content)
 
     assert isinstance(uri, str)

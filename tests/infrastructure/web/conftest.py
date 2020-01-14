@@ -8,12 +8,10 @@ from typing import cast, List
 from injectark import Injectark
 from mediark.application.models import Image, Audio
 from mediark.application.utilities import QueryParser
-from mediark.application.utilities.tenancy import (
-    Tenant, StandardTenantProvider)
 from mediark.application.repositories import (
     MemoryImageRepository, MemoryAudioRepository)
 from mediark.infrastructure.core import (
-    ProductionConfig, build_config, Config, JwtSupplier)
+    ProductionConfig, build_config, Config)
 from mediark.infrastructure.core.factories import build_factory
 from mediark.infrastructure.web import create_app, ServerApplication
 
@@ -22,21 +20,17 @@ from mediark.infrastructure.web import create_app, ServerApplication
 def app(tmp_path) -> Flask:
     config = ProductionConfig()
 
-    mock_secret_file_path = str(tmp_path / "sign.txt")
-    with open(mock_secret_file_path, "w") as f:
-        f.write("123456")
-
-    config['secrets'] = {
-        "jwt": mock_secret_file_path,
-        "domain": str(tmp_path / "domain.txt")
-    }
+    config['domain'] = 'https://mediark.dev.nubark.cloud'
     config['data']['dir_path'] = str(tmp_path / 'data')
     config['tenancy']['json'] = str(tmp_path / 'tenants.json')
 
     template_dir = Path(config['data']['dir_path']) / "__template__"
     template_dir.mkdir(parents=True, exist_ok=True)
-    (template_dir / "images").mkdir(parents=True, exist_ok=True)
-    (template_dir / "audios").mkdir(parents=True, exist_ok=True)
+    (template_dir / "json").mkdir(parents=True, exist_ok=True)
+    (template_dir / "json" / "audios.json").write_text('{"audios":{}}')
+    (template_dir / "json" / "images.json").write_text('{"images":{}}')
+    (template_dir / 'media' / "images").mkdir(parents=True, exist_ok=True)
+    (template_dir / 'media' / "audios").mkdir(parents=True, exist_ok=True)
 
     strategy = config['strategy']
     factory = build_factory(config)
@@ -51,21 +45,7 @@ def app(tmp_path) -> Flask:
 
 @fixture
 def headers() -> dict:
-
-    payload_dict = {
-        "tid": "1",
-        "uid": "1",
-        "name": "jjalvarez",
-        "email": "jjalvarez@servagro.com.co",
-        "attributes": {},
-        "authorization": {},
-        "exp": int(datetime.now().timestamp()) + 5
-    }
-
-    jwt_supplier = JwtSupplier('123456')
-    token = jwt_supplier.encode(payload_dict)
-
-    return {"Authorization": (token)}
+    return {"TenantId": "1"}
 
 
 @fixture

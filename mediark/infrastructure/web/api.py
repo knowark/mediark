@@ -34,9 +34,7 @@ def create_api(app: Flask, config: dict, resolver: Injectark) -> None:
     config_data = config['data']
     spec.path(path="/download/<string:tenant>/<string:type>/<path:uri>",
               resource=DownloadResource)
-    download_view = DownloadResource.as_view(
-        'download', resolver=resolver, data_path=config_data['dir_path'],
-        media_dir=config_data['media']['dir_path'])
+    download_view = DownloadResource.as_view('download', resolver=resolver)
     app.add_url_rule(
         "/download/<string:tenant>/<string:type>/<path:uri>",
         view_func=download_view)
