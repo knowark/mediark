@@ -50,7 +50,7 @@ def test_memory_repository_get_missing(filled_memory_repository) -> None:
         filled_memory_repository.get("999999999")
 
 
-def test_memory_repository_add(filled_memory_repository) -> None:
+def test_memory_repository_add() -> None:
     parser = QueryParser()
     tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     repository: MemoryRepository = MemoryRepository(
@@ -62,6 +62,35 @@ def test_memory_repository_add(filled_memory_repository) -> None:
     assert is_saved
     assert "1" in repository.data['default'].keys()
     assert item in repository.data['default'].values()
+
+
+def test_memory_repository_update() -> None:
+    parser = QueryParser()
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
+    repository: MemoryRepository = MemoryRepository(
+        parser=parser, tenant_provider=tenant_provider)
+    item = DummyEntity("1", "value_1")
+    repository.add(item)
+    item.field_1 = "new_value"
+    is_updated = repository.update(item)
+    updated_item = repository.get("1")
+
+    assert len(repository.data) == 1
+    assert is_updated
+    assert "1" in repository.data['default'].keys()
+    assert item in repository.data['default'].values()
+    assert item.field_1 == updated_item.field_1
+
+
+def test_memory_repository_bad_update() -> None:
+    parser = QueryParser()
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
+    repository: MemoryRepository = MemoryRepository(
+        parser=parser, tenant_provider=tenant_provider)
+    item = DummyEntity("1", "value_1")
+    repository.add(item)
+    item.id = "2"
+    assert not repository.update(item)
 
 
 def test_memory_repository_search(filled_memory_repository):
@@ -87,7 +116,7 @@ def test_memory_repository_search_limit(filled_memory_repository):
 
 
 def test_memory_repository_search_limit_zero(filled_memory_repository):
-    items = filled_memory_repository.search([], limit=0)
+    items = filled_memory_repository.search([])
 
     assert len(items) == 3
 
