@@ -1,4 +1,3 @@
-from uuid import UUID
 from mediark.application.services import MemoryFileStoreService
 
 
@@ -6,17 +5,17 @@ def test_storage_coordinator_instantiation(audio_storage_coordinator):
     assert audio_storage_coordinator is not None
 
 
-def test_storage_coordinator_store_no_data(audio_storage_coordinator):
+async def test_storage_coordinator_store_no_data(audio_storage_coordinator):
     audio_dict = {
         'namespace': 'https://example.com',
         'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
         'extension': 'mp4'}
-    audio_storage_coordinator.store(audio_dict)
+    await audio_storage_coordinator.store(audio_dict)
 
     assert len(audio_storage_coordinator.audio_repository.data) == 0
 
 
-def test_storage_coordinator_store_data(audio_storage_coordinator):
+async def test_storage_coordinator_store_data(audio_storage_coordinator):
     audio_dict = {
         'namespace': 'https://example.com',
         'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
@@ -24,12 +23,12 @@ def test_storage_coordinator_store_data(audio_storage_coordinator):
         'extension': 'mp4'
     }
 
-    audio_storage_coordinator.store(audio_dict)
+    await audio_storage_coordinator.store(audio_dict)
 
     assert len(audio_storage_coordinator.audio_repository.data) == 1
 
 
-def test_storage_coordinator_store_file(audio_storage_coordinator):
+async def test_storage_coordinator_store_file(audio_storage_coordinator):
     audio_dict = {
         'namespace': 'https://example.com',
         'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
@@ -38,6 +37,6 @@ def test_storage_coordinator_store_file(audio_storage_coordinator):
         'extension': 'png'
     }
 
-    audio_storage_coordinator.store(audio_dict)
+    await audio_storage_coordinator.store(audio_dict)
 
     assert len(audio_storage_coordinator.audio_repository.data) == 1

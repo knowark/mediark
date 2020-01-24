@@ -18,7 +18,7 @@ def test_memory_file_store_service_store() -> None:
     content = 'BASE64_ENCODED_CONTENT'
 
     file_store_service = MemoryFileStoreService(
-        StandardTenantProvider(Tenant(name="custom-tenant")),
+        StandardTenantProvider(),
         StandardAuthProvider())
     uri = file_store_service.store(file_id, content)
 

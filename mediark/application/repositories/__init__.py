@@ -1,4 +1,5 @@
 from .repository import Repository
 from .memory_repository import MemoryRepository
-from .image_repository import ImageRepository, MemoryImageRepository
-from .audio_repository import AudioRepository, MemoryAudioRepository
+from .memory_model_repositories import (
+    AudioRepository, ImageRepository, MemoryAudioRepository,
+    MemoryImageRepository)

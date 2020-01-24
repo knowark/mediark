@@ -19,7 +19,9 @@ def query_parser():
 
 @fixture
 def tenant_provider():
-    return StandardTenantProvider(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(name="default"))
+    return tenant_provider
 
 
 @fixture
@@ -40,13 +42,13 @@ def file_store_service(tenant_provider, auth_provider):
 # Repositories
 
 @fixture
-def audio_repository(query_parser, tenant_provider):
-    return MemoryAudioRepository(query_parser, tenant_provider)
+def audio_repository(query_parser, tenant_provider, auth_provider):
+    return MemoryAudioRepository(query_parser, tenant_provider, auth_provider)
 
 
 @fixture
-def image_repository(query_parser, tenant_provider):
-    return MemoryImageRepository(query_parser, tenant_provider)
+def image_repository(query_parser, tenant_provider, auth_provider):
+    return MemoryImageRepository(query_parser, tenant_provider, auth_provider)
 
 
 # Coordinators
