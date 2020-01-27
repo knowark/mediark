@@ -2,5 +2,5 @@ __author__ = """Nubark"""
 __email__ = 'info@nubark.com'
 __version__ = '1.4.4'
 
-from gevent import monkey
-monkey.patch_all()
+# from gevent import monkey
+# monkey.patch_all()

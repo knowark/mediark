@@ -37,7 +37,6 @@ class MemoryRepository(Repository, Generic[T]):
             item.updated_at = item.created_at
             item.updated_by = item.created_by
             self.data[self._location][item.id] = item
-        print("DATA:::: ", self.data)
         return items
 
     async def update(self, item: Union[T, List[T]]) -> bool:
@@ -95,4 +94,4 @@ class MemoryRepository(Repository, Generic[T]):
 
     @property
     def _location(self) -> str:
-        return self.tenant_provider.tenant.zone or 'default'
+        return self.tenant_provider.tenant.location('memory')

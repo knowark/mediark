@@ -18,4 +18,4 @@ class MemoryFileStoreService(FileStoreService):
 
     @property
     def _location(self) -> str:
-        return self.tenant_service.tenant.zone or 'memory'
+        return self.tenant_service.tenant.location('memory')

@@ -6,7 +6,7 @@ from ....application.repositories import (
     ImageRepository, MemoryImageRepository,
     AudioRepository, MemoryAudioRepository)
 from ....application.utilities import (
-    QueryParser, TenantProvider, StandardTenantProvider,
+    User, QueryParser, TenantProvider, StandardTenantProvider,
     AuthProvider, StandardAuthProvider)
 from ....application.services import (
     IdService, StandardIdService,
@@ -35,7 +35,7 @@ class MemoryFactory(Factory):
         return StandardTenantProvider()
 
     def standard_auth_provider(self) -> StandardAuthProvider:
-        return StandardAuthProvider()
+        return StandardAuthProvider(User(id="1", name="John Doe"))
 
     def directory_load_supplier(self) -> DirectoryLoadSupplier:
         return DirectoryLoadSupplier(
@@ -53,15 +53,17 @@ class MemoryFactory(Factory):
 
     # Repositories
 
-    def memory_image_repository(self, query_parser: QueryParser,
-                                tenant_provider: TenantProvider
-                                ) -> MemoryImageRepository:
-        return MemoryImageRepository(query_parser, tenant_provider)
+    def memory_image_repository(
+            self, query_parser: QueryParser, tenant_provider: TenantProvider,
+            standard_auth_provider: AuthProvider) -> MemoryImageRepository:
+        return MemoryImageRepository(
+            query_parser, tenant_provider, standard_auth_provider)
 
-    def memory_audio_repository(self, query_parser: QueryParser,
-                                tenant_provider: TenantProvider
-                                ) -> MemoryAudioRepository:
-        return MemoryAudioRepository(query_parser, tenant_provider)
+    def memory_audio_repository(
+            self, query_parser: QueryParser, tenant_provider: TenantProvider,
+            standard_auth_provider: AuthProvider) -> MemoryAudioRepository:
+        return MemoryAudioRepository(
+            query_parser, tenant_provider, standard_auth_provider)
 
     # Services
 
