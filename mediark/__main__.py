@@ -3,13 +3,16 @@ Mediark entrypoint
 """
 import os
 import sys
+import uvloop
+import asyncio
+import uvloop
 from injectark import Injectark
-from .infrastructure.core import build_factory, build_config, Config
+from .infrastructure.core import build_config
 from .infrastructure.cli import Cli
-from .infrastructure.web import create_app, ServerApplication
+from .infrastructure.factories import build_factory
 
 
-def main():  # pragma: no cover
+def main(args=None):  # pragma: no cover
     mode = os.environ.get('MEDIARK_MODE', 'PROD')
     config_path = os.environ.get('MEDIARK_CONFIG', 'config.json')
     config = build_config(config_path, mode)
@@ -22,4 +25,7 @@ def main():  # pragma: no cover
 
 
 if __name__ == '__main__':  # pragma: no cover
-    main()
+    uvloop.install()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main(sys.argv[1:]))
+    loop.close()

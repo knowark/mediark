@@ -37,3 +37,6 @@ class JsonTenantSupplier(TenantSupplier):
 
     def search_tenants(self, domain):
         return self.provider.search_tenants(domain)
+
+    def resolve_tenant(self, name: str) -> Dict[str, Any]:
+        return self.provider.resolve_tenant(name)

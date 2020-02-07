@@ -13,7 +13,6 @@ from ....application.services import (
     FileStoreService, MemoryFileStoreService,
     ImageFileStoreService, MemoryImageFileStoreService,
     AudioFileStoreService, MemoryAudioFileStoreService)
-from ...web.middleware import Authenticate
 from ...core import JsonTenantSupplier
 from ....application.coordinators import (
     SessionCoordinator, ImageStorageCoordinator, AudioStorageCoordinator)
@@ -41,15 +40,6 @@ class MemoryFactory(Factory):
         return DirectoryLoadSupplier(
             data_path=self.config['data']['dir_path'],
             media_dir=self.config['data']['media']['dir_path'])
-
-    # Security
-
-    def middleware_authenticate(
-            self,
-            tenant_supplier: TenantSupplier,
-            session_coordinator: SessionCoordinator) -> Authenticate:
-        return Authenticate(
-            tenant_supplier, session_coordinator)
 
     # Repositories
 

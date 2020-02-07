@@ -1,40 +1,49 @@
-from typing import Callable, Optional, Any
-from functools import wraps
-from flask import request, jsonify
+import rapidjson as json
+from typing import Callable, Dict, Any
+from aiohttp import web
+from injectark import Injectark
 from ....application.coordinators import SessionCoordinator
-from ...core import TenantSupplier, AuthenticationError
-from ..schemas import UserSchema
-import logging
+from ...core import TenantSupplier
 
 
-class Authenticate:
+def authenticate_middleware_factory(injector: Injectark) -> Callable:
+    session_coordinator: SessionCoordinator = injector['SessionCoordinator']
+    tenant_supplier: TenantSupplier = injector['TenantSupplier']
 
-    def __init__(self,
-                 tenant_supplier: TenantSupplier,
-                 session_coordinator: SessionCoordinator) -> None:
-        self.tenant_supplier = tenant_supplier
-        self.session_coordinator = session_coordinator
+    @web.middleware
+    async def middleware(request: web.Request, handler: Callable):
+        if request.path == '/':
+            return await handler(request)
 
-    def __call__(self, method: Callable) -> Callable:
-        @wraps(method)
-        def decorator(*args, **kwargs):
+        try:
+            user_dict = extract_user(request.headers)
+            session_coordinator.set_user(user_dict)
+
             tenant_id = request.headers['TenantId']
-            user_id = request.headers.get('UserId')
-            email = request.headers.get('From', "@")
-            name = email.split('@')[0]
-            roles = request.headers.get('Roles', '').strip().split(',')
+            tenant_dict = tenant_supplier.get_tenant(tenant_id)
+            session_coordinator.set_tenant(tenant_dict)
+        except Exception as e:
+            raise web.HTTPUnauthorized(
+                body=json.dumps({
+                    "errors": [
+                        {"message": f"{e.__class__.__name__}: {str(e)}"}
+                    ]
+                }))
 
-            user_dict = {
-                'id': user_id,
-                'name': name,
-                'email': email,
-                'roles': roles
-            }
-            self.session_coordinator.set_user(user_dict)
+        return await handler(request)
 
-            tenant_dict = self.tenant_supplier.get_tenant(tenant_id)
-            self.session_coordinator.set_tenant(tenant_dict)
+    return middleware
 
-            return method(*args, **kwargs)
 
-        return decorator
+def extract_user(headers: Dict[str, Any]) -> Dict[str, Any]:
+    user_id = headers['UserId']
+    email = headers.get('From', "@")
+    name = email.split('@')[0]
+    roles = headers.get('Roles', '').strip().split(',')
+
+    return {
+        'id': user_id,
+        'name': name,
+        'email': email,
+        'roles': roles
+    }

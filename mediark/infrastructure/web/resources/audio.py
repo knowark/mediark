@@ -1,19 +1,39 @@
-import json
+from aiohttp import web
+from rapidjson import dumps, loads
 from typing import Any, Dict, Tuple
 from flask import request, jsonify
 from flask.views import MethodView
 from marshmallow import ValidationError
 from ..helpers import get_request_filter
 from ..schemas import AudioSchema
+from injectark import Injectark
 
 
-class AudioResource(MethodView):
+class AudioResource:
+    def __init__(self, injector: Injectark) -> None:
+        self.injector = injector
+        self.audio_storage_coordinator = self.injector[
+            'AudioStorageCoordinator']
+        self.mediark_reporter = self.injector['MediarkReporter']
 
-    def __init__(self, resolver) -> None:
-        self.audio_storage_coordinator = resolver['AudioStorageCoordinator']
-        self.mediark_reporter = resolver['MediarkReporter']
+    async def head(self, request) -> web.Response:
+        """
+        ---
+        summary: Return audios HEAD headers.
+        tags:
+          - Audios
+        """
 
-    def get(self) -> Tuple[str, int]:
+        domain, _, _ = get_request_filter(request)
+
+        headers = {
+            'Total-Count': str(await self.mediark_reporter.count(
+                'conflict', domain))
+        }
+
+        return web.Response(headers=headers)
+
+    async def get(self) -> web.Response:
         """
         ---
         summary: Return all audios.
@@ -33,11 +53,11 @@ class AudioResource(MethodView):
         domain, limit, offset = get_request_filter(request)
 
         audios = AudioSchema().dump(
-            self.mediark_reporter.search_audios(domain), many=True)
+            await self.mediark_reporter.search_audios(domain), many=True)
 
         return jsonify(audios)
 
-    def post(self) -> Tuple[str, int]:
+    async def post(self, request: web.Request) -> web.Response:
         """
         ---
         summary: Register audio.
@@ -54,8 +74,7 @@ class AudioResource(MethodView):
             description: "Audio created"
         """
 
-        data = AudioSchema().loads(request.data)
-        self.audio_storage_coordinator.store(data)
-        json_audio = json.dumps(data, sort_keys=True, indent=4)
+        data = AudioSchema().loads(await request.text())
+        await self.audio_storage_coordinator.store(data)
 
-        return json_audio, 201
+        return web.Response(text="201 CREATED")

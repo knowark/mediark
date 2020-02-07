@@ -1,10 +1,11 @@
 from typing import Any
 from flask.views import MethodView
+from injectark import Injectark
 
 
-class DownloadResource(MethodView):
-    def __init__(self, resolver) -> None:
-        self.directory_load_supplier = resolver['DirectoryLoadSupplier']
+class DownloadResource:
+    def __init__(self, injector: Injectark) -> None:
+        self.directory_load_supplier = injector['DirectoryLoadSupplier']
 
     def get(self, tenant: str, type: str, uri: str) -> Any:
         """

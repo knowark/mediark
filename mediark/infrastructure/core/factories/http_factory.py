@@ -3,7 +3,6 @@ from pathlib import Path
 from ....application.repositories import ImageRepository, AudioRepository
 from ...http import HttpMediarkReporter
 from ..configuration import Config
-from ...web.middleware import Authenticate
 from ....application.coordinators import SessionCoordinator
 from ...core import JsonTenantSupplier
 from ....application.utilities.tenancy import TenantProvider
