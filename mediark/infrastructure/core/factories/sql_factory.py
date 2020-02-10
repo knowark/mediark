@@ -3,14 +3,13 @@ from pathlib import Path
 from uuid import uuid4
 from filtrark import SqlParser, SafeEval
 from migrark import sql_migrate
-from ..config import Config
-from ...application.models import Conflict
+from ..configuration import Config
 from mediark.infrastructure.data import (
     ConnectionManager, DefaultConnectionManager, SqlTransactionManager,
     SqlRepository, SqlAudioRepository, SqlImageRepository)
-from ..core import TenantSupplier, SchemaTenantSupplier
+from ...core import TenantSupplier, SchemaTenantSupplier
 from .http_factory import HttpFactory
-from shiftark.application.utilities import (
+from mediark.application.utilities import (
     AuthProvider, StandardAuthProvider, StandardTenantProvider, TenantProvider,
     User)
 
