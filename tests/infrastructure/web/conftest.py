@@ -11,14 +11,14 @@ from mediark.application.utilities import QueryParser
 from mediark.application.repositories import (
     MemoryImageRepository, MemoryAudioRepository)
 from mediark.infrastructure.core import (
-    ProductionConfig, build_config, Config)
+    JsonConfig, build_config, Config)
 from mediark.infrastructure.core.factories import build_factory
 from mediark.infrastructure.web import create_app
 
 
 @fixture
 def app(tmp_path) -> Flask:
-    config = ProductionConfig()
+    config = JsonConfig()
 
     config['domain'] = 'https://mediark.dev.nubark.cloud'
     config['data']['dir_path'] = str(tmp_path / 'data')

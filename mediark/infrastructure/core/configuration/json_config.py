@@ -7,10 +7,10 @@ from pathlib import Path
 from .development_config import DevelopmentConfig
 
 
-class ProductionConfig(DevelopmentConfig):
+class JsonConfig(DevelopmentConfig):
     def __init__(self):
         super().__init__()
-        self['mode'] = 'PROD'
+        self['mode'] = 'JSON'
         self['gunicorn'].update({
             'workers': self.number_of_workers()
         })
@@ -18,22 +18,13 @@ class ProductionConfig(DevelopmentConfig):
             "type": "jwt",
             "secret_file": Path.home().joinpath('sign.txt')
         }
-        self['factory'] = 'HttpFactory'
+        self['factory'] = 'JsonFactory'
         self['strategy'].update({
             "ImageRepository": {
                 "method": "json_image_repository",
             },
-            "ImageFileStoreService": {
-                "method": "directory_image_file_store_service"
-            },
             "AudioRepository": {
                 "method": "json_audio_repository",
-            },
-            "AudioFileStoreService": {
-                "method": "directory_audio_file_store_service"
-            },
-            "MediarkReporter": {
-                "method": "http_mediark_reporter",
             },
 
             # Tenancy

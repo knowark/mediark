@@ -3,7 +3,7 @@ from pytest import fixture
 from json import dump
 from injectark import Injectark
 from mediark.infrastructure.core.configuration import (
-    DevelopmentConfig, ProductionConfig)
+    DevelopmentConfig, JsonConfig)
 
 
 @fixture
@@ -20,7 +20,7 @@ def mock_development_config(tmp_path):
 
 @fixture
 def mock_production_config(mock_development_config):
-    mock_production_config = ProductionConfig()
+    mock_production_config = JsonConfig()
     mock_production_config['tenancy']['json'] = \
         mock_development_config['tenancy']['json']
     mock_production_config['data']['dir_path'] = \

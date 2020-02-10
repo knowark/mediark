@@ -21,7 +21,7 @@ class DevelopmentConfig(Config):
         self['authorization'] = {
             "dominion": "mediark"
         }
-        self['factory'] = 'MemoryFactory'
+        self['factory'] = 'HttpFactory'
 
         self['strategy'] = {
             # Security
@@ -59,6 +59,12 @@ class DevelopmentConfig(Config):
             "ImageRepository": {
                 "method": "memory_image_repository",
             },
+            "ImageFileStoreService": {
+                "method": "directory_image_file_store_service"
+            },
+            "AudioFileStoreService": {
+                "method": "directory_audio_file_store_service"
+            },
             "ImageStorageCoordinator": {
                 "method": "image_storage_coordinator",
             },
@@ -76,5 +82,8 @@ class DevelopmentConfig(Config):
             },
             "DirectoryLoadSupplier": {
                 "method": "directory_load_supplier"
+            },
+            "MediarkReporter": {
+                "method": "http_mediark_reporter",
             },
         }

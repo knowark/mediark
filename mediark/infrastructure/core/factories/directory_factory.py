@@ -4,10 +4,10 @@ from ....application.utilities import (
 from ....infrastructure.data import (
     DirectoryImageFileStoreService, DirectoryAudioFileStoreService)
 from ..configuration import Config
-from .json_factory import JsonFactory
+from .memory_factory import MemoryFactory
 
 
-class DirectoryFactory(JsonFactory):
+class DirectoryFactory(MemoryFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
 

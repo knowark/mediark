@@ -4,11 +4,11 @@ from ....infrastructure.data import (
     JsonAudioRepository, JsonImageRepository)
 from mediark.application.utilities import TenantProvider, AuthProvider
 from ..configuration import Config
-from .memory_factory import MemoryFactory
+from .http_factory import HttpFactory
 from ...core import JsonTenantSupplier, TenantSupplier
 
 
-class JsonFactory(MemoryFactory):
+class JsonFactory(HttpFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
 

@@ -35,7 +35,8 @@ def json_repository(tmp_path) -> JsonRepository:
         dump({collection: item_dict}, f, indent=2)
 
     parser = QueryParser()
-    tenant_provider = StandardTenantProvider(Tenant(
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(
         name="Default",
         data={
             'directory': {
