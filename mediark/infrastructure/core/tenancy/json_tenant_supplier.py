@@ -20,7 +20,8 @@ class JsonTenantSupplier(TenantSupplier):
             'provisioner_kind': 'directory',
             'provision_template': (
                 str(directory_data) + f"/{directory_template}"),
-            'data_directory': directory_data,
+            'provision_directory_zones': {
+                "default": directory_data},
         })
 
         if (len(self.provider.search_tenants([])) == 0):

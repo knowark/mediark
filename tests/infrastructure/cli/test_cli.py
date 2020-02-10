@@ -52,9 +52,11 @@ async def test_cli_serve(cli, monkeypatch):
     assert called
 
 
-async def test_cli_provision(cli):
+async def test_cli_provision(cli, tmp_path):
     namespace = Namespace(data=json.dumps({
-        'name': 'Knowark'
+        'id': '1',
+        'name': 'knowark',
+        'data': {'directory': {'default':  str(tmp_path / 'data')}}
     }))
 
     result = await cli.provision(namespace)
