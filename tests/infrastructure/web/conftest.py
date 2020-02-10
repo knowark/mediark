@@ -13,7 +13,7 @@ from mediark.application.repositories import (
 from mediark.infrastructure.core import (
     ProductionConfig, build_config, Config)
 from mediark.infrastructure.core.factories import build_factory
-from mediark.infrastructure.web import create_app, ServerApplication
+from mediark.infrastructure.web import create_app
 
 
 @fixture
@@ -69,3 +69,21 @@ def encoded_audio() -> str:
 @fixture
 def retrieve_development_conf() -> Config:
     return build_config("", 'DEV')
+
+
+@fixture
+def app(loop, aiohttp_client):
+    """Create app testing client"""
+    config = build_config("", 'PROD')
+
+    # Configuration loading
+    strategy = config['strategy']
+    factory = build_factory(config)
+
+    injector = Injectark(strategy, factory)
+
+    app = create_app(config, injector)
+    # register_error_handler(app)
+    # app.testing = True
+
+    return loop.run_until_complete(aiohttp_client(app))

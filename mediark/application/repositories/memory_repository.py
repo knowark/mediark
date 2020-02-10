@@ -94,4 +94,4 @@ class MemoryRepository(Repository, Generic[T]):
 
     @property
     def _location(self) -> str:
-        return self.tenant_provider.tenant.location('memory')
+        return self.tenant_provider.tenant.zone or 'default'
