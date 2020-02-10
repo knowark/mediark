@@ -21,9 +21,15 @@ class ProductionConfig(DevelopmentConfig):
         self['factory'] = 'HttpFactory'
         self['strategy'].update({
             "ImageRepository": {
-                "method": "json_image_repository", "TenantSupplier": {
-                    "method": "json_tenant_supplier"
-                },
+                "method": "json_image_repository",
+            },
+            "ImageFileStoreService": {
+                "method": "directory_image_file_store_service"
+            },
+            "AudioRepository": {
+                "method": "json_audio_repository",
+            },
+            "AudioFileStoreService": {
                 "method": "directory_audio_file_store_service"
             },
             "MediarkReporter": {
