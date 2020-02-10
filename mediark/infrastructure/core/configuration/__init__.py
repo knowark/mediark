@@ -9,12 +9,11 @@ from .sql_config import *
 
 
 def build_config(config_path: str, mode: str) -> Config:
-    production_config: Config
+    production_config: Config = SqlConfig()
     if mode == 'DEV':
         return DevelopmentConfig()
     elif mode == "JSON":
         production_config = JsonConfig()
-    production_config = SqlConfig()
     loaded_config = load_config(config_path)
     if loaded_config is not None:
         production_config.update(loaded_config)

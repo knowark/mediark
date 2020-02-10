@@ -31,9 +31,6 @@ class DevelopmentConfig(Config):
 
         self['strategy'] = {
             # Security
-            "Authenticate": {
-                "method": "middleware_authenticate"
-            },
             "AuthProvider": {
                 "method": "standard_auth_provider"
             },
