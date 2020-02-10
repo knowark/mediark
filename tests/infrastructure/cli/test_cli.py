@@ -1,73 +1,81 @@
-from pytest import raises, fixture
-from injectark import Injectark
+import contextlib
+from typing import List
+import rapidjson as json
+from asyncmock import AsyncMock
+from argparse import ArgumentParser, Namespace
+from pytest import raises
 from unittest.mock import Mock, call
 from argparse import Namespace
-from mediark.infrastructure.cli import cli as cli_module
+from shiftark.infrastructure.cli import Cli
+from shiftark.infrastructure.cli import cli as cli_module
 
 
 def test_cli_instantiation(cli):
     assert cli is not None
 
 
-def test_cli_run(cli):
-    mock_parse = Mock()
+async def test_cli_run(cli):
+    mock_parse = AsyncMock()
     cli.parse = mock_parse
-    argv = []
-    cli.run(argv)
+    argv: List = []
+    await cli.run(argv)
 
     assert mock_parse.call_count == 1
 
 
-def test_cli_parse(cli):
+async def test_cli_parse(cli):
     called = False
     argv = ['serve']
-    result = cli.parse(argv)
+    result = await cli.parse(argv)
 
     assert result is not None
 
 
-def test_cli_parse_empty_argv(cli):
+async def test_cli_parse_empty_argv(cli):
     with raises(SystemExit) as e:
-        result = cli.parse([])
+        result = await cli.parse([])
 
 
-def test_cli_provision(cli, monkeypatch):
-    namespace = Namespace()
-    namespace.name = "custom"
-    cli.provision(namespace)
-    tenants = cli.resolver["TenantSupplier"].search_tenants("")
-
-    assert len(tenants) == 2
-    assert tenants[0]["name"] == "custom"
-
-    print("TENANTS::::", tenants)
-
-
-def test_cli_serve(cli, monkeypatch):
+async def test_cli_serve(cli, monkeypatch):
     called = False
-    namespace = Namespace()
+    namespace = Namespace(port=8080)
 
-    called = False
-
-    class MockServerApplication:
-        def __init__(self, app, options):
-            pass
-
-        def run(self):
-            nonlocal called
-            called = True
-
-    create_app_called = False
-
-    def mock_create_app_function(config, resolver):
-        nonlocal create_app_called
-        create_app_called = True
+    async def mock_run_app(app, port):
+        nonlocal called
+        called = True
 
     monkeypatch.setattr(
-        cli_module, 'ServerApplication', MockServerApplication)
+        cli_module, 'run_app', mock_run_app)
+
+    result = await cli.serve(namespace)
+
+    assert called
+
+
+async def test_cli_provision(cli):
+    namespace = Namespace(data=json.dumps({
+        'name': 'Knowark'
+    }))
+
+    result = await cli.provision(namespace)
+
+    assert result is None
+
+
+async def test_cli_migrate(cli, monkeypatch):
+    called = False
+    namespace = Namespace()
+    namespace.tenant = 'Default'
+    namespace.version = ""
+
+    def mock_sql_migrate_function(
+            database_uri, migrations_path, schema, target_version):
+        nonlocal called
+        called = True
+
     monkeypatch.setattr(
-        cli_module, 'create_app', mock_create_app_function)
+        cli_module, 'sql_migrate', mock_sql_migrate_function)
 
-    cli.serve(namespace)
+    await cli.migrate(namespace)
 
-    assert called and create_app_called
+    assert called

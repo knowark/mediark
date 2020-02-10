@@ -1,4 +1,4 @@
-from shiftark.infrastructure.core import (
+from mediark.infrastructure.core import (
     TenantSupplier, MemoryTenantSupplier)
 
 
