@@ -1,4 +1,4 @@
-from json import dump, loads
+from rapidjson import dump, loads
 from pathlib import Path
 from pytest import fixture, raises
 from mediark.application.models import Entity
