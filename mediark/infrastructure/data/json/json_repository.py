@@ -124,6 +124,6 @@ class JsonRepository(Repository, Generic[T]):
 
     @property
     def _file_path(self) -> Path:
-        location = self.tenant_provider.tenant.zone('directory')
+        location = self.tenant_provider.tenant.zone['directory']
         slug = self.tenant_provider.tenant.slug
         return Path(location) / slug / "json" / f"{ self.collection}.json"

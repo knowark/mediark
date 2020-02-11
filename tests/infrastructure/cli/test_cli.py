@@ -68,14 +68,14 @@ async def test_cli_migrate(cli, monkeypatch, tmp_path):
     called = False
     namespace = Namespace(data=json.dumps({
         'id': '1',
-        'name': 'default',
+        'name': 'knowark',
         'data': {'directory': {'default':  str(tmp_path / 'data')}}
     }))
 
     assert (await cli.provision(namespace)) is None
 
     namespace = Namespace()
-    namespace.tenant = 'default'
+    namespace.tenant = 'knowark'
     namespace.version = ""
 
     def mock_sql_migrate_function(

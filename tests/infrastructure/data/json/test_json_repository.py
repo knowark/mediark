@@ -37,11 +37,10 @@ def json_repository(tmp_path) -> JsonRepository:
     parser = QueryParser()
     tenant_provider = StandardTenantProvider()
     tenant_provider.setup(Tenant(
+        id="3",
         name="Default",
-        data={
-            'directory': {
-                'default': tmp_path
-            }
+        zone={
+            'directory': str(tmp_path)
         }))
     auth_provider = StandardAuthProvider(User(
         id='001', name='johndoe'))
@@ -55,8 +54,8 @@ def json_repository(tmp_path) -> JsonRepository:
     return json_repository
 
 
-def test_json_repository_get(json_repository):
-    item = json_repository.get("1")
+async def test_json_repository_get(json_repository):
+    item = await json_repository.get("1")
     assert item and item.field_1 == "value_1"
 
 

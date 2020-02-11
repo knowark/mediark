@@ -11,15 +11,9 @@ class Tenant:
         self.attributes = attributes.get('attributes', {})
         self.created_at = attributes.get('created_at', int(time.time()))
         self.data: Mapping[str, str] = attributes.get('data', {
-            'memory': {
-                "default": ""
-            },
-            'directory': {
-                "default": ""
-            },
-            'schema': {
-                "default": ""
-            }
+            'memory': "",
+            'directory':  "",
+            'schema': ""
         })
         self.email = attributes.get('email', '')
         self.name = attributes['name']
