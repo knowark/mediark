@@ -59,14 +59,14 @@ async def test_json_repository_get(json_repository):
     assert item and item.field_1 == "value_1"
 
 
-def test_json_repository_get_not_found(json_repository):
+async def test_json_repository_get_not_found(json_repository):
     with raises(EntityNotFoundError):
-        json_repository.get("99")
+        await json_repository.get("99")
 
 
-def test_json_repository_add(json_repository):
+async def test_json_repository_add(json_repository):
     item = DummyEntity('5', 'value_5')
-    json_repository.add(item)
+    await json_repository.add(item)
 
     with json_repository._file_path.open() as f:
         data = loads(f.read())
@@ -89,10 +89,10 @@ def test_json_repository_add_no_id(json_repository) -> None:
             assert len(key) > 0
 
 
-def test_json_repository_update(json_repository) -> None:
+async def test_json_repository_update(json_repository) -> None:
     updated_entity = DummyEntity("1", "New Value")
 
-    is_updated = json_repository.update(updated_entity)
+    is_updated = await json_repository.update(updated_entity)
 
     file_path = str(json_repository._file_path)
     with open(file_path) as f:
@@ -104,10 +104,10 @@ def test_json_repository_update(json_repository) -> None:
         assert "New Value" in items['1']['field_1']
 
 
-def test_json_repository_update_false(json_repository):
+async def test_json_repository_update_false(json_repository):
     missing_entity = DummyEntity("99", "New Value")
 
-    is_updated = json_repository.update(missing_entity)
+    is_updated = await json_repository.update(missing_entity)
 
     file_path = str(json_repository._file_path)
     with open(file_path) as f:
@@ -118,9 +118,9 @@ def test_json_repository_update_false(json_repository):
         assert is_updated is False
 
 
-def test_json_repository_search(json_repository):
+async def test_json_repository_search(json_repository):
     domain = [('field_1', '=', "value_3")]
-    items = json_repository.search(domain)
+    items = await json_repository.search(domain)
 
     assert len(items) == 1
     for item in items:
@@ -128,27 +128,27 @@ def test_json_repository_search(json_repository):
         assert item.field_1 == "value_3"
 
 
-def test_json_repository_search_all(json_repository):
-    items = json_repository.search([])
+async def test_json_repository_search_all(json_repository):
+    items = await json_repository.search([])
     assert len(items) == 3
 
 
-def test_json_repository_search_limit(json_repository):
-    items = json_repository.search([], limit=2)
+async def test_json_repository_search_limit(json_repository):
+    items = await json_repository.search([], limit=2)
     assert len(items) == 2
 
 
-def test_json_repository_search_limit_none(json_repository):
-    items = json_repository.search([], limit=None, offset=None)
+async def test_json_repository_search_limit_none(json_repository):
+    items = await json_repository.search([], limit=None, offset=None)
     assert len(items) == 3
 
 
-def test_json_repository_search_offset(json_repository):
-    items = json_repository.search([], offset=2)
+async def test_json_repository_search_offset(json_repository):
+    items = await json_repository.search([], offset=2)
     assert len(items) == 1
 
 
-def test_json_repository_remove_true(json_repository):
+async def test_json_repository_remove_true(json_repository):
     file_path = str(json_repository._file_path)
     with open(file_path) as f:
         data = loads(f.read())
@@ -156,7 +156,7 @@ def test_json_repository_remove_true(json_repository):
         item_dict = items_dict.get('2')
 
     item = DummyEntity(**item_dict)
-    deleted = json_repository.remove(item)
+    deleted = await json_repository.remove(item)
 
     with open(file_path) as f:
         data = loads(f.read())
@@ -167,10 +167,10 @@ def test_json_repository_remove_true(json_repository):
     assert "2" not in items_dict.keys()
 
 
-def test_json_repository_remove_false(json_repository):
+async def test_json_repository_remove_false(json_repository):
     file_path = str(json_repository._file_path)
     item = DummyEntity(**{'id': '6', 'field_1': 'MISSING'})
-    deleted = json_repository.remove(item)
+    deleted = await json_repository.remove(item)
 
     with open(file_path) as f:
         data = loads(f.read())
