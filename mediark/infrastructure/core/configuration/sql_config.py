@@ -18,9 +18,16 @@ class SqlConfig(DevelopmentConfig):
             "type": "jwt",
             "secret_file": Path.home().joinpath('sign.txt')
         }
+        self['tenancy'] = {
+            "dsn": (
+                "postgresql://mediark:mediark"
+                "@localhost/mediark")
+        }
         self["zones"] = {
             "default": {
-                "dsn": 'dummy_connection://database'
+                "dsn": ("postgresql://mediark:mediark"
+                        "@localhost/mediark"),
+                "pool": {}
             }
         }
         self['factory'] = 'SqlFactory'
@@ -29,6 +36,16 @@ class SqlConfig(DevelopmentConfig):
             "SqlParser": {
                 "method": "sql_query_parser"
             },
+
+            # Connections
+            "ConnectionManager": {
+                "method": "sql_connection_manager",
+            },
+
+            "TransactionManager": {
+                "method": "sql_transaction_manager",
+            },
+
 
             # Repositories
             "ImageRepository": {
