@@ -171,14 +171,3 @@ async def test_transaction_manager_decorator_with_rollback(
             f"SELECT data FROM origin.samples")
 
     assert not any(json.loads(item['data'])['id'] == uid for item in result)
-
-
-# async def test_transaction_manager_decorator_private_methods(
-#         dummy_coordinator, sample_repository, transaction_manager):
-#     TransactionCoordinator = transaction_manager(dummy_coordinator)
-
-#     result = await TransactionCoordinator(sample_repository)._private_method()
-
-#     connection_manager = transaction_manager.connection_manager
-#     assert result == 'PRIVATE_VALUE'
-#     assert getattr(connection_manager, 'pools') is None

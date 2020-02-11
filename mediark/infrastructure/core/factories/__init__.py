@@ -8,7 +8,7 @@ from .memory_factory import MemoryFactory
 from .sql_factory import SqlFactory
 
 
-def build_factory(config: Config):
+def build_factory(config: Config) -> Factory:
     factory = config['factory']
     return {
         'MemoryFactory': lambda config: MemoryFactory(config),

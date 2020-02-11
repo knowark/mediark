@@ -45,11 +45,10 @@ def json_repository(tmp_path) -> JsonRepository:
     auth_provider = StandardAuthProvider(User(
         id='001', name='johndoe'))
 
-    json_repository = JsonRepository(parser=parser,
-                                     tenant_provider=tenant_provider,
-                                     auth_provider=auth_provider,
-                                     collection=collection,
-                                     item_class=DummyEntity)
+    json_repository = JsonRepository(
+        parser=parser, tenant_provider=tenant_provider,
+        auth_provider=auth_provider, collection=collection,
+        item_class=DummyEntity)
 
     return json_repository
 
