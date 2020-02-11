@@ -16,11 +16,6 @@ class DevelopmentConfig(Config):
             'acesslog': '-',
             'loglevel': 'debug'
         })
-        self["zones"] = {
-            "default": {
-                "dsn": 'dummy_connection://database'
-            }
-        }
         self['secrets'] = {
             "jwt": Path.home() / 'sign.txt'
         }

@@ -18,6 +18,11 @@ class SqlConfig(DevelopmentConfig):
             "type": "jwt",
             "secret_file": Path.home().joinpath('sign.txt')
         }
+        self["zones"] = {
+            "default": {
+                "dsn": 'dummy_connection://database'
+            }
+        }
         self['factory'] = 'SqlFactory'
         self['strategy'].update({
             # Parser

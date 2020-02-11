@@ -3,7 +3,7 @@ from pytest import fixture
 from json import dump
 from injectark import Injectark
 from mediark.infrastructure.core.configuration import (
-    DevelopmentConfig, JsonConfig)
+    DevelopmentConfig, JsonConfig, SqlConfig)
 
 
 @fixture
@@ -19,27 +19,28 @@ def mock_development_config(tmp_path):
 
 
 @fixture
-def mock_production_config(mock_development_config):
-    mock_production_config = JsonConfig()
-    mock_production_config['tenancy']['json'] = \
+def mock_json_config(mock_development_config):
+    mock_json_config = JsonConfig()
+    mock_json_config['tenancy']['json'] = \
         mock_development_config['tenancy']['json']
-    mock_production_config['data']['dir_path'] = \
+    mock_json_config['data']['dir_path'] = \
         mock_development_config['data']['dir_path']
-    mock_production_config['secrets']['jwt'] = \
+    mock_json_config['secrets']['jwt'] = \
         mock_development_config['secrets']['jwt']
-    mock_production_config['secrets']['domain'] = \
+    mock_json_config['secrets']['domain'] = \
         mock_development_config['secrets']['domain']
     template_dir = Path(
-        mock_production_config['data']['dir_path']) / "__template__"
+        mock_json_config['data']['dir_path']) / "__template__"
     template_dir.mkdir(parents=True, exist_ok=True)
     (template_dir / "images").mkdir(parents=True, exist_ok=True)
     (template_dir / "audios").mkdir(parents=True, exist_ok=True)
-    return mock_production_config
+    return mock_json_config
 
 
 @fixture
-def test_data(mock_development_config, mock_production_config):
+def test_data(mock_development_config, mock_json_config):
     return [
         mock_development_config,
-        mock_production_config
+        mock_json_config,
+        SqlConfig()
     ]

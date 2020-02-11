@@ -1,5 +1,5 @@
 from pytest import fixture
-from json import dump, loads
+from rapidjson import dump, loads
 from pathlib import Path
 from mediark.infrastructure.core.tenancy import JsonTenantSupplier
 
@@ -39,16 +39,9 @@ def tenant_dict():
     return {
         "id": "c5934df0-cab9-4660-af14-c95272a92ab7",
         "name": "Servagro",
-        "email": "",
-        "active": True,
-        "slug": "servagro",
-        "attributes": {},
         "data": {
             "directory": {
-                "default": "/home/jjalvarez/data"
-            },
-            "schema": {
-                "default": "postgresql://shiftark:shiftark@localhost/shiftark"
+                "default": "/opt/mediark/data"
             }
         }
     }
@@ -56,4 +49,5 @@ def tenant_dict():
 
 @fixture
 def json_tenant_supplier(catalog_path, directory_data, directory_template):
-    return JsonTenantSupplier(str(catalog_path), str(directory_data), directory_template)
+    return JsonTenantSupplier(
+        str(catalog_path), str(directory_data), directory_template)
