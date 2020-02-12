@@ -62,12 +62,6 @@ class DevelopmentConfig(Config):
             "ImageRepository": {
                 "method": "memory_image_repository",
             },
-            "ImageFileStoreService": {
-                "method": "directory_image_file_store_service"
-            },
-            "AudioFileStoreService": {
-                "method": "directory_audio_file_store_service"
-            },
             "ImageStorageCoordinator": {
                 "method": "image_storage_coordinator",
             },

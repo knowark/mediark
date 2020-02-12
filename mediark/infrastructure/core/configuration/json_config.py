@@ -26,6 +26,12 @@ class JsonConfig(DevelopmentConfig):
             "AudioRepository": {
                 "method": "json_audio_repository",
             },
+            "ImageFileStoreService": {
+                "method": "directory_image_file_store_service"
+            },
+            "AudioFileStoreService": {
+                "method": "directory_audio_file_store_service"
+            },
 
             # Tenancy
 
