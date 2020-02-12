@@ -50,13 +50,11 @@ async def test_api_images_put_search_and_download(
     response = await app.get(
         f'/images?filter=[["reference", "=", "{custom_uuid}"]]',
         headers=headers)
-    print("RESPONSE::::: ", await response.text())
     data = loads(await response.text())
 
     assert len(data) == 1
 
     download_url = "/"+data[0]['url'].split('/', 3)[3]
-    print("Download URL image:::: ", download_url)
     response = await app.get(download_url, headers=headers)
     encoded_image_response = str(b64encode(await response.read()), 'utf-8')
 
@@ -76,16 +74,12 @@ async def test_api_audios_put_search_and_download(
     response = await app.get(
         f'/audios?filter=[["reference", "=", "{custom_uuid}"]]',
         headers=headers)
-    print("RESPONSE::::: ", await response.text())
     data = loads(await response.text())
 
     assert len(data) == 1
 
     download_url = "/"+data[0]['url'].split('/', 3)[3]
-    print("Download URL audio:::: ", download_url)
     response = await app.get(download_url, headers=headers)
     encoded_audio_response = str(b64encode(await response.read()), 'utf-8')
-
-    print("AUDIO RESPONSE:::: ", encoded_audio_response)
 
     assert encoded_audio == encoded_audio_response
