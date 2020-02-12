@@ -18,7 +18,7 @@ class ImageResource:
     async def head(self, request: web.Request) -> web.Response:
         """
         ---
-        summary: Return audios HEAD headers.
+        summary: Return images HEAD headers.
         tags:
           - Audios
         """
@@ -26,8 +26,8 @@ class ImageResource:
         domain, _, _ = get_request_filter(request)
 
         headers = {
-            'Total-Count': str(await self.mediark_reporter.count(
-                'images', domain))
+            'Total-Count': str(len(
+                await self.mediark_reporter.search_images(domain)))
         }
 
         return web.Response(headers=headers)

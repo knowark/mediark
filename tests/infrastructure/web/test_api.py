@@ -37,6 +37,14 @@ async def test_invalid_headers(app: web.Application) -> None:
     assert data["errors"]
 
 
+async def test_bad_filter_get_route_filter(app, headers) -> None:
+    response = await app.get('/images?filter=[[**BAD FILTER**]]',
+                             headers=headers)
+    content = await response.text()
+    data_dict = loads(content)
+    assert data_dict
+
+
 async def test_api_images_put_search_and_download(
     app: web.Application, headers: dict, encoded_image: bytes
 ) -> None:
@@ -46,6 +54,9 @@ async def test_api_images_put_search_and_download(
     response = await app.post('/images', data=dumps(image), headers=headers)
 
     assert response.status == 200
+
+    response = await app.head('/images', headers=headers)
+    assert int(response.headers.get('Total-Count')) > 0
 
     response = await app.get(
         f'/images?filter=[["reference", "=", "{custom_uuid}"]]',
@@ -70,6 +81,9 @@ async def test_api_audios_put_search_and_download(
     response = await app.post('/audios', data=dumps(audio), headers=headers)
 
     assert response.status == 200
+
+    response = await app.head('/audios', headers=headers)
+    assert int(response.headers.get('Total-Count')) > 0
 
     response = await app.get(
         f'/audios?filter=[["reference", "=", "{custom_uuid}"]]',

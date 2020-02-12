@@ -27,8 +27,8 @@ class AudioResource:
         domain, _, _ = get_request_filter(request)
 
         headers = {
-            'Total-Count': str(await self.mediark_reporter.count(
-                'audios', domain))
+            'Total-Count': str(len(
+                await self.mediark_reporter.search_audios(domain)))
         }
 
         return web.Response(headers=headers)
