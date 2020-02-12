@@ -52,7 +52,7 @@ async def test_api_images_put_search_and_download(
         headers=headers)
     data = loads(await response.text())
 
-    assert len(data) == 1
+    assert len(data) > 0
 
     download_url = "/"+data[0]['url'].split('/', 3)[3]
     response = await app.get(download_url, headers=headers)
@@ -76,7 +76,7 @@ async def test_api_audios_put_search_and_download(
         headers=headers)
     data = loads(await response.text())
 
-    assert len(data) == 1
+    assert len(data) > 0
 
     download_url = "/"+data[0]['url'].split('/', 3)[3]
     response = await app.get(download_url, headers=headers)
