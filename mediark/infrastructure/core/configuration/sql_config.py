@@ -4,10 +4,10 @@ from typing import Dict, Any
 from abc import ABC, abstractmethod
 from json import loads, JSONDecodeError
 from pathlib import Path
-from .development_config import DevelopmentConfig
+from .http_config import HttpConfig
 
 
-class SqlConfig(DevelopmentConfig):
+class SqlConfig(HttpConfig):
     def __init__(self):
         super().__init__()
         self['mode'] = 'PROD'
@@ -53,12 +53,6 @@ class SqlConfig(DevelopmentConfig):
             },
             "AudioRepository": {
                 "method": "sql_audio_repository",
-            },
-            "ImageFileStoreService": {
-                "method": "directory_image_file_store_service"
-            },
-            "AudioFileStoreService": {
-                "method": "directory_audio_file_store_service"
             },
 
             # Tenancy

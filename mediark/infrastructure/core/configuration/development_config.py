@@ -81,6 +81,6 @@ class DevelopmentConfig(Config):
                 "method": "directory_load_supplier"
             },
             "MediarkReporter": {
-                "method": "http_mediark_reporter",
+                "method": "memory_mediark_reporter",
             },
         }
