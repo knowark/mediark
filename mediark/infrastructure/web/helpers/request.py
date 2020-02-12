@@ -4,9 +4,10 @@ from .format import parse_domain, parse_dict
 
 
 def get_request_filter(request: web.Request) -> Tuple:
-    filter = request.query.get('filter')
-    limit = int(request.query.get('limit') or 1000)
-    offset = int(request.query.get('offset') or 0)
+    parameters = get_parameters(request)
+    filter: str = parameters.get('filter', "")
+    limit: int = int(parameters.get('limit', 1000))
+    offset: int = int(parameters.get('offset', 0))
 
     domain = parse_domain(filter)
 
