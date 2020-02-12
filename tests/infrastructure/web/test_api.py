@@ -9,6 +9,18 @@ from mediark.application.models import Audio, Image
 from mediark.infrastructure.core.configuration import SqlConfig
 from mediark.infrastructure.web.resources import RootResource
 from mediark.infrastructure.web.spec import create_spec
+from mediark.infrastructure.core import (
+    DevelopmentConfig, JsonConfig, SqlConfig, build_config, Config)
+
+
+def test_build_configurations() -> None:
+    config_path = ".config.json"
+    config = build_config(config_path, "DEV")
+    assert isinstance(config, DevelopmentConfig)
+    config = build_config(config_path, "JSON")
+    assert isinstance(config, JsonConfig)
+    config = build_config(config_path, "PROD")
+    assert isinstance(config, SqlConfig)
 
 
 def test_development_config_retrieve(retrieve_development_conf) -> None:
