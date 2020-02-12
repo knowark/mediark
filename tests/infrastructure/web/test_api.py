@@ -6,13 +6,13 @@ from rapidjson import loads, dumps
 from marshmallow import ValidationError
 from base64 import b64encode
 from mediark.application.models import Audio, Image
-from mediark.infrastructure.core.configuration import JsonConfig
+from mediark.infrastructure.core.configuration import SqlConfig
 from mediark.infrastructure.web.resources import RootResource
 from mediark.infrastructure.web.spec import create_spec
 
 
 def test_development_config_retrieve(retrieve_development_conf) -> None:
-    assert isinstance(retrieve_development_conf, JsonConfig)
+    assert isinstance(retrieve_development_conf, SqlConfig)
 
 
 async def test_root_resource(app: web.Application) -> None:

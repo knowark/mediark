@@ -5,7 +5,7 @@ class Migration:  # pragma: no cover
         self.context = context
         self.connection = context['connection']
         self.schema = context['schema']
-        self.owner = "shiftark"
+        self.owner = "mediark"
         self.entities = ["audio", "image"]
 
     def _create_table(self, table):

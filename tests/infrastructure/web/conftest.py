@@ -12,14 +12,16 @@ from mediark.application.utilities import QueryParser, User
 from mediark.application.repositories import (
     MemoryImageRepository, MemoryAudioRepository)
 from mediark.infrastructure.core import (
-    JsonConfig, build_config, Config)
+    SqlConfig, build_config, Config)
 from mediark.infrastructure.core.factories import build_factory
 from mediark.infrastructure.web import create_app
+from migrark import sql_migrate
 
 
 @fixture
 def app(tmp_path, loop, aiohttp_client) -> web.Application:
-    config = JsonConfig()
+    # config = build_config('config.json', "JSON")
+    config = build_config('config.json', "PROD")
 
     config['domain'] = 'https://mediark.dev.nubark.cloud'
     config['data']['dir_path'] = str(tmp_path / 'data')
@@ -38,8 +40,27 @@ def app(tmp_path, loop, aiohttp_client) -> web.Application:
 
     resolver = Injectark(strategy, factory)
 
-    resolver["TenantSupplier"].create_tenant({
-        'id': "001", "name": "Test", "zone": str(tmp_path / 'data')})
+    tenant_supplier = resolver["TenantSupplier"]
+
+    tenant_zone = ""
+
+    if config["mode"] == "JSON":
+        tenant_zone = config['data']['dir_path']
+    else:
+        database_uri = config['zones']['default']['dsn']
+        migrations_path = str((
+            Path(__file__).parent.parent.parent.parent / 'mediark' /
+            'infrastructure' / 'data' / 'sql' / 'migrations'
+        ).absolute())
+        print("Migrations path:::: ", migrations_path)
+        sql_migrate(database_uri, migrations_path, schema='test',
+                    target_version="004")
+
+    try:
+        resolver["TenantSupplier"].create_tenant({
+            'id': "001", "name": "Test", "zone": tenant_zone})
+    except Exception:
+        print("WARNING!!!::: a tenant already has been created")
     resolver["AuthProvider"].setup(User(id='001', name='johndoe'))
 
     app = create_app(config, resolver)
@@ -75,4 +96,4 @@ def encoded_audio() -> str:
 
 @fixture
 def retrieve_development_conf() -> Config:
-    return build_config("", 'JSON')
+    return build_config("", 'PROD')
