@@ -1,6 +1,5 @@
 from typing import Any
 from pathlib import Path
-from flask import send_from_directory
 
 
 class DirectoryLoadSupplier ():
@@ -8,7 +7,6 @@ class DirectoryLoadSupplier ():
         self.data_path = data_path
         self.media_dir = media_dir
 
-    def send_file(self, tenant: str, type: str, uri: str) -> Any:
-        directory = Path(self.data_path).joinpath(
-            tenant+"/"+self.media_dir+"/"+type+"/")
-        return send_from_directory(directory, uri)
+    def file_path(self, tenant: str, type: str, uri: str) -> Path:
+        return Path(self.data_path).joinpath(
+            f"{tenant}/{self.media_dir}/{type}/{uri}")

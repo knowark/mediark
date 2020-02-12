@@ -16,7 +16,7 @@ class AudioResource:
             'AudioStorageCoordinator']
         self.mediark_reporter = self.injector['MediarkReporter']
 
-    async def head(self, request) -> web.Response:
+    async def head(self, request: web.Request) -> web.Response:
         """
         ---
         summary: Return audios HEAD headers.
@@ -28,12 +28,12 @@ class AudioResource:
 
         headers = {
             'Total-Count': str(await self.mediark_reporter.count(
-                'conflict', domain))
+                'audios', domain))
         }
 
         return web.Response(headers=headers)
 
-    async def get(self) -> web.Response:
+    async def get(self, request: web.Request) -> web.Response:
         """
         ---
         summary: Return all audios.
@@ -55,7 +55,7 @@ class AudioResource:
         audios = AudioSchema().dump(
             await self.mediark_reporter.search_audios(domain), many=True)
 
-        return jsonify(audios)
+        return web.json_response(audios, dumps=dumps)
 
     async def post(self, request: web.Request) -> web.Response:
         """

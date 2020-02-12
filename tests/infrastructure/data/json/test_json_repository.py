@@ -39,9 +39,8 @@ def json_repository(tmp_path) -> JsonRepository:
     tenant_provider.setup(Tenant(
         id="3",
         name="Default",
-        zone={
-            'directory': str(tmp_path)
-        }))
+        zone=str(tmp_path)
+    ))
     auth_provider = StandardAuthProvider(User(
         id='001', name='johndoe'))
 

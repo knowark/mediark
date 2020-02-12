@@ -1,24 +1,23 @@
-from flask import request, render_template, make_response, jsonify
-from flask.views import MethodView
+from aiohttp import web
+from aiohttp_jinja2 import render_template
 from .... import __version__
 from .image import ImageResource
 from .audio import AudioResource
 from .download import DownloadResource
 
 
-class RootResource(MethodView):
+class RootResource:
 
     def __init__(self, spec) -> None:
         self.spec = spec
 
-    def get(self) -> str:
-        if 'api' in request.args:
-            return jsonify(self.spec.to_dict())
+    async def get(self, request):
+        if 'api' in request.query:
+            return web.json_response(self.spec.to_dict())
 
-        template = render_template(
-            'index.html', url="/?api", version=__version__)
-        response = make_response(template, 200, {
-            'Content-Type': 'text/html'
-        })
+        context = {'url': '/?api', 'version': __version__}
+        response = render_template(
+            'index.html', request, context)
+        response.headers['Content-Type'] = 'text/html'
 
         return response

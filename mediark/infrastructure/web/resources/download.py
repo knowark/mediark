@@ -1,5 +1,5 @@
 from typing import Any
-from flask.views import MethodView
+from aiohttp import web
 from injectark import Injectark
 
 
@@ -7,7 +7,7 @@ class DownloadResource:
     def __init__(self, injector: Injectark) -> None:
         self.directory_load_supplier = injector['DirectoryLoadSupplier']
 
-    def get(self, tenant: str, type: str, uri: str) -> Any:
+    def get(self, request: web.Request) -> Any:
         """
         ---
         summary: Return all media.
@@ -24,4 +24,12 @@ class DownloadResource:
                     $ref: '#/components/schemas/Download'
         """
 
-        return self.directory_load_supplier.send_file(tenant, type, uri)
+        tenant = request.match_info.get('tenant')
+        type = request.match_info.get('type')
+        id_part_one = request.match_info.get('id_part_one')
+        id_part_two = request.match_info.get('id_part_two')
+        id = request.match_info.get('id')
+        uri = f"{id_part_one}/{id_part_two}/{id}"
+
+        path = self.directory_load_supplier.file_path(tenant, type, uri)
+        return web.FileResponse(path)

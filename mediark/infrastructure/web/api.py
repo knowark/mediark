@@ -30,31 +30,10 @@ def create_api(app: web.Application, injector: Injectark) -> None:
 
     # Download Resource
     app.router.add_route(
-        "get", "/download/{tenant}/{type}/{uri}",
-        getattr(DownloadResource, "get", None))
-
-    # Audios Resource
-    # spec.path(path="/audios", resource=AudioResource)
-    # audio_view = authenticate(
-    #     AudioResource.as_view('audios', resolver=resolver))
-    # app.add_url_rule("/audios", view_func=audio_view)
-
-    # # Download Resource
-    # config_data = config['data']
-    # spec.path(path="/download/<string:tenant>/<string:type>/<path:uri>",
-    #           resource=DownloadResource)
-    # download_view = DownloadResource.as_view('download', resolver=resolver)
-    # app.add_url_rule(
-    #     "/download/<string:tenant>/<string:type>/<path:uri>",
-    #     view_func=download_view)
-
-    # Download Resource
-    # spec.path(path="/download/<string:tenant>/<string:type>/<path:uri>",
-    #           resource=DownloadResource)
-    # download_view = DownloadResource.as_view('download', resolver=resolver)
-    # app.add_url_rule(
-    #     "/download/<string:tenant>/<string:type>/<path:uri>",
-    #     view_func=download_view)
+        "get", "/download/{tenant}/{type}/{id_part_one}/{id_part_two}/{id}",
+        getattr(DownloadResource(injector), "get", None))
+    spec.path(path="/download",
+              operations={'get': {}}, resource=DownloadResource)
 
 
 def bind_routes(app: web.Application, path: str, resource: Any):

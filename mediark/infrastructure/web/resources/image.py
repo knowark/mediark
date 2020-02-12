@@ -2,8 +2,6 @@ from aiohttp import web
 from rapidjson import dumps, loads
 from typing import Any, Dict, Tuple
 from injectark import Injectark
-from flask import request, jsonify
-from flask.views import MethodView
 from marshmallow import ValidationError
 from ..helpers import get_request_filter
 from ..schemas import ImageSchema
@@ -17,7 +15,24 @@ class ImageResource:
             'ImageStorageCoordinator']
         self.mediark_reporter = self.injector['MediarkReporter']
 
-    async def get(self) -> web.Response:
+    async def head(self, request: web.Request) -> web.Response:
+        """
+        ---
+        summary: Return audios HEAD headers.
+        tags:
+          - Audios
+        """
+
+        domain, _, _ = get_request_filter(request)
+
+        headers = {
+            'Total-Count': str(await self.mediark_reporter.count(
+                'images', domain))
+        }
+
+        return web.Response(headers=headers)
+
+    async def get(self, request: web.Request) -> web.Response:
         """
         ---
         summary: Return all images.
@@ -39,7 +54,7 @@ class ImageResource:
         images = ImageSchema().dump(
             await self.mediark_reporter.search_images(domain), many=True)
 
-        return jsonify(images)
+        return web.json_response(images, dumps=dumps)
 
     async def post(self, request: web.Request) -> web.Response:
         """
