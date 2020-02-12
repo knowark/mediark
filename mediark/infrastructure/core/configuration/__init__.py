@@ -6,6 +6,7 @@ from .config import *
 from .development_config import *
 from .json_config import *
 from .sql_config import *
+from .http_config import *
 
 
 def build_config(config_path: str, mode: str) -> Config:
