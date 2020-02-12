@@ -62,6 +62,10 @@ async def test_json_repository_get_not_found(json_repository):
         await json_repository.get("99")
 
 
+async def test_json_repository_count(json_repository):
+    assert await json_repository.count() == 3
+
+
 async def test_json_repository_add(json_repository):
     item = DummyEntity('5', 'value_5')
     await json_repository.add(item)
