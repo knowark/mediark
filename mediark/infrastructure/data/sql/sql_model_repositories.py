@@ -13,7 +13,7 @@ class SqlAudioRepository(SqlRepository, AudioRepository):
                  auth_provider: AuthProvider,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('audio', Audio, tenant_provider,
+        super().__init__('audios', Audio, tenant_provider,
                          auth_provider, connection_manager, parser)
 
 
@@ -24,5 +24,5 @@ class SqlImageRepository(SqlRepository, ImageRepository):
                  auth_provider: AuthProvider,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('image', Image, tenant_provider,
+        super().__init__('images', Image, tenant_provider,
                          auth_provider, connection_manager, parser)
