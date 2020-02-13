@@ -15,6 +15,7 @@ class Config(defaultdict, ABC):
         self['tenancy'] = {
             'json': Path.home() / 'tenants.json'
         }
+        self['port'] = 8080
         self['secrets'] = {}
         self['strategy'] = {}
         self['environment'] = {

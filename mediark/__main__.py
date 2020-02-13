@@ -7,12 +7,11 @@ import uvloop
 import asyncio
 import uvloop
 from injectark import Injectark
-from .infrastructure.core import build_config
+from .infrastructure.core import build_config, build_factory
 from .infrastructure.cli import Cli
-from .infrastructure.factories import build_factory
 
 
-def main(args=None):  # pragma: no cover
+async def main(args=None):  # pragma: no cover
     mode = os.environ.get('MEDIARK_MODE', 'PROD')
     config_path = os.environ.get('MEDIARK_CONFIG', 'config.json')
     config = build_config(config_path, mode)
@@ -21,7 +20,7 @@ def main(args=None):  # pragma: no cover
     strategy = config['strategy']
     resolver = Injectark(strategy=strategy, factory=factory)
 
-    Cli(config, resolver).run(sys.argv[1:])
+    await Cli(config, resolver).run(sys.argv[1:])
 
 
 if __name__ == '__main__':  # pragma: no cover
