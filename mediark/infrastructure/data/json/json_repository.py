@@ -3,7 +3,7 @@ import time
 from pathlib import Path
 from json import load, dump
 from uuid import uuid4
-from typing import Dict, List, Any, Type, Callable, Generic
+from typing import Dict, List, Any, Type, Callable, Generic, Union
 from ....application.models import T
 from ....application.utilities import (
     TenantProvider, AuthProvider, QueryDomain,
@@ -23,7 +23,7 @@ class JsonRepository(Repository, Generic[T]):
         self.item_class: Callable[..., T] = item_class
         self.max_items = 1000
 
-    def get(self, id: str) -> T:
+    async def get(self, id: str) -> T:
         with self._file_path.open() as f:
             data = load(f)
             items = data.get(self.collection, {})
@@ -33,40 +33,59 @@ class JsonRepository(Repository, Generic[T]):
                     f"The entity with id {id} was not found.")
             return self.item_class(**item_dict)
 
-    def add(self, item: T) -> T:
+    async def add(self, item: Union[T, List[T]]) -> List[T]:
         data: Dict[str, Any] = {}
         with self._file_path.open() as f:
             data = load(f)
         user = self.auth_provider.user
-        item.id = item.id or str(uuid4())
-        item.created_at = int(time.time())
-        item.created_by = user and user.id or ""
-        item.updated_at = item.created_at
-        item.updated_by = item.created_by
-        data[self.collection].update({item.id: vars(item)})
-        with self._file_path.open('w') as f:
-            dump(data, f, indent=2)
-        return item
+        items = item if isinstance(item, list) else [item]
+        for item in items:
+            item.id = item.id or str(uuid4())
+            item.created_at = int(time.time())
+            item.created_by = user and user.id or ""
+            item.updated_at = item.created_at
+            item.updated_by = item.created_by
+            data[self.collection].update({item.id: vars(item)})
+            with self._file_path.open('w') as f:
+                dump(data, f, indent=2)
+        return items
 
-    def update(self, item: T) -> bool:
+    async def update(self, item: Union[T, List[T]]) -> bool:
+        items = item if isinstance(item, list) else [item]
         with self._file_path.open() as f:
             data = load(f)
             items_dict = data.get(self.collection)
+        for item in items:
+            if item.id not in items_dict:
+                return False
 
-        if item.id not in items_dict:
-            return False
+            user = self.auth_provider.user
+            item.updated_at = int(time.time())
+            item.updated_by = user and user.id or ""
 
-        user = self.auth_provider.user
-        item.updated_at = int(time.time())
-        item.updated_by = user and user.id or ""
+            items_dict[item.id] = vars(item)
 
-        items_dict[item.id] = vars(item)
-
-        with self._file_path.open('w') as f:
-            dump(data, f, indent=2)
+            with self._file_path.open('w') as f:
+                dump(data, f, indent=2)
         return True
 
-    def search(self, domain: QueryDomain, limit=1000, offset=0) -> List[T]:
+    async def count(self, domain: QueryDomain = None) -> int:
+        count = 0
+        domain = domain or []
+        with self._file_path.open() as f:
+            data = load(f)
+            items_dict = data.get(self.collection, {})
+
+        filter_function = self.parser.parse(domain)
+        for item_dict in items_dict.values():
+
+            if filter_function(self.item_class(**item_dict)):
+                count += 1
+
+        return count
+
+    async def search(
+            self, domain: QueryDomain, limit=1000, offset=0) -> List[T]:
         with self._file_path.open() as f:
             data = load(f)
             items_dict = data.get(self.collection, {})
@@ -87,22 +106,24 @@ class JsonRepository(Repository, Generic[T]):
 
         return items
 
-    def remove(self, item: T) -> bool:
+    async def remove(self, item: Union[T, List[T]]) -> bool:
+        items = item if isinstance(item, list) else [item]
         with self._file_path.open() as f:
             data = load(f)
             items_dict = data.get(self.collection)
 
-        if item.id not in items_dict:
-            return False
+        for item in items:
+            if item.id not in items_dict:
+                return False
 
-        del items_dict[item.id]
+            del items_dict[item.id]
 
-        with self._file_path.open('w') as f:
-            dump(data, f, indent=2)
+            with self._file_path.open('w') as f:
+                dump(data, f, indent=2)
         return True
 
     @property
     def _file_path(self) -> Path:
-        location = self.tenant_provider.tenant.location('directory')
+        location = self.tenant_provider.tenant.zone
         slug = self.tenant_provider.tenant.slug
         return Path(location) / slug / "json" / f"{ self.collection}.json"

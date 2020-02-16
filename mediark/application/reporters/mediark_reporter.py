@@ -6,8 +6,12 @@ from .types import ImageDictList, AudioDictList, SearchDomain
 class MediarkReporter(ABC):
 
     @abstractmethod
-    def search_images(self, domain: SearchDomain) -> ImageDictList:
+    async def search_images(self, domain: SearchDomain) -> ImageDictList:
         """Search Mediark's Images"""
+
+    @abstractmethod
+    async def search_audios(self, domain: SearchDomain) -> AudioDictList:
+        """Search Mediark's Audios"""
 
 
 class StandardMediarkReporter(MediarkReporter):
@@ -17,10 +21,10 @@ class StandardMediarkReporter(MediarkReporter):
         self.image_repository = image_repository
         self.audio_repository = audio_repository
 
-    def search_images(self, domain: SearchDomain) -> ImageDictList:
+    async def search_images(self, domain: SearchDomain) -> ImageDictList:
         return [vars(image) for image in
-                self.image_repository.search(domain)]
+                (await self.image_repository.search(domain))]
 
-    def search_audios(self, domain: SearchDomain) -> AudioDictList:
+    async def search_audios(self, domain: SearchDomain) -> AudioDictList:
         return [vars(audio) for audio in
-                self.audio_repository.search(domain)]
+                (await self.audio_repository.search(domain))]

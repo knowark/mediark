@@ -20,14 +20,9 @@ class JsonTenantSupplier(TenantSupplier):
             'provisioner_kind': 'directory',
             'provision_template': (
                 str(directory_data) + f"/{directory_template}"),
-            'data_directory': directory_data,
+            'provision_directory_zones': {
+                "default": directory_data},
         })
-
-        if (len(self.provider.search_tenants([])) == 0):
-            self.create_tenant({
-                'id': '1', 'name': 'origin',
-                'data': {'directory': {'default': str(directory_data)}}
-            })
 
     def get_tenant(self, tenant_id: str) -> Dict[str, Any]:
         return self.provider.get_tenant(tenant_id)
@@ -37,3 +32,6 @@ class JsonTenantSupplier(TenantSupplier):
 
     def search_tenants(self, domain):
         return self.provider.search_tenants(domain)
+
+    def resolve_tenant(self, name: str) -> Dict[str, Any]:
+        return self.provider.resolve_tenant(name)

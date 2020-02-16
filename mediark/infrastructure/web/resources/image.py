@@ -1,19 +1,38 @@
-import json
+from aiohttp import web
+from rapidjson import dumps, loads
 from typing import Any, Dict, Tuple
-from flask import request, jsonify
-from flask.views import MethodView
+from injectark import Injectark
 from marshmallow import ValidationError
 from ..helpers import get_request_filter
 from ..schemas import ImageSchema
 
 
-class ImageResource(MethodView):
+class ImageResource:
 
-    def __init__(self, resolver) -> None:
-        self.image_storage_coordinator = resolver['ImageStorageCoordinator']
-        self.mediark_reporter = resolver['MediarkReporter']
+    def __init__(self, injector: Injectark) -> None:
+        self.injector = injector
+        self.image_storage_coordinator = self.injector[
+            'ImageStorageCoordinator']
+        self.mediark_reporter = self.injector['MediarkReporter']
 
-    def get(self) -> Tuple[str, int]:
+    async def head(self, request: web.Request) -> web.Response:
+        """
+        ---
+        summary: Return images HEAD headers.
+        tags:
+          - Audios
+        """
+
+        domain, _, _ = get_request_filter(request)
+
+        headers = {
+            'Total-Count': str(len(
+                await self.mediark_reporter.search_images(domain)))
+        }
+
+        return web.Response(headers=headers)
+
+    async def get(self, request: web.Request) -> web.Response:
         """
         ---
         summary: Return all images.
@@ -31,12 +50,13 @@ class ImageResource(MethodView):
         """
 
         domain, limit, offset = get_request_filter(request)
+
         images = ImageSchema().dump(
-            self.mediark_reporter.search_images(domain), many=True)
+            await self.mediark_reporter.search_images(domain), many=True)
 
-        return jsonify(images)
+        return web.json_response(images, dumps=dumps)
 
-    def post(self) -> Tuple[str, int]:
+    async def post(self, request: web.Request) -> web.Response:
         """
         ---
         summary: Register image.
@@ -53,8 +73,7 @@ class ImageResource(MethodView):
             description: "Image created"
         """
 
-        data = ImageSchema().loads(request.data)
-        self.image_storage_coordinator.store(data)
-        json_image = json.dumps(data, sort_keys=True, indent=4)
+        data = ImageSchema().loads(await request.text())
+        await self.image_storage_coordinator.store(data)
 
-        return json_image, 201
+        return web.Response(text="201 CREATED")

@@ -11,6 +11,7 @@ class ImageSchema(Schema):
     reference = fields.Str(
         required=True, example="00648c29-eca2-4112-8a1a-4deedb443188")
     url = fields.Str(
-        requiered=False, example="https://mediark.knowark/media/images/00648c29-eca2-4112-8a1a-4deedb443188.jpg"
+        requiered=False, example="https://mediark.knowark/media/images/"
+        "00648c29-eca2-4112-8a1a-4deedb443188.jpg"
     )
     data = fields.Str(requiered=True, example="aGVsbG8=")

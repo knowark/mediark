@@ -3,9 +3,7 @@ from pathlib import Path
 from ....application.repositories import ImageRepository, AudioRepository
 from ...http import HttpMediarkReporter
 from ..configuration import Config
-from ...web.middleware import Authenticate
 from ....application.coordinators import SessionCoordinator
-from ...core import JsonTenantSupplier
 from ....application.utilities.tenancy import TenantProvider
 from ..tenancy import TenantSupplier, MemoryTenantSupplier
 from .directory_factory import DirectoryFactory
@@ -14,11 +12,6 @@ from .directory_factory import DirectoryFactory
 class HttpFactory(DirectoryFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
-
-    def json_tenant_supplier(self) -> TenantSupplier:
-        catalog_path = self.config['tenancy']['json']
-        directory_data = self.config['data']['dir_path']
-        return JsonTenantSupplier(catalog_path, directory_data)
 
     def http_mediark_reporter(
         self, tenant_provider: TenantProvider,

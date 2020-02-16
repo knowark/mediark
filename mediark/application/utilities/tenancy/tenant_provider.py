@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from threading import local
+from aiocontextvars import ContextVar
 from .tenant import Tenant
 
 
 class TenantProvider(ABC):
-    """Tenant provider."""
+    """Tenant service."""
 
     @abstractmethod
     def setup(self, tenant: Tenant) -> None:
@@ -16,17 +16,16 @@ class TenantProvider(ABC):
         """Get the current tenant"""
 
 
+tenant_var = ContextVar('tenant', default=None)
+
+
 class StandardTenantProvider(TenantProvider):
 
-    def __init__(self, tenant=None) -> None:
-        self.state = local()
-        self.state.__dict__.setdefault('tenant', tenant)
-
     def setup(self, tenant: Tenant) -> None:
-        self.state.tenant = tenant
+        tenant_var.set(tenant)
 
     @property
     def tenant(self) -> Tenant:
-        if not self.state.tenant:
+        if not tenant_var.get():
             raise ValueError('No tenant has been set.')
-        return self.state.tenant
+        return tenant_var.get()

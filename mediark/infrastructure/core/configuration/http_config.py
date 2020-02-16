@@ -7,12 +7,11 @@ from pathlib import Path
 from .development_config import DevelopmentConfig
 
 
-class ProductionConfig(DevelopmentConfig):
+class HttpConfig(DevelopmentConfig):
     def __init__(self):
         super().__init__()
-        self['mode'] = 'PROD'
+        self['mode'] = 'JSON'
         self['gunicorn'].update({
-            'limit_request_line': 0,
             'workers': self.number_of_workers()
         })
         self['authentication'] = {
@@ -21,14 +20,8 @@ class ProductionConfig(DevelopmentConfig):
         }
         self['factory'] = 'HttpFactory'
         self['strategy'].update({
-            "ImageRepository": {
-                "method": "json_image_repository",
-            },
             "ImageFileStoreService": {
                 "method": "directory_image_file_store_service"
-            },
-            "AudioRepository": {
-                "method": "json_audio_repository",
             },
             "AudioFileStoreService": {
                 "method": "directory_audio_file_store_service"
@@ -45,8 +38,5 @@ class ProductionConfig(DevelopmentConfig):
 
             "TenantSupplier": {
                 "method": "json_tenant_supplier"
-            },
+            }
         })
-
-    def number_of_workers(self):
-        return (multiprocessing.cpu_count() * 2) + 1

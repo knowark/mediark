@@ -6,14 +6,13 @@ from ....application.repositories import (
     ImageRepository, MemoryImageRepository,
     AudioRepository, MemoryAudioRepository)
 from ....application.utilities import (
-    QueryParser, TenantProvider, StandardTenantProvider,
+    User, QueryParser, TenantProvider, StandardTenantProvider,
     AuthProvider, StandardAuthProvider)
 from ....application.services import (
     IdService, StandardIdService,
     FileStoreService, MemoryFileStoreService,
     ImageFileStoreService, MemoryImageFileStoreService,
     AudioFileStoreService, MemoryAudioFileStoreService)
-from ...web.middleware import Authenticate
 from ...core import JsonTenantSupplier
 from ....application.coordinators import (
     SessionCoordinator, ImageStorageCoordinator, AudioStorageCoordinator)
@@ -35,33 +34,26 @@ class MemoryFactory(Factory):
         return StandardTenantProvider()
 
     def standard_auth_provider(self) -> StandardAuthProvider:
-        return StandardAuthProvider()
+        return StandardAuthProvider(User(id="1", name="John Doe"))
 
     def directory_load_supplier(self) -> DirectoryLoadSupplier:
         return DirectoryLoadSupplier(
             data_path=self.config['data']['dir_path'],
             media_dir=self.config['data']['media']['dir_path'])
 
-    # Security
-
-    def middleware_authenticate(
-            self,
-            tenant_supplier: TenantSupplier,
-            session_coordinator: SessionCoordinator) -> Authenticate:
-        return Authenticate(
-            tenant_supplier, session_coordinator)
-
     # Repositories
 
-    def memory_image_repository(self, query_parser: QueryParser,
-                                tenant_provider: TenantProvider
-                                ) -> MemoryImageRepository:
-        return MemoryImageRepository(query_parser, tenant_provider)
+    def memory_image_repository(
+            self, query_parser: QueryParser, tenant_provider: TenantProvider,
+            standard_auth_provider: AuthProvider) -> MemoryImageRepository:
+        return MemoryImageRepository(
+            query_parser, tenant_provider, standard_auth_provider)
 
-    def memory_audio_repository(self, query_parser: QueryParser,
-                                tenant_provider: TenantProvider
-                                ) -> MemoryAudioRepository:
-        return MemoryAudioRepository(query_parser, tenant_provider)
+    def memory_audio_repository(
+            self, query_parser: QueryParser, tenant_provider: TenantProvider,
+            standard_auth_provider: AuthProvider) -> MemoryAudioRepository:
+        return MemoryAudioRepository(
+            query_parser, tenant_provider, standard_auth_provider)
 
     # Services
 

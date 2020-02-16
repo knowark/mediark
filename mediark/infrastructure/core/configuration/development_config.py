@@ -11,23 +11,26 @@ class DevelopmentConfig(Config):
         super().__init__()
         self['mode'] = 'DEV'
         self['gunicorn'].update({
+            'limit_request_line': 0,
             'debug': True,
             'acesslog': '-',
             'loglevel': 'debug'
         })
+        self["zones"] = {
+            "default": {
+                "dsn": 'dummy_connection://database'
+            }
+        }
         self['secrets'] = {
             "jwt": Path.home() / 'sign.txt'
         }
         self['authorization'] = {
             "dominion": "mediark"
         }
-        self['factory'] = 'MemoryFactory'
+        self['factory'] = 'HttpFactory'
 
         self['strategy'] = {
             # Security
-            "Authenticate": {
-                "method": "middleware_authenticate"
-            },
             "AuthProvider": {
                 "method": "standard_auth_provider"
             },
@@ -76,5 +79,8 @@ class DevelopmentConfig(Config):
             },
             "DirectoryLoadSupplier": {
                 "method": "directory_load_supplier"
+            },
+            "MediarkReporter": {
+                "method": "memory_mediark_reporter",
             },
         }

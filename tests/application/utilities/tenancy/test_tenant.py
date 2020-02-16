@@ -1,10 +1,10 @@
 from pytest import fixture, raises
-from mediark.application.utilities import Tenant, TenantLocationError
+from mediark.application.utilities import TenantLocationError, Tenant
 
 
 @fixture
 def tenant() -> Tenant:
-    return Tenant(name="Digital")
+    return Tenant(name="Amazon")
 
 
 def test_tenant_creation(tenant: Tenant) -> None:
@@ -13,17 +13,16 @@ def test_tenant_creation(tenant: Tenant) -> None:
 
 def test_tenant_default_attributes(tenant: Tenant) -> None:
     assert tenant.id == ""
-    assert tenant.created_at > 0
-    assert tenant.updated_at > 0
-    assert tenant.name == "Digital"
-    assert tenant.slug == 'digital'
+    assert tenant.name == "Amazon"
+    assert tenant.slug == 'amazon'
+    assert tenant.zone == ''
 
 
 def test_tenant_attributes_from_dict() -> None:
 
     tenant_dict = {
         "id": "farbo007",
-        "name": "Compu Servidores"
+        "name": "Hortofrutícola El Cariño"
     }
 
     tenant = Tenant(**tenant_dict)
@@ -31,15 +30,12 @@ def test_tenant_attributes_from_dict() -> None:
     for key, value in tenant_dict.items():
         assert getattr(tenant, key) == value
 
-    assert tenant.created_at > 0
-    assert tenant.updated_at > 0
-
 
 def test_tenant_normalize_slug() -> None:
-    given_slug = "Compu Servidores"
+    given_slug = "Hortofrutícola El Cariño"
     slug = Tenant._normalize_slug(given_slug)
 
-    # assert slug == 'Compu Servidores'
+    assert slug == 'hortofruticola_el_carino'
 
 
 def test_tenant_normalize_slug_invalid() -> None:
@@ -50,8 +46,3 @@ def test_tenant_normalize_slug_invalid() -> None:
     unsupported_slug = " あ "
     with raises(ValueError):
         resp = Tenant._normalize_slug(unsupported_slug)
-
-
-def test_tenant_location_error(tenant: tenant):
-    with raises(TenantLocationError):
-        tenant.location("non_memory", "non_default")

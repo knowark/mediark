@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any
-from tenark.resolver import (
-    resolve_cataloguer, resolve_provider, resolve_arranger)
 
 
 class TenantSupplier(ABC):
@@ -15,30 +13,5 @@ class TenantSupplier(ABC):
         """Create tenant method to be implemented."""
 
     @abstractmethod
-    def search_tenants(self, domain):
-        """Search tenant method to be implemented."""
-
-
-class MemoryTenantSupplier(TenantSupplier):
-
-    def __init__(self) -> None:
-        cataloguer = resolve_cataloguer({})
-        self.provider = resolve_provider({
-            'cataloguer': cataloguer
-        })
-        self.arranger = resolve_arranger({
-            'cataloguer': cataloguer
-        })
-        self.create_tenant({
-            'id': '1', 'name': 'origin',
-            'data': {'directory': {'default': 'origin'}}
-        })
-
-    def get_tenant(self, tenant_id: str) -> Dict[str, Any]:
-        return self.provider.get_tenant(tenant_id)
-
-    def create_tenant(self, tenant_dict: Dict[str, Any]) -> None:
-        self.arranger.create_tenant(tenant_dict)
-
-    def search_tenants(self, domain):
-        return self.provider.search_tenants(domain)
+    def resolve_tenant(self, name: str) -> Dict[str, Any]:
+        """Resolve tenant method to be implemented."""
