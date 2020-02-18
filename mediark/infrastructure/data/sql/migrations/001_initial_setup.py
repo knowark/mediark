@@ -6,11 +6,11 @@ class Migration:  # pragma: no cover
         self.connection = context['connection']
         self.schema = context['schema']
         self.owner = "mediark"
-        self.entities = ["audio", "image"]
+        self._tables = ["audios", "images"]
 
     def _create_table(self, table):
         return (
-            f"CREATE TABLE IF NOT EXISTS {self.schema}.{table} ( data JSONB );"
+            f"CREATE TABLE IF NOT EXISTS {self.schema}.{table} (data JSONB);"
             f"ALTER TABLE {self.schema}.{table} OWNER TO {self.owner};"
             f"CREATE UNIQUE INDEX IF NOT EXISTS pk_{table}_id ON "
             f"{self.schema}.{table} ((data ->> 'id'));"
@@ -19,8 +19,8 @@ class Migration:  # pragma: no cover
 
     def schema_up(self):
         database = ""
-        for entity in self.entities:
-            database += self._create_table(entity)
+        for table in self._tables:
+            database += self._create_table(table)
 
         database += "SET enable_seqscan = false;"
 
