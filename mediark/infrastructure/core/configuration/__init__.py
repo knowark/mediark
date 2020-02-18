@@ -2,11 +2,11 @@ import json
 from pathlib import Path
 from json import load
 from typing import Optional
-from .config import *
-from .development_config import *
-from .json_config import *
-from .sql_config import *
-from .http_config import *
+from .config import Config
+from .development_config import DevelopmentConfig
+from .json_config import JsonConfig
+from .sql_config import SqlConfig
+from .http_config import HttpConfig
 
 
 def build_config(config_path: str, mode: str) -> Config:

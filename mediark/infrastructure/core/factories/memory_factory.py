@@ -7,7 +7,8 @@ from ....application.repositories import (
     AudioRepository, MemoryAudioRepository)
 from ....application.utilities import (
     User, QueryParser, TenantProvider, StandardTenantProvider,
-    AuthProvider, StandardAuthProvider)
+    AuthProvider, StandardAuthProvider, TransactionManager,
+    MemoryTransactionManager)
 from ....application.services import (
     IdService, StandardIdService,
     FileStoreService, MemoryFileStoreService,
@@ -29,6 +30,9 @@ class MemoryFactory(Factory):
 
     def memory_tenant_supplier(self) -> MemoryTenantSupplier:
         return MemoryTenantSupplier()
+
+    def memory_transaction_manager(self) -> MemoryTransactionManager:
+        return MemoryTransactionManager()
 
     def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
@@ -75,27 +79,35 @@ class MemoryFactory(Factory):
     # Coordinators
 
     def session_coordinator(self, tenant_provider: TenantProvider,
-                            auth_provider: AuthProvider
+                            auth_provider: AuthProvider,
+                            transaction_manager: TransactionManager
                             ) -> SessionCoordinator:
-        return SessionCoordinator(tenant_provider, auth_provider)
+        return transaction_manager(SessionCoordinator)(
+            tenant_provider, auth_provider)
 
     def image_storage_coordinator(self, image_repository: ImageRepository,
                                   id_service: IdService,
-                                  file_store_service: ImageFileStoreService
+                                  file_store_service: ImageFileStoreService,
+                                  transaction_manager: TransactionManager
                                   ) -> ImageStorageCoordinator:
-        return ImageStorageCoordinator(image_repository, id_service,
-                                       file_store_service)
+        return transaction_manager(ImageStorageCoordinator)(
+            image_repository, id_service,
+            file_store_service)
 
     def audio_storage_coordinator(self, audio_repository: AudioRepository,
                                   id_service: IdService,
-                                  file_store_service: AudioFileStoreService
+                                  file_store_service: AudioFileStoreService,
+                                  transaction_manager: TransactionManager
                                   ) -> AudioStorageCoordinator:
-        return AudioStorageCoordinator(audio_repository, id_service,
-                                       file_store_service)
+        return transaction_manager(AudioStorageCoordinator)(
+            audio_repository, id_service,
+            file_store_service)
 
     # Reporters
 
     def memory_mediark_reporter(self, image_repository: ImageRepository,
-                                audio_repository: AudioRepository
+                                audio_repository: AudioRepository,
+                                transaction_manager: TransactionManager
                                 ) -> StandardMediarkReporter:
-        return StandardMediarkReporter(image_repository, audio_repository)
+        return transaction_manager(StandardMediarkReporter)(
+            image_repository, audio_repository)

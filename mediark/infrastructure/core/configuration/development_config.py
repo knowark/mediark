@@ -55,6 +55,9 @@ class DevelopmentConfig(Config):
             "TenantSupplier": {
                 "method": "memory_tenant_supplier"
             },
+            "TransactionManager": {
+                "method": "memory_transaction_manager",
+            },
 
             "ImageFileStoreService": {
                 "method": "memory_image_file_store_service"
