@@ -52,7 +52,6 @@ def app(tmp_path, loop, aiohttp_client) -> web.Application:
             Path(__file__).parent.parent.parent.parent / 'mediark' /
             'infrastructure' / 'data' / 'sql' / 'migrations'
         ).absolute())
-        print("Migrations path:::: ", migrations_path)
         sql_migrate(database_uri, migrations_path, schema='test',
                     target_version="004")
 
@@ -60,7 +59,6 @@ def app(tmp_path, loop, aiohttp_client) -> web.Application:
         resolver["TenantSupplier"].create_tenant({
             'id': "001", "name": "Test", "zone": tenant_zone})
     except Exception:
-        print("WARNING!!!::: a tenant already has been created")
     resolver["AuthProvider"].setup(User(id='001', name='johndoe'))
 
     app = create_app(config, resolver)

@@ -7,7 +7,6 @@ from mediark.infrastructure.core import build_factory
 
 def test_config(test_data):
     for config in test_data:
-        print("TESTING FACTORY: ", config["factory"])
         factory = build_factory(config)
         resolver = Injectark(
             strategy=config["strategy"], factory=factory)
