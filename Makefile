@@ -56,3 +56,6 @@ uninstall-all:
 upgrade:
 	pip-review --local --auto
 	pip freeze > requirements.txt
+
+dev-deploy:
+	 bin/dev_deploy.sh
