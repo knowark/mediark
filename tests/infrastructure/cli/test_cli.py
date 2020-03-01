@@ -4,7 +4,6 @@ import rapidjson as json
 from asyncmock import AsyncMock
 from argparse import ArgumentParser, Namespace
 from pytest import raises
-from unittest.mock import Mock, call
 from argparse import Namespace
 from mediark.infrastructure.cli import Cli
 from mediark.infrastructure.cli import cli as cli_module

@@ -8,31 +8,27 @@ test:
 	pytest
 
 COVFILE ?= .coverage
-PWD = $(shell pwd)
 PROJECT = mediark
 
 coverage-application:
 	mypy $(PROJECT)/application
 	export COVERAGE_FILE=$(COVFILE); pytest -x \
-	--cov=$(PWD)/$(PROJECT)/application $(PWD)/tests/application/ \
-	--cov-report term-missing \
-	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
+	--cov=$(PROJECT)/application tests/application/ \
+	--cov-report term-missing -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 coverage-infrastructure:
 	mypy $(PROJECT)/infrastructure
 	export COVERAGE_FILE=$(COVFILE); pytest -x \
-	--cov=$(PWD)/$(PROJECT)/infrastructure $(PWD)/tests/infrastructure/ \
-	--cov-report term-missing \
-	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
+	--cov=$(PROJECT)/infrastructure tests/infrastructure/ \
+	--cov-report term-missing -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 coverage: 
 	mypy $(PROJECT)
 	export COVERAGE_FILE=$(COVFILE); pytest -x \
-	--cov=$(PWD)/$(PROJECT) $(PWD)/tests/ \
-	--cov-report term-missing \
-	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
+	--cov=$(PROJECT) tests/ \
+	--cov-report term-missing -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 update:

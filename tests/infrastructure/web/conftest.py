@@ -1,6 +1,5 @@
 import os
 from aiohttp import web
-from flask import Flask
 from pathlib import Path
 from pytest import fixture
 from datetime import datetime
@@ -59,7 +58,7 @@ def app(tmp_path, loop, aiohttp_client) -> web.Application:
         resolver["TenantSupplier"].create_tenant({
             'id': "001", "name": "Test", "zone": tenant_zone})
     except Exception:
-    resolver["AuthProvider"].setup(User(id='001', name='johndoe'))
+        resolver["AuthProvider"].setup(User(id='001', name='johndoe'))
 
     app = create_app(config, resolver)
 

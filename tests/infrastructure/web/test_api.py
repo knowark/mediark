@@ -1,6 +1,5 @@
 from typing import List
 from pytest import fixture, raises
-from flask import Flask, request
 from aiohttp import web
 from rapidjson import loads, dumps
 from marshmallow import ValidationError

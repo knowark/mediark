@@ -1,5 +1,5 @@
 from mediark.infrastructure.core.configuration import (
-    load_config, build_config, SqlConfig)
+    load_config, build_config, SqlConfig, DevelopmentConfig)
 
 
 def test_load_config(config_file):
@@ -12,6 +12,12 @@ def test_load_config_missing_file(config_file):
     path = 'missing_config.json'
     result = load_config(path)
     assert result is None
+
+
+def test_build_config_development(config_file):
+    result = build_config(config_file, 'DEV')
+
+    assert isinstance(result, DevelopmentConfig)
 
 
 def test_build_config_production(config_file):

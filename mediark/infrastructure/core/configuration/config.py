@@ -10,7 +10,6 @@ class Config(defaultdict, ABC):
     @abstractmethod
     def __init__(self):
         self['mode'] = 'BASE'
-        self['flask'] = {}
         self['database'] = {}
         self['tenancy'] = {
             'json': Path.home() / 'tenants.json'
