@@ -13,7 +13,7 @@ def test_standard_tenant_provider_instantiation(tenant_provider):
 
 
 def test_standard_tenant_provider_setup(tenant_provider):
-    tenant = Tenant(name='Alpina')
+    tenant = Tenant(id='001', name='Alpina')
     tenant_provider.setup(None)
     tenant_provider.setup(tenant)
     assert tenant_provider.tenant == tenant

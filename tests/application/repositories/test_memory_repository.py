@@ -21,7 +21,7 @@ def test_memory_repository_implementation() -> None:
 @fixture
 def memory_repository() -> MemoryRepository:
     tenant_provider = StandardTenantProvider()
-    tenant_provider.setup(Tenant(name="Default"))
+    tenant_provider.setup(Tenant(id='001', name="Default"))
     auth_provider = StandardAuthProvider()
     auth_provider.setup(User(id='001', name='johndoe'))
     parser = QueryParser()

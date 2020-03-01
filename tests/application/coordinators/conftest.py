@@ -20,7 +20,7 @@ def query_parser():
 @fixture
 def tenant_provider():
     tenant_provider = StandardTenantProvider()
-    tenant_provider.setup(Tenant(name="default"))
+    tenant_provider.setup(Tenant(id='001', name="default"))
     return tenant_provider
 
 

@@ -6,14 +6,14 @@ def test_session_coordinator_creation(session_coordinator) -> None:
 
 def test_session_coordinator_set_tenant(session_coordinator) -> None:
 
-    tenant = {'name': 'Default'}
+    tenant = {'id': '001', 'name': 'Default'}
     session_coordinator.set_tenant(tenant)
     assert session_coordinator
 
 
 def test_session_coordinator_get_tenant(session_coordinator) -> None:
 
-    session_coordinator.set_tenant({'name': 'Default'})
+    session_coordinator.set_tenant({'id': '001', 'name': 'Default'})
     tenant = session_coordinator.get_tenant()
     assert isinstance(tenant, dict)
     assert tenant['name'] == 'Default'
