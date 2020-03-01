@@ -79,9 +79,9 @@ async def test_json_repository_add(json_repository):
         assert item_dict.get('field_1') == item.field_1
 
 
-def test_json_repository_add_no_id(json_repository) -> None:
+async def test_json_repository_add_no_id(json_repository) -> None:
     item = DummyEntity(field_1='value_5')
-    item = json_repository.add(item)
+    item = await json_repository.add(item)
 
     file_path = str(json_repository._file_path)
     with open(file_path) as f:

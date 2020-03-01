@@ -18,7 +18,7 @@ from migrark import sql_migrate
 
 
 @fixture
-def app(tmp_path, loop, aiohttp_client) -> web.Application:
+def xapp(tmp_path, loop, aiohttp_client) -> web.Application:
     # config = build_config('config.json', "JSON")
     config = build_config('config.json', "PROD")
 
@@ -28,6 +28,7 @@ def app(tmp_path, loop, aiohttp_client) -> web.Application:
 
     template_dir = Path(config['data']['dir_path']) / "__template__"
     template_dir.mkdir(parents=True, exist_ok=True)
+
     (template_dir / "json").mkdir(parents=True, exist_ok=True)
     (template_dir / "json" / "audios.json").write_text('{"audios":{}}')
     (template_dir / "json" / "images.json").write_text('{"images":{}}')
@@ -66,6 +67,19 @@ def app(tmp_path, loop, aiohttp_client) -> web.Application:
 
 
 @fixture
+def app(tmp_path, loop, aiohttp_client) -> web.Application:
+    config = build_config('', 'TEST')
+    strategy = config['strategy']
+    factory = build_factory(config)
+
+    resolver = Injectark(strategy, factory)
+
+    app = create_app(config, resolver)
+
+    return loop.run_until_complete(aiohttp_client(app))
+
+
+@fixture
 def headers() -> dict:
     return {
         "TenantId": "001",
@@ -89,8 +103,3 @@ def encoded_audio() -> str:
     with open(filename, "rb") as f:
         binary_data = f.read()
     return str(b64encode(binary_data), "utf-8")
-
-
-@fixture
-def retrieve_development_conf() -> Config:
-    return build_config("", 'PROD')

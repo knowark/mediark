@@ -12,10 +12,6 @@ def cli(tmp_path) -> Cli:
     config['data']['dir_path'] = str(tmp_path / 'data')
     template_dir = tmp_path / 'data' / '__template__'
     template_dir.mkdir(parents=True, exist_ok=True)
-    config['secrets']['jwt'] = str(tmp_path / 'sign.txt')
-    config['secrets']['domain'] = str(tmp_path / 'domain.txt')
-    with open(config['secrets']['jwt'], "w") as f:
-        f.write("123456")
     strategy = config["strategy"]
     factory = build_factory(config)
 

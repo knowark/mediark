@@ -15,7 +15,6 @@ class Config(defaultdict, ABC):
             'json': Path.home() / 'tenants.json'
         }
         self['port'] = 8080
-        self['secrets'] = {}
         self['strategy'] = {}
         self['environment'] = {
             'home': '/opt/mediark'
@@ -56,9 +55,4 @@ class Config(defaultdict, ABC):
                     'database': 'images.json'
                 },
             }
-        }
-        self['gunicorn'] = {
-            'bind': '%s:%s' % ('0.0.0.0', '8080'),
-            'workers': 1,
-            'worker_class': 'gevent',
         }

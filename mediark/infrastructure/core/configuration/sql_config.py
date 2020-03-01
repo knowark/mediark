@@ -11,9 +11,6 @@ class SqlConfig(HttpConfig):
     def __init__(self):
         super().__init__()
         self['mode'] = 'PROD'
-        self['gunicorn'].update({
-            'workers': self.number_of_workers()
-        })
         self['authentication'] = {
             "type": "jwt",
             "secret_file": Path.home().joinpath('sign.txt')
@@ -65,6 +62,3 @@ class SqlConfig(HttpConfig):
                 "method": "schema_tenant_supplier"
             },
         })
-
-    def number_of_workers(self):
-        return (multiprocessing.cpu_count() * 2) + 1

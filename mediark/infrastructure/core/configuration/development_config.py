@@ -10,19 +10,10 @@ class DevelopmentConfig(Config):
     def __init__(self):
         super().__init__()
         self['mode'] = 'DEV'
-        self['gunicorn'].update({
-            'limit_request_line': 0,
-            'debug': True,
-            'acesslog': '-',
-            'loglevel': 'debug'
-        })
         self["zones"] = {
             "default": {
                 "dsn": 'dummy_connection://database'
             }
-        }
-        self['secrets'] = {
-            "jwt": Path.home() / 'sign.txt'
         }
         self['authorization'] = {
             "dominion": "mediark"
@@ -37,7 +28,6 @@ class DevelopmentConfig(Config):
             "SessionCoordinator": {
                 "method": "session_coordinator"
             },
-
             # Query parser
             "QueryParser": {
                 "method": "query_parser"

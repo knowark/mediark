@@ -11,9 +11,6 @@ class JsonConfig(HttpConfig):
     def __init__(self):
         super().__init__()
         self['mode'] = 'JSON'
-        self['gunicorn'].update({
-            'workers': self.number_of_workers()
-        })
         self['authentication'] = {
             "type": "jwt",
             "secret_file": Path.home().joinpath('sign.txt')
@@ -43,6 +40,3 @@ class JsonConfig(HttpConfig):
                 "method": "json_tenant_supplier"
             },
         })
-
-    def number_of_workers(self):
-        return (multiprocessing.cpu_count() * 2) + 1

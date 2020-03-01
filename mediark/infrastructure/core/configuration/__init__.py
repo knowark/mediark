@@ -4,6 +4,7 @@ from json import load
 from typing import Optional
 from .config import Config
 from .development_config import DevelopmentConfig
+from .trial_config import TrialConfig
 from .json_config import JsonConfig
 from .sql_config import SqlConfig
 from .http_config import HttpConfig
@@ -11,6 +12,8 @@ from .http_config import HttpConfig
 
 def build_config(config_path: str, mode: str) -> Config:
     production_config: Config = SqlConfig()
+    if mode == 'TEST':
+        return TrialConfig()
     if mode == 'DEV':
         return DevelopmentConfig()
     elif mode == "JSON":
