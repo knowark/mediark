@@ -12,3 +12,15 @@ class TrialConfig(DevelopmentConfig):
         super().__init__()
         self['mode'] = 'TEST'
         self['factory'] = 'CheckFactory'
+
+        self['strategy'].update({
+            "TenantSupplier": {
+                "method": "check_tenant_supplier"
+            },
+            "ImageRepository": {
+                "method": "check_image_repository",
+            },
+            "AudioRepository": {
+                "method": "check_audio_repository",
+            }
+        })

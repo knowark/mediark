@@ -49,15 +49,37 @@ async def test_bad_filter_get_route_filter(app, headers) -> None:
                              headers=headers)
     content = await response.text()
     data_dict = loads(content)
-    assert data_dict
+    assert len(data_dict) == 3
 
 
-async def test_api_images_search(app: web.Application, headers: dict) -> None:
+async def test_api_images_get(app: web.Application, headers: dict) -> None:
     response = await app.get('/images', headers=headers)
     content = await response.text()
     assert response.status == 200
     data_dict = loads(content)
-    assert len(data_dict) > 0
+    assert len(data_dict) == 3
+
+
+async def test_images_head(app, headers) -> None:
+    response = await app.head('/images', headers=headers)
+    count = response.headers.get('Total-Count')
+
+    assert int(count) == 3
+
+
+async def test_api_audios_get(app: web.Application, headers: dict) -> None:
+    response = await app.get('/audios', headers=headers)
+    content = await response.text()
+    assert response.status == 200
+    data_dict = loads(content)
+    assert len(data_dict) == 2
+
+
+async def test_audios_head(app, headers) -> None:
+    response = await app.head('/audios', headers=headers)
+    count = response.headers.get('Total-Count')
+
+    assert int(count) == 2
 
 
 async def xtest_api_images_put_search_and_download(

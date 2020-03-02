@@ -49,7 +49,6 @@ class ImageResource:
                     $ref: '#/components/schemas/Image'
         """
 
-        print('>>>>Domain:::', request)
         domain, limit, offset = get_request_filter(request)
 
         images = ImageSchema().dump(

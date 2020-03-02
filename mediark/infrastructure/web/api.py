@@ -1,3 +1,4 @@
+import asyncio
 from typing import Dict, Any
 from aiohttp import web
 from apispec import APISpec
@@ -14,9 +15,6 @@ def create_api(app: web.Application, injector: Injectark) -> None:
 
     # Root Resource
     bind_routes(app, '/', RootResource(spec))
-
-    # Middleware
-    # authenticate = resolver['Authenticate']
 
     # Images Resource
     bind_routes(app, "/images", ImageResource(injector))

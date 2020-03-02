@@ -49,15 +49,15 @@ class MemoryFactory(Factory):
 
     def memory_image_repository(
             self, query_parser: QueryParser, tenant_provider: TenantProvider,
-            standard_auth_provider: AuthProvider) -> MemoryImageRepository:
+            auth_provider: AuthProvider) -> MemoryImageRepository:
         return MemoryImageRepository(
-            query_parser, tenant_provider, standard_auth_provider)
+            query_parser, tenant_provider, auth_provider)
 
     def memory_audio_repository(
             self, query_parser: QueryParser, tenant_provider: TenantProvider,
-            standard_auth_provider: AuthProvider) -> MemoryAudioRepository:
+            auth_provider: AuthProvider) -> MemoryAudioRepository:
         return MemoryAudioRepository(
-            query_parser, tenant_provider, standard_auth_provider)
+            query_parser, tenant_provider, auth_provider)
 
     # Services
 

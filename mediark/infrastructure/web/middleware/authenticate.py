@@ -18,10 +18,8 @@ def authenticate_middleware_factory(injector: Injectark) -> Callable:
         try:
             user_dict = extract_user(request.headers)
             session_coordinator.set_user(user_dict)
-            print('>>>>Request.headers:::', request.headers)
             tenant_id = request.headers['TenantId']
             tenant_dict = tenant_supplier.get_tenant(tenant_id)
-            print('>>>TenantDict:::', tenant_dict)
             session_coordinator.set_tenant(tenant_dict)
         except Exception as e:
             raise web.HTTPUnauthorized(
