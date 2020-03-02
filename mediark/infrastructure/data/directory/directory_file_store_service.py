@@ -18,7 +18,8 @@ class DirectoryFileStoreService(FileStoreService):
         self.extension = extension or \
             self.data_config["media"][self.data_type]["extension"]
 
-    def store(self, file_id: str, content: str, extension: str = None) -> str:
+    async def store(
+            self, file_id: str, content: str, extension: str = None) -> str:
         first_dir, second_dir = self._get_subdirs(file_id)
         extension = extension or self.extension
         binary_data = b64decode(content)

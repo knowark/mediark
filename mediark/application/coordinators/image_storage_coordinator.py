@@ -24,7 +24,7 @@ class ImageStorageCoordinator:
         content = image_dict.pop('data')
         extension = image_dict.get('extension')
 
-        uri = self.file_store_service.store(file_id, content, extension)
+        uri = await self.file_store_service.store(file_id, content, extension)
         image_dict['uri'] = uri
         image = Image(**image_dict)
         return await self.image_repository.add(image)

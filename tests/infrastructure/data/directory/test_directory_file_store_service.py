@@ -2,7 +2,7 @@ from pytest import raises
 from pathlib import Path
 
 
-def test_directory_file_store_service(
+async def test_directory_file_store_service(
         directory_file_store_service, encoded_image):
     id_ = "abca8e11-0719-44ab-bd3f-ed5aa1bd2918"
     extension = "png"
@@ -17,7 +17,7 @@ def test_directory_file_store_service(
     image_path = base_path.joinpath(
         "ab", "ca", "{0}.{1}".format(id_, extension))
 
-    uri = directory_file_store_service.store(id_, encoded_image)
+    uri = await directory_file_store_service.store(id_, encoded_image)
     assert image_path.is_file()
     assert uri == "ab/ca/abca8e11-0719-44ab-bd3f-ed5aa1bd2918.png"
 

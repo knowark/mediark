@@ -24,7 +24,7 @@ class AudioStorageCoordinator:
         content = audio_dict.pop('data')
         extension = audio_dict.get('extension')
 
-        uri = self.file_store_service.store(file_id, content, extension)
+        uri = await self.file_store_service.store(file_id, content, extension)
         audio_dict['uri'] = uri
         audio = Audio(**audio_dict)
         return await self.audio_repository.add(audio)
