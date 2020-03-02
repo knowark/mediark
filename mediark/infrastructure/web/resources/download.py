@@ -7,7 +7,7 @@ class DownloadResource:
     def __init__(self, injector: Injectark) -> None:
         self.directory_load_supplier = injector['DirectoryLoadSupplier']
 
-    def get(self, request: web.Request) -> Any:
+    async def get(self, request: web.Request) -> Any:
         """
         ---
         summary: Return all media.
