@@ -6,6 +6,7 @@ from .http_factory import HttpFactory
 from .json_factory import JsonFactory
 from .memory_factory import MemoryFactory
 from .sql_factory import SqlFactory
+from .check_factory import CheckFactory
 
 
 def build_factory(config: Config) -> Factory:
@@ -16,4 +17,5 @@ def build_factory(config: Config) -> Factory:
         'SqlFactory': lambda config: SqlFactory(config),
         'HttpFactory': lambda config: HttpFactory(config),
         'DirectoryFactory': lambda config: DirectoryFactory(config),
+        'CheckFactory': lambda config: CheckFactory(config),
     }[factory](config)

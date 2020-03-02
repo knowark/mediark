@@ -52,6 +52,14 @@ async def test_bad_filter_get_route_filter(app, headers) -> None:
     assert data_dict
 
 
+async def test_api_images_search(app: web.Application, headers: dict) -> None:
+    response = await app.get('/images', headers=headers)
+    content = await response.text()
+    assert response.status == 200
+    data_dict = loads(content)
+    assert len(data_dict) > 0
+
+
 async def xtest_api_images_put_search_and_download(
     app: web.Application, headers: dict, encoded_image: bytes
 ) -> None:

@@ -71,6 +71,7 @@ def app(tmp_path, loop, aiohttp_client) -> web.Application:
     config = build_config('', 'TEST')
     strategy = config['strategy']
     factory = build_factory(config)
+    print('\n\n\n\Factory:::', factory)
 
     resolver = Injectark(strategy, factory)
 

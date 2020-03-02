@@ -11,3 +11,4 @@ class TrialConfig(DevelopmentConfig):
     def __init__(self):
         super().__init__()
         self['mode'] = 'TEST'
+        self['factory'] = 'CheckFactory'
