@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 class DirectoryLoadSupplier ():
-    def __init__(self, data_path: str, media_dir: str):
+    def __init__(self, data_path: str, media_dir: str) -> None:
         self.data_path = data_path
         self.media_dir = media_dir
 

@@ -1,24 +1,23 @@
 from pathlib import Path
 from .factory import Factory
-from ..configuration import Config
-from ..tenancy import TenantSupplier, MemoryTenantSupplier
-from ....application.repositories import (
+from ...application.repositories import (
     ImageRepository, MemoryImageRepository,
     AudioRepository, MemoryAudioRepository)
-from ....application.utilities import (
+from ...application.utilities import (
     User, QueryParser, TenantProvider, StandardTenantProvider,
     AuthProvider, StandardAuthProvider, TransactionManager,
     MemoryTransactionManager)
-from ....application.services import (
+from ...application.services import (
     IdService, StandardIdService,
     FileStoreService, MemoryFileStoreService,
     ImageFileStoreService, MemoryImageFileStoreService,
     AudioFileStoreService, MemoryAudioFileStoreService)
-from ...core import JsonTenantSupplier
-from ....application.coordinators import (
+from ...application.coordinators import (
     SessionCoordinator, ImageStorageCoordinator, AudioStorageCoordinator)
-from ....application.reporters import MediarkReporter, StandardMediarkReporter
-from ...web.helpers import DirectoryLoadSupplier
+from ...application.reporters import MediarkReporter, StandardMediarkReporter
+from ..core import (
+    Config, JsonTenantSupplier, TenantSupplier, MemoryTenantSupplier)
+from ..web.helpers import DirectoryLoadSupplier
 
 
 class MemoryFactory(Factory):

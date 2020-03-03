@@ -20,7 +20,7 @@ class ImageResource:
         ---
         summary: Return images HEAD headers.
         tags:
-          - Audios
+          - Images
         """
 
         domain, _, _ = get_request_filter(request)
@@ -76,4 +76,4 @@ class ImageResource:
         data = ImageSchema().loads(await request.text())
         await self.image_storage_coordinator.store(data)
 
-        return web.Response(text="201 CREATED")
+        return web.Response(status=201)

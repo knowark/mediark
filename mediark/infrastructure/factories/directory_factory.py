@@ -1,13 +1,14 @@
 from pathlib import Path
-from ....application.utilities import (
+from ...application.utilities import (
     TenantProvider, StandardTenantProvider)
-from ....infrastructure.data import (
+from ...infrastructure.data import (
     DirectoryImageFileStoreService, DirectoryAudioFileStoreService)
-from ..configuration import Config
+from ..core import Config
 from .memory_factory import MemoryFactory
+from .json_factory import JsonFactory
 
 
-class DirectoryFactory(MemoryFactory):
+class DirectoryFactory(JsonFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
 

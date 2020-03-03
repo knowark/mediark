@@ -1,11 +1,10 @@
 from pathlib import Path
-from ....application.utilities import QueryParser
-from ....infrastructure.data import (
+from ...application.utilities import QueryParser
+from ...infrastructure.data import (
     JsonAudioRepository, JsonImageRepository)
 from mediark.application.utilities import TenantProvider, AuthProvider
-from ..configuration import Config
+from ..core import Config, JsonTenantSupplier, TenantSupplier
 from .http_factory import HttpFactory
-from ...core import JsonTenantSupplier, TenantSupplier
 
 
 class JsonFactory(HttpFactory):

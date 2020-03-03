@@ -3,21 +3,20 @@ from pathlib import Path
 from uuid import uuid4
 from filtrark import SqlParser, SafeEval
 from migrark import sql_migrate
-from ..configuration import Config
-from mediark.infrastructure.data import (
+from ...application.utilities import (
+    AuthProvider, StandardAuthProvider, StandardTenantProvider,
+    TenantProvider, User)
+from ..core import Config, TenantSupplier, SchemaTenantSupplier
+from ..data import (
     ConnectionManager, DefaultConnectionManager, SqlTransactionManager,
     SqlRepository, SqlAudioRepository, SqlImageRepository)
-from ...core import TenantSupplier, SchemaTenantSupplier
-from .http_factory import HttpFactory
-from mediark.application.utilities import (
-    AuthProvider, StandardAuthProvider, StandardTenantProvider, TenantProvider,
-    User)
+from .directory_factory import DirectoryFactory
 
 
-class SqlFactory(HttpFactory):
+class SqlFactory(DirectoryFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
-        self._setup()
+        # self._setup()
 
     def _setup(self):
         target_version = '001'

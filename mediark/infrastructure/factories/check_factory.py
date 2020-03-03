@@ -1,17 +1,16 @@
 from pathlib import Path
-from ....application.models import (Image, Audio)
-from ....application.repositories import (
+from ...application.models import (Image, Audio)
+from ...application.repositories import (
     ImageRepository, MemoryImageRepository,
     AudioRepository, MemoryAudioRepository)
-from ....application.utilities import (
+from ...application.utilities import (
     QueryParser, TenantProvider, StandardTenantProvider,
     AuthProvider, StandardAuthProvider)
-from ..configuration import Config
-from ..tenancy import TenantSupplier, MemoryTenantSupplier
-from .memory_factory import MemoryFactory
+from ..core import Config, TenantSupplier, MemoryTenantSupplier
+from .http_factory import HttpFactory
 
 
-class CheckFactory(MemoryFactory):
+class CheckFactory(HttpFactory):
     def __init__(self, config: Config) -> None:
         self.config = config
 

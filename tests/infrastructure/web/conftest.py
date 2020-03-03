@@ -68,7 +68,7 @@ def xapp(tmp_path, loop, aiohttp_client) -> web.Application:
 
 @fixture
 def app(tmp_path, loop, aiohttp_client) -> web.Application:
-    config = build_config('', 'TEST')
+    config = build_config('', 'DEV')
     strategy = config['strategy']
     factory = build_factory(config)
 

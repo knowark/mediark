@@ -10,15 +10,20 @@ class Config(defaultdict, ABC):
     @abstractmethod
     def __init__(self):
         self['mode'] = 'BASE'
-        self['database'] = {}
+        self['factory'] = 'CloudFactory'
+        self['port'] = 8080
+        self['strategies'] = ['base']
+        self['strategy'] = {}
         self['tenancy'] = {
             'json': Path.home() / 'tenants.json'
         }
-        self['port'] = 8080
-        self['strategy'] = {}
-        self['environment'] = {
-            'home': '/opt/mediark'
+        self['database'] = {}
+        self["zones"] = {
+            "default": {
+                "dsn": 'dummy_connection://database'
+            }
         }
+        self['environment'] = {'home': '/opt/mediark'}
         self['domain'] = 'https://mediark.dev.nubark.cloud'
         self['data'] = {
             'dir_path': Path.home() / 'data',
@@ -54,5 +59,42 @@ class Config(defaultdict, ABC):
                     'dir_path': 'images',
                     'database': 'images.json'
                 },
+            },
+            'cloud': {
+                "swift": {
+                    "auth_url": "https://auth.cloud.ovh.net/v3/auth/tokens",
+                    "object_store_url": "",
+                    "username": "",
+                    "password": "",
+                    "container_prefix": "",
+                    "container_suffix": "dev"
+                }
+            }
+        }
+
+
+class DevelopmentConfig(Config):
+    def __init__(self):
+        super().__init__()
+        self['mode'] = 'DEV'
+        self['strategies'].extend(['http', 'check'])
+
+
+class ProductionConfig(Config):
+    def __init__(self):
+        super().__init__()
+        self['mode'] = 'PROD'
+        self['factory'] = 'CloudFactory'
+        self['strategies'].extend(['http', 'sql', 'swift'])
+        self['tenancy'] = {
+            "dsn": (
+                "postgresql://mediark:mediark"
+                "@localhost/mediark")
+        }
+        self["zones"] = {
+            "default": {
+                "dsn": ("postgresql://mediark:mediark"
+                        "@localhost/mediark"),
+                "pool": {}
             }
         }

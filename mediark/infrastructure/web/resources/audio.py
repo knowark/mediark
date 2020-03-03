@@ -75,4 +75,4 @@ class AudioResource:
         data = AudioSchema().loads(await request.text())
         await self.audio_storage_coordinator.store(data)
 
-        return web.Response(text="201 CREATED")
+        return web.Response(status=201)

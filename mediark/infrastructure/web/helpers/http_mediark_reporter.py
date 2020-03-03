@@ -1,6 +1,6 @@
 from typing import List, Any
-from ...application.utilities import TenantProvider
-from ...application.reporters import (
+from ....application.utilities import TenantProvider
+from ....application.reporters import (
     StandardMediarkReporter, ImageDictList, AudioDictList, SearchDomain)
 
 
