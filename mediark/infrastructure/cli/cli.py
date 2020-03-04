@@ -72,7 +72,8 @@ class Cli:
 
     async def provision(self, args: Namespace) -> None:
         logger.info('PROVISION')
-        tenant_supplier = self.injector.resolve('TenantSupplier')
+        tenant_supplier = self.injector['TenantSupplier']
+        print('TenantSupplier:::', tenant_supplier)
         tenant_dict = json.loads(args.data)
         logger.info("Creating tenant:", tenant_dict)
         tenant_supplier.create_tenant(tenant_dict)

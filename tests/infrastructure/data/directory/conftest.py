@@ -28,10 +28,9 @@ def encoded_image() -> bytes:
 
 @fixture
 def directory_file_store_service(tmp_path):
-    config = build_config('DEV')['data']
+    config = build_config('', 'DEV')['data']
     config['dir_path'] = tmp_path / 'data'
     standard_tenant_provider = StandardTenantProvider()
-    standard_tenant_provider.setup(Tenant(id=2, name="custom-tenant"))
+    standard_tenant_provider.setup(Tenant(id='2', name="custom-tenant"))
     return DirectoryFileStoreService(
-        standard_tenant_provider, config,
-        'images', 'png')
+        standard_tenant_provider, config)

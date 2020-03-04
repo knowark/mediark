@@ -77,6 +77,7 @@ class DevelopmentConfig(Config):
     def __init__(self):
         super().__init__()
         self['mode'] = 'DEV'
+        self['factory'] = 'CheckFactory'
         self['strategies'].extend(['http', 'check'])
 
 

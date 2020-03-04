@@ -1,7 +1,7 @@
 from pytest import fixture
 from injectark import Injectark
 from mediark.infrastructure.core import build_config
-from mediark.infrastructure.factories import build_factory
+from mediark.infrastructure.factories import build_strategy, build_factory
 from mediark.infrastructure.cli import Cli
 
 
@@ -12,8 +12,9 @@ def cli(tmp_path) -> Cli:
     config['data']['dir_path'] = str(tmp_path / 'data')
     template_dir = tmp_path / 'data' / '__template__'
     template_dir.mkdir(parents=True, exist_ok=True)
-    strategy = config["strategy"]
+
     factory = build_factory(config)
+    strategy = build_strategy(config['strategies'], config["strategy"])
 
     resolver = Injectark(strategy, factory)
 
