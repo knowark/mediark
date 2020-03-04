@@ -12,14 +12,13 @@ from mediark.application.repositories import (
     MemoryImageRepository, MemoryAudioRepository)
 from mediark.infrastructure.core import (
     build_config, Config)
-from mediark.infrastructure.factories import build_factory
+from mediark.infrastructure.factories import build_strategy, build_factory
 from mediark.infrastructure.web import create_app
 from migrark import sql_migrate
 
 
 @fixture
 def xapp(tmp_path, loop, aiohttp_client) -> web.Application:
-    # config = build_config('config.json', "JSON")
     config = build_config('config.json', "PROD")
 
     config['domain'] = 'https://mediark.dev.nubark.cloud'
@@ -69,7 +68,7 @@ def xapp(tmp_path, loop, aiohttp_client) -> web.Application:
 @fixture
 def app(tmp_path, loop, aiohttp_client) -> web.Application:
     config = build_config('', 'DEV')
-    strategy = config['strategy']
+    strategy = build_strategy(config['strategies'], config['strategy'])
     factory = build_factory(config)
 
     resolver = Injectark(strategy, factory)

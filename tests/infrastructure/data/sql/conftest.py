@@ -62,6 +62,9 @@ def dummies_table(mediark_database, schema):
             f"CREATE TABLE {schema}.{table} ("
             "data JSONB)")
         cursor.execute(
+            f"CREATE UNIQUE INDEX IF NOT EXISTS pk_{table}_id ON "
+            f"{schema}.{table} ((data ->> 'id'));")
+        cursor.execute(
             f"INSERT INTO {schema}.{table} "
             "(data) "
             "VALUES (%s)", (data_1,))

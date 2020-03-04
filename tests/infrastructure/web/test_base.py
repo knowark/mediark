@@ -1,14 +1,14 @@
 from aiohttp import web
 from injectark import Injectark
 from mediark.infrastructure.core import build_config
-from mediark.infrastructure.factories import build_factory
+from mediark.infrastructure.factories import build_strategy,  build_factory
 from mediark.infrastructure.web import create_app, run_app
 from mediark.infrastructure.web import base as base_module
 
 
 def test_create_app():
     config = build_config('', 'DEV')
-    strategy = config['strategy']
+    strategy = build_strategy(config['strategies'], config['strategy'])
     factory = build_factory(config)
 
     injector = Injectark(strategy, factory)

@@ -2,7 +2,7 @@ from pathlib import Path
 from pytest import fixture
 from json import dump
 from injectark import Injectark
-from mediark.infrastructure.core import DevelopmentConfig
+from mediark.infrastructure.core import DevelopmentConfig, ProductionConfig
 
 
 @fixture
@@ -33,5 +33,5 @@ def test_data(mock_development_config, mock_json_config):
     return [
         mock_development_config,
         mock_json_config,
-        SqlConfig()
+        ProductionConfig()
     ]

@@ -15,7 +15,7 @@ from mediark.infrastructure.data import (
 
 class SampleEntity(Entity):
     def __init__(self, **attributes) -> None:
-        self.id = attributes.get('id', '')
+        super().__init__(**attributes)
         self.name = attributes.get('name', '')
         self.size = attributes.get('size', 0)
 
@@ -52,6 +52,9 @@ def samples_table(connection_database, schema):
         cursor.execute(
             f"CREATE TABLE {schema}.{table} ("
             "data JSONB)")
+        cursor.execute(
+            f"CREATE UNIQUE INDEX IF NOT EXISTS pk_{table}_id ON "
+            f"{schema}.{table} ((data ->> 'id'));")
 
     with connection.cursor() as cursor:
         cursor.execute(
