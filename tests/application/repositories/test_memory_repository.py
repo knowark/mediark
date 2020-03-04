@@ -1,17 +1,19 @@
 from typing import Dict, List
+from asyncio import sleep
 from pytest import fixture, raises
 from inspect import signature
 from mediark.application.utilities import (
     QueryParser, EntityNotFoundError, TenantProvider, StandardTenantProvider,
     Tenant, StandardAuthProvider, User)
+from mediark.application.models import Entity
 from mediark.application.repositories import (
     Repository, MemoryRepository)
 
 
-class DummyEntity:
-    def __init__(self, id: str = "", field_1: str = "") -> None:
-        self.id = id
-        self.field_1 = field_1
+class DummyEntity(Entity):
+    def __init__(self, **attributes) -> None:
+        super().__init__(**attributes)
+        self.field_1 = attributes.get('field_1', "")
 
 
 def test_memory_repository_implementation() -> None:
@@ -35,9 +37,9 @@ def memory_repository() -> MemoryRepository:
 def filled_memory_repository(memory_repository) -> MemoryRepository:
     data_dict = {
         "default": {
-            "1": DummyEntity('1', 'value_1'),
-            "2": DummyEntity('2', 'value_2'),
-            "3": DummyEntity('3', 'value_3')
+            "1": DummyEntity(id='1', field_1='value_1'),
+            "2": DummyEntity(id='2', field_1='value_2'),
+            "3": DummyEntity(id='3', field_1='value_3')
         }
     }
     memory_repository.load(data_dict)
@@ -59,8 +61,14 @@ async def test_memory_repository_get_missing(filled_memory_repository) -> None:
         await filled_memory_repository.get("999999999")
 
 
+async def test_memory_repository_get_missing_with_default(
+        filled_memory_repository) -> None:
+    result = await filled_memory_repository.get("999999999", None)
+    assert result is None
+
+
 async def test_memory_repository_add(memory_repository) -> None:
-    item = DummyEntity("1", "value_1")
+    item = DummyEntity(id="1", field_1="value_1")
 
     is_saved = await memory_repository.add(item)
 
@@ -70,39 +78,23 @@ async def test_memory_repository_add(memory_repository) -> None:
     assert item in memory_repository.data['default'].values()
 
 
-async def test_memory_repository_update(memory_repository) -> None:
-    memory_repository.data = {
-        "default": {
-            '1': DummyEntity("1", "value_1")
-        }
-    }
+async def test_memory_repository_add_update(memory_repository) -> None:
+    created_entity = DummyEntity(id="1", field_1="value_1")
+    created_entity, *_ = await memory_repository.add(created_entity)
 
-    updated_entity = DummyEntity("1", "New Value")
+    await sleep(1)
 
-    is_updated = await memory_repository.update(updated_entity)
+    updated_entity = DummyEntity(id="1", field_1="New Value")
+    updated_entity, *_ = await memory_repository.add(updated_entity)
+
+    assert created_entity.created_at == updated_entity.created_at
+    assert created_entity.created_by == updated_entity.created_by
 
     items = memory_repository.data['default']
     assert len(items) == 1
-    assert is_updated is True
     assert "1" in items.keys()
     assert updated_entity in items.values()
     assert "New Value" in items['1'].field_1
-
-
-async def test_memory_repository_update_false(memory_repository):
-    memory_repository.data = {
-        "default": {
-            '1': DummyEntity("1", "value_1")
-        }
-    }
-
-    missing_entity = DummyEntity("99", "New Value")
-
-    is_updated = await memory_repository.update(missing_entity)
-
-    items = memory_repository.data['default']
-    assert len(items) == 1
-    assert is_updated is False
 
 
 async def test_memory_repository_add_no_id(memory_repository) -> None:
@@ -182,6 +174,25 @@ async def test_memory_repository_remove_false(filled_memory_repository):
     items = filled_memory_repository.data['default']
     assert deleted is False
     assert len(items) == 3
+
+
+async def test_memory_repository_remove_idempotent(filled_memory_repository):
+    existing_item = item = filled_memory_repository.data['default']["2"]
+    missing_item = DummyEntity(**{'id': '6', 'field_1': 'MISSING'})
+
+    items = filled_memory_repository.data['default']
+
+    deleted = await filled_memory_repository.remove(
+        [existing_item, missing_item])
+
+    assert deleted is True
+    assert len(items) == 2
+
+    deleted = await filled_memory_repository.remove(
+        [existing_item, missing_item])
+
+    assert deleted is False
+    assert len(items) == 2
 
 
 async def test_memory_repository_add_multiple(memory_repository) -> None:

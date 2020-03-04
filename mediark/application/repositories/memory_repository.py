@@ -1,7 +1,7 @@
 import time
 from uuid import uuid4
 from collections import defaultdict
-from typing import List, Dict, TypeVar, Optional, Type, Generic, Union
+from typing import List, Dict, TypeVar, Optional, Type, Generic, Union, Any
 from ..models import T
 from ..utilities import (
     QueryParser, QueryDomain, EntityNotFoundError,
@@ -20,12 +20,11 @@ class MemoryRepository(Repository, Generic[T]):
         self.auth_provider: AuthProvider = auth_provider
         self.max_items = 1000
 
-    async def get(self, id: str) -> T:
-        #         >>> def get(value, default=...):
-        # ...     if default is ...:
-        # ...         print('without default')
+    async def get(self, id: str, default: Any = ...) -> T:
         item = self.data[self._location].get(id)
         if not item:
+            if default is not ...:
+                return default
             raise EntityNotFoundError(
                 f"The entity with id {id} was not found.")
         return item
@@ -35,27 +34,18 @@ class MemoryRepository(Repository, Generic[T]):
         items = item if isinstance(item, list) else [item]
         for item in items:
             item.id = item.id or str(uuid4())
-            item.created_at = int(time.time())
-            item.created_by = user.id
-            item.updated_at = item.created_at
-            item.updated_by = item.created_by
-            self.data[self._location][item.id] = item
-        return items
-
-    async def update(self, item: Union[T, List[T]]) -> bool:
-        user = self.auth_provider.user
-        items = item if isinstance(item, list) else [item]
-
-        for item in items:
-            if item.id not in self.data[self._location]:
-                return False
-
-        for item in items:
             item.updated_at = int(time.time())
             item.updated_by = user.id
-            self.data[self._location][item.id] = item
+            existing_item = self.data[self._location].get(item.id)
+            if existing_item:
+                item.created_at = existing_item.created_at
+                item.created_by = existing_item.created_by
+            else:
+                item.created_at = item.updated_at
+                item.created_by = item.updated_by
 
-        return True
+            self.data[self._location][item.id] = item
+        return items
 
     async def search(self, domain: QueryDomain, limit=1000, offset=0
                      ) -> List[T]:
@@ -75,13 +65,12 @@ class MemoryRepository(Repository, Generic[T]):
 
     async def remove(self, item: Union[T, List[T]]) -> bool:
         items = item if isinstance(item, list) else [item]
+        deleted = False
         for item in items:
-            if str(item.id) not in self.data[self._location].keys():
-                return False
-        for item in items:
-            del self.data[self._location][str(item.id)]
+            deleted_item = self.data[self._location].pop(item.id, None)
+            deleted = bool(deleted_item) or deleted
 
-        return True
+        return deleted
 
     async def count(self, domain: QueryDomain = None) -> int:
         count = 0

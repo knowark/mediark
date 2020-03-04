@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Generic, Union
+from typing import List, Generic, Union, Any
 from ..models import T
 from ..utilities import QueryDomain
 
@@ -7,16 +7,12 @@ from ..utilities import QueryDomain
 class Repository(ABC, Generic[T]):
 
     @abstractmethod
-    async def get(self, id: str) -> T:
+    async def get(self, id: str, default: Any = ...) -> T:
         "Get method to be implemented."
 
     @abstractmethod
     async def add(self, item: Union[T, List[T]]) -> List[T]:
-        "Add method to be implemented."
-
-    @abstractmethod
-    async def update(self, item: Union[T, List[T]]) -> bool:
-        "Update method to be implemented."
+        "Add or update method to be implemented."
 
     @abstractmethod
     async def search(self, domain: QueryDomain,
