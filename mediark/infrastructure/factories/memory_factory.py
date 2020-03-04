@@ -86,7 +86,7 @@ class MemoryFactory(Factory):
 
     def image_storage_coordinator(self, image_repository: ImageRepository,
                                   id_service: IdService,
-                                  file_store_service: ImageFileStoreService,
+                                  file_store_service: FileStoreService,
                                   transaction_manager: TransactionManager
                                   ) -> ImageStorageCoordinator:
         return transaction_manager(ImageStorageCoordinator)(

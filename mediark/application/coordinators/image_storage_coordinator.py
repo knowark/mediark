@@ -22,8 +22,8 @@ class ImageStorageCoordinator:
         image_dict.setdefault('id', self.id_service.generate_id())
         image = Image(**image_dict)
         context = vars(image)
-        # uri = await self.file_store_service.store(content, context)
-        uri = ''
+        uri = await self.file_store_service.store(content, context)
+        # uri = ''
 
         image.uri = uri
 

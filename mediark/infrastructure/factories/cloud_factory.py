@@ -2,7 +2,7 @@ from pathlib import Path
 from ...application.utilities import (
     TenantProvider, StandardTenantProvider)
 from ...infrastructure.data import (
-    SwiftAuthSupplier,
+    SwiftAuthSupplier, SwiftFileStoreService,
     SwiftImageFileStoreService, SwiftAudioFileStoreService)
 from ..core import Config, HttpClientSupplier
 from .memory_factory import MemoryFactory
@@ -32,3 +32,10 @@ class CloudFactory(SqlFactory):
     ) -> SwiftAudioFileStoreService:
         return SwiftAudioFileStoreService(
             tenant_provider, self.config["data"], "audios")
+
+    def swift_file_store_service(
+        self, tenant_provider: TenantProvider,
+        auth_supplier: SwiftAuthSupplier
+    ) -> SwiftFileStoreService:
+        return SwiftFileStoreService(
+            tenant_provider, auth_supplier, self.config["data"])
