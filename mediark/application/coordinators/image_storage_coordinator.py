@@ -16,7 +16,7 @@ class ImageStorageCoordinator:
         self.file_store_service = file_store_service
 
     async def store(self, image_dict: ImageDict) -> None:
-        content = image_dict.pop('data')
+        content = image_dict.pop('data', None)
         if not content:
             raise ValueError("The image must have content.")
 

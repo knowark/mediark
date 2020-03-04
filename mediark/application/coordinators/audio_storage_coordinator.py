@@ -15,7 +15,7 @@ class AudioStorageCoordinator:
         self.file_store_service = file_store_service
 
     async def store(self, audio_dict: AudioDict) -> None:
-        content = audio_dict.pop('data')
+        content = audio_dict.pop('data', None)
         if not content:
             raise ValueError("The audio must have content.")
 

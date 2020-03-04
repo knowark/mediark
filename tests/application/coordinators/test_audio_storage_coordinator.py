@@ -1,3 +1,4 @@
+from pytest import raises
 from mediark.application.services import MemoryFileStoreService
 
 
@@ -10,16 +11,16 @@ async def test_storage_coordinator_store_no_data(audio_storage_coordinator):
         'namespace': 'https://example.com',
         'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
         'extension': 'mp4'}
-    await audio_storage_coordinator.store(audio_dict)
 
-    assert len(audio_storage_coordinator.audio_repository.data) == 0
+    with raises(ValueError):
+        await audio_storage_coordinator.store(audio_dict)
 
 
 async def test_storage_coordinator_store_data(audio_storage_coordinator):
     audio_dict = {
         'namespace': 'https://example.com',
         'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
-        'data': 'BASE64_DATA',
+        'data': 'QkFTRTY0X0RBVEE=',  # BASE64_DATA
         'extension': 'mp4'
     }
 
