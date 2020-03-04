@@ -1,5 +1,6 @@
 from ..models import Image
 from typing import List, Optional
+from base64 import b64decode
 from ..repositories import ImageRepository
 from ..services import IdService, FileStoreService
 from ..utilities import EntityNotFoundError
@@ -15,22 +16,15 @@ class ImageStorageCoordinator:
         self.file_store_service = file_store_service
 
     async def store(self, image_dict: ImageDict) -> None:
-        content = image_dict.pop('data', None)
+        content = image_dict.pop('data')
         if not content:
             raise ValueError("The image must have content.")
 
         image_dict.setdefault('id', self.id_service.generate_id())
         image = Image(**image_dict)
+        content_bytes = b64decode(content)
         context = {'type': 'images', **vars(image)}
-        uri = await self.file_store_service.store(content, context)
-        # uri = ''
 
+        uri = await self.file_store_service.store(content_bytes, context)
         image.uri = uri
-
         await self.image_repository.add(image)
-
-        # try:
-        #     await self.image_repository.get(image.id)
-        #     result = await self.image_repository.update(image)
-        # except EntityNotFoundError:
-        #     result = await self.image_repository.add(image)

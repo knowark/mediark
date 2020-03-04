@@ -1,5 +1,6 @@
 from ..models import Audio
 from typing import Optional, List
+from base64 import b64decode
 from ..repositories import AudioRepository
 from ..services import IdService, FileStoreService
 from .types import AudioDict
@@ -13,18 +14,16 @@ class AudioStorageCoordinator:
         self.id_service = id_service
         self.file_store_service = file_store_service
 
-    async def store(self, audio_dict: AudioDict) -> Optional[List[Audio]]:
-        if 'data' not in audio_dict:
-            return None
-
-        if 'id' not in audio_dict:
-            audio_dict['id'] = self.id_service.generate_id()
-
-        file_id = str(audio_dict.get('id'))
+    async def store(self, audio_dict: AudioDict) -> None:
         content = audio_dict.pop('data')
-        extension = audio_dict.get('extension')
+        if not content:
+            raise ValueError("The audio must have content.")
 
-        uri = await self.file_store_service.store(file_id, content, extension)
-        audio_dict['uri'] = uri
+        audio_dict.setdefault('id', self.id_service.generate_id())
         audio = Audio(**audio_dict)
-        return await self.audio_repository.add(audio)
+        content_bytes = b64decode(content)
+        context = {'type': 'audios', **vars(audio)}
+
+        uri = await self.file_store_service.store(content_bytes, context)
+        audio.uri = uri
+        await self.audio_repository.add(audio)
