@@ -47,8 +47,8 @@ class MemoryRepository(Repository, Generic[T]):
             self.data[self._location][item.id] = item
         return items
 
-    async def search(self, domain: QueryDomain, limit=1000, offset=0
-                     ) -> List[T]:
+    async def search(self, domain: QueryDomain,
+                     limit=10000, offset=0) -> List[T]:
         items = []
         filter_function = self.parser.parse(domain)
         for item in list(self.data[self._location].values()):
