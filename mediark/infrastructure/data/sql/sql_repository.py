@@ -28,7 +28,7 @@ class SqlRepository(Repository, Generic[T]):
         self.parser = parser
         self.max_items = 1000
 
-    async def get(self, id: str) -> T:
+    async def get(self, id: str, default=...) -> T:
 
         tenant = self.tenant_provider.tenant
         user = self.auth_provider.user
@@ -42,6 +42,9 @@ class SqlRepository(Repository, Generic[T]):
         row = await connection.fetchrow(query, id)
 
         if not (row and row['data']):
+            if default is not ...:
+                return default
+
             raise EntityNotFoundError(
                 f"The entity with id {id} was not found.")
 
@@ -103,8 +106,8 @@ class SqlRepository(Repository, Generic[T]):
 
         return True
 
-    async def search(self, domain: QueryDomain, limit=1000, offset=0
-                     ) -> List[T]:
+    async def search(self, domain: QueryDomain, limit=1000, offset=0,
+                     order_by=None) -> List[T]:
         tenant = self.tenant_provider.tenant
         user = self.auth_provider.user
 

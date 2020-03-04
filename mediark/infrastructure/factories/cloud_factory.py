@@ -25,17 +25,18 @@ class CloudFactory(SqlFactory):
         self, tenant_provider: TenantProvider
     ) -> SwiftImageFileStoreService:
         return SwiftImageFileStoreService(
-            tenant_provider, self.config["data"], "images")
+            tenant_provider, self.config["data"], None, "images")
 
     def swift_audio_file_store_service(
         self, tenant_provider: TenantProvider
     ) -> SwiftAudioFileStoreService:
         return SwiftAudioFileStoreService(
-            tenant_provider, self.config["data"], "audios")
+            tenant_provider, self.config["data"], None, "audios")
 
     def swift_file_store_service(
         self, tenant_provider: TenantProvider,
-        auth_supplier: SwiftAuthSupplier
+        auth_supplier: SwiftAuthSupplier,
+        client: HttpClientSupplier
     ) -> SwiftFileStoreService:
         return SwiftFileStoreService(
-            tenant_provider, auth_supplier, self.config["data"])
+            tenant_provider, auth_supplier, client, self.config["data"])

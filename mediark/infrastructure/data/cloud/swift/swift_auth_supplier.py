@@ -11,8 +11,8 @@ class SwiftAuthSupplier:
         self.auth_url = auth_url
         self.username = username
         self.password = password
-        self.expires_at = None
-        self.token = None
+        self.expires_at: time.struct_time = None
+        self.token: str = None
 
     async def authenticate(self) -> str:
         if self.expires_at and time.gmtime() < self.expires_at:
