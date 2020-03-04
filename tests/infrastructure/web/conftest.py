@@ -11,8 +11,8 @@ from mediark.application.utilities import QueryParser, User
 from mediark.application.repositories import (
     MemoryImageRepository, MemoryAudioRepository)
 from mediark.infrastructure.core import (
-    SqlConfig, build_config, Config)
-from mediark.infrastructure.core.factories import build_factory
+    build_config, Config)
+from mediark.infrastructure.factories import build_factory
 from mediark.infrastructure.web import create_app
 from migrark import sql_migrate
 

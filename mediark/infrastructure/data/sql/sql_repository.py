@@ -55,17 +55,28 @@ class SqlRepository(Repository, Generic[T]):
         items = item if isinstance(item, list) else [item]
         for item in items:
             item.id = item.id or str(uuid4())
-            item.created_at = int(time.time())
-            item.created_by = user.id
-            item.updated_at = item.created_at
-            item.updated_by = item.created_by
+            item.updated_at = int(time.time())
+            item.updated_by = user.id
+            item.created_at = item.created_at or item.updated_at
+            item.created_by = item.created_by or item.updated_by
             records.append((json.dumps(vars(item)),))
 
-        connection = await self.connection_manager.get(tenant.zone)
-        result = await connection.copy_records_to_table(
-            self.table, records=records, schema_name=tenant.slug)
+        namespace = f"{tenant.slug}.{self.table}"
+        query = f"""
+            INSERT INTO {namespace}(data) (
+                SELECT *
+                FROM unnest($1::{namespace}[]) AS d
+            )
+            ON CONFLICT ((data->>'id'))
+            DO UPDATE SET data = {namespace}.data ||
+                EXCLUDED.data - 'created_at' - 'created_by'
+            RETURNING *;
+        """
 
-        return items
+        connection = await self.connection_manager.get(tenant.zone)
+        rows = await connection.fetch(query, records)
+
+        return [self.constructor(**json.loads(row['data'])) for row in rows]
 
     async def update(self, item: Union[T, List[T]]) -> bool:
         tenant = self.tenant_provider.tenant

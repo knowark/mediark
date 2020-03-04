@@ -19,7 +19,9 @@ def create_api(app: web.Application, injector: Injectark) -> None:
     # Images Resource
     bind_routes(app, "/images", ImageResource(injector))
     spec.path(path="/images", operations={
-        'get': {}, 'post': {}, 'head': {}}, resource=ImageResource)
+        'get': {}, 'post': {}, 'put': {}, 'head': {}}, resource=ImageResource)
+    spec.path(path="/images/<id>", operations={
+        'put': {}}, resource=ImageResource)
 
     # Audios Resource
     bind_routes(app, "/audios", AudioResource(injector))
@@ -35,7 +37,7 @@ def create_api(app: web.Application, injector: Injectark) -> None:
 
 
 def bind_routes(app: web.Application, path: str, resource: Any):
-    general_methods = ['get', 'post', 'head', 'patch']
+    general_methods = ['get', 'put', 'post', 'head', 'patch']
     identified_methods = ['get', 'put', 'delete', 'patch']
     for method in general_methods + identified_methods:
         handler = getattr(resource, method, None)

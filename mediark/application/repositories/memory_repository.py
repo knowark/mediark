@@ -21,6 +21,9 @@ class MemoryRepository(Repository, Generic[T]):
         self.max_items = 1000
 
     async def get(self, id: str) -> T:
+        #         >>> def get(value, default=...):
+        # ...     if default is ...:
+        # ...         print('without default')
         item = self.data[self._location].get(id)
         if not item:
             raise EntityNotFoundError(

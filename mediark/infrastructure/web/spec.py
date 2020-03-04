@@ -14,14 +14,16 @@ class ResourcePlugin(BasePlugin):
             'delete', 'head', 'options', 'trace']
 
     def path_helper(self, path, operations=None, resource=None, **kwargs):
-        if resource:
-            for method in self.methods:
-                function = getattr(resource, method, None)
-                if not function:
-                    continue
-                operation = load_yaml_from_docstring(function.__doc__)
-                if operation:
-                    operations[method] = operation
+        if not resource:
+            return
+
+        for method in operations or self.methods:
+            function = getattr(resource, method, None)
+            if not function:
+                continue
+            operation = load_yaml_from_docstring(function.__doc__)
+            if operation:
+                operations[method] = operation
 
 
 def create_spec() -> APISpec:
@@ -33,9 +35,10 @@ def create_spec() -> APISpec:
         info=dict(
             description="Media Management Server.",
             contact=dict(
-                name="Nubark",
-                url="https://www.nubark.com"
+                name="Knowark",
+                url="https://www.knowark.com"
             )))
+
     _register_schemas(spec)
 
     return spec

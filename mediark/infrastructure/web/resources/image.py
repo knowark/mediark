@@ -77,3 +77,27 @@ class ImageResource:
         await self.image_storage_coordinator.store(data)
 
         return web.Response(status=201)
+
+    async def put(self, request: web.Request) -> web.Response:
+        """
+        ---
+        summary: Create or update an image.
+        tags:
+          - Images
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+        responses:
+          200:
+            description: "Success"
+        """
+        many = True if request.query.get('many') else False
+        data = ImageSchema(many=many).loads(await request.text())
+
+        # print('data:::', data)
+        await self.image_storage_coordinator.store(data)
+
+        return web.Response(status=201)
