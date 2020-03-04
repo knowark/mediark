@@ -9,9 +9,7 @@ from ...application.utilities import (
     MemoryTransactionManager)
 from ...application.services import (
     IdService, StandardIdService,
-    FileStoreService, MemoryFileStoreService,
-    ImageFileStoreService, MemoryImageFileStoreService,
-    AudioFileStoreService, MemoryAudioFileStoreService)
+    FileStoreService, MemoryFileStoreService)
 from ...application.coordinators import (
     SessionCoordinator, ImageStorageCoordinator, AudioStorageCoordinator)
 from ...application.reporters import MediarkReporter, StandardMediarkReporter
@@ -63,17 +61,11 @@ class MemoryFactory(Factory):
     def standard_id_service(self) -> StandardIdService:
         return StandardIdService()
 
-    def memory_image_file_store_service(
+    def memory_file_store_service(
             self, tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryImageFileStoreService:
-        return MemoryImageFileStoreService(tenant_provider, auth_provider)
-
-    def memory_audio_file_store_service(
-        self, tenant_provider: TenantProvider,
-        auth_provider: AuthProvider
-    ) -> MemoryAudioFileStoreService:
-        return MemoryAudioFileStoreService(tenant_provider, auth_provider)
+    ) -> MemoryFileStoreService:
+        return MemoryFileStoreService(tenant_provider, auth_provider)
 
     # Coordinators
 
@@ -95,7 +87,7 @@ class MemoryFactory(Factory):
 
     def audio_storage_coordinator(self, audio_repository: AudioRepository,
                                   id_service: IdService,
-                                  file_store_service: AudioFileStoreService,
+                                  file_store_service: FileStoreService,
                                   transaction_manager: TransactionManager
                                   ) -> AudioStorageCoordinator:
         return transaction_manager(AudioStorageCoordinator)(

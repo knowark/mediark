@@ -2,8 +2,7 @@ from pathlib import Path
 from ...application.utilities import (
     TenantProvider, StandardTenantProvider)
 from ...infrastructure.data import (
-    SwiftAuthSupplier, SwiftFileStoreService,
-    SwiftImageFileStoreService, SwiftAudioFileStoreService)
+    SwiftAuthSupplier, SwiftFileStoreService)
 from ..core import Config, HttpClientSupplier
 from .memory_factory import MemoryFactory
 from .directory_factory import DirectoryFactory
@@ -20,18 +19,6 @@ class CloudFactory(SqlFactory):
         username = self.config['data']['cloud']['swift']['username']
         password = self.config['data']['cloud']['swift']['password']
         return SwiftAuthSupplier(client, auth_url, username, password)
-
-    def swift_image_file_store_service(
-        self, tenant_provider: TenantProvider
-    ) -> SwiftImageFileStoreService:
-        return SwiftImageFileStoreService(
-            tenant_provider, self.config["data"], None, "images")
-
-    def swift_audio_file_store_service(
-        self, tenant_provider: TenantProvider
-    ) -> SwiftAudioFileStoreService:
-        return SwiftAudioFileStoreService(
-            tenant_provider, self.config["data"], None, "audios")
 
     def swift_file_store_service(
         self, tenant_provider: TenantProvider,

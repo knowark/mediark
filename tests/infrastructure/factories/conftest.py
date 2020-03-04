@@ -2,8 +2,7 @@ from pathlib import Path
 from pytest import fixture
 from json import dump
 from injectark import Injectark
-from mediark.infrastructure.core.configuration import (
-    DevelopmentConfig, JsonConfig, SqlConfig)
+from mediark.infrastructure.core import DevelopmentConfig
 
 
 @fixture
@@ -16,7 +15,7 @@ def mock_development_config(tmp_path):
 
 @fixture
 def mock_json_config(mock_development_config):
-    mock_json_config = JsonConfig()
+    mock_json_config = DevelopmentConfig()
     mock_json_config['tenancy']['json'] = (
         mock_development_config['tenancy']['json'])
     mock_json_config['data']['dir_path'] = (

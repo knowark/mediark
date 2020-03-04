@@ -5,21 +5,18 @@ from rapidjson import loads, dumps
 from marshmallow import ValidationError
 from base64 import b64encode
 from mediark.application.models import Audio, Image
-from mediark.infrastructure.core.configuration import SqlConfig
 from mediark.infrastructure.web.resources import RootResource
 from mediark.infrastructure.web.spec import create_spec
 from mediark.infrastructure.core import (
-    DevelopmentConfig, JsonConfig, SqlConfig, build_config, Config)
+    DevelopmentConfig, ProductionConfig, build_config, Config)
 
 
 def test_build_configurations() -> None:
     config_path = ".config.json"
     config = build_config(config_path, "DEV")
     assert isinstance(config, DevelopmentConfig)
-    config = build_config(config_path, "JSON")
-    assert isinstance(config, JsonConfig)
     config = build_config(config_path, "PROD")
-    assert isinstance(config, SqlConfig)
+    assert isinstance(config, ProductionConfig)
 
 
 async def test_root_resource(app: web.Application) -> None:
