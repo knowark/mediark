@@ -76,3 +76,26 @@ class AudioResource:
         await self.audio_storage_coordinator.store(data)
 
         return web.Response(status=201)
+
+    async def put(self, request: web.Request) -> web.Response:
+        """
+        ---
+        summary: Create or update an audio.
+        tags:
+          - Audios
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Audio'
+        responses:
+          200:
+            description: "Success"
+        """
+        many = True if request.query.get('many') else False
+        data = AudioSchema(many=many).loads(await request.text())
+
+        await self.audio_storage_coordinator.store(data)
+
+        return web.Response(status=201)

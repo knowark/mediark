@@ -26,7 +26,9 @@ def create_api(app: web.Application, injector: Injectark) -> None:
     # Audios Resource
     bind_routes(app, "/audios", AudioResource(injector))
     spec.path(path="/audios", operations={
-        'get': {}, 'post': {}, 'head': {}}, resource=AudioResource)
+        'get': {}, 'post': {}, 'put': {}, 'head': {}}, resource=AudioResource)
+    spec.path(path="/audios/<id>", operations={
+        'put': {}}, resource=AudioResource)
 
     # Download Resource
     app.router.add_route(
