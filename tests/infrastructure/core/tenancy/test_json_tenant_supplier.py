@@ -33,3 +33,11 @@ def test_json_tenant_supplier_search_tenants(
     tenants = json_tenant_supplier.search_tenants("")
 
     assert len(tenants) == 1
+
+
+def test_json_tenant_supplier_resolve_tenant(
+        json_tenant_supplier, tenant_dict, directory_data):
+    json_tenant_supplier.create_tenant(tenant_dict)
+    tenant = json_tenant_supplier.resolve_tenant('Servagro')
+
+    assert tenant['slug'] == 'servagro'
