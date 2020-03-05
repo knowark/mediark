@@ -1,4 +1,5 @@
 import rapidjson as json
+from asyncio import sleep
 from pathlib import Path
 from pytest import fixture, raises
 from asyncpg import connect
@@ -79,13 +80,26 @@ async def test_sql_repository_get_not_found(sql_repository):
         item = await sql_repository.get(uid)
 
 
-async def test_sql_repository_update(sql_repository):
-    uid = '99cc4dc3-4a6e-43a6-ae5f-1c126bf7c0c6'
-    updated_item = DummyEntity(id=uid, field_1='value_4')
+async def test_sql_repository_get_not_found_with_default(
+        sql_repository) -> None:
+    result = await sql_repository.get("999999999", None)
+    assert result is None
 
-    updated = await sql_repository.update(updated_item)
 
-    assert updated is True
+async def test_sql_repository_add_update(sql_repository):
+    uid = '5fdda850-ac85-41e2-a105-f8b5ba593ecd'
+    created_entity = DummyEntity(id=uid, field_1="value_99")
+    created_entity, *_ = await sql_repository.add(created_entity)
+
+    await sleep(1)
+
+    updated_entity = DummyEntity(id=uid, field_1="New Value")
+    updated_entity, *_ = await sql_repository.add(updated_entity)
+
+    assert created_entity.created_at == updated_entity.created_at
+    assert created_entity.created_by == updated_entity.created_by
+    assert created_entity.updated_by == updated_entity.updated_by
+    assert created_entity.updated_at != updated_entity.updated_at
 
     connection_manager = sql_repository.connection_manager
     connection_string = connection_manager.settings[0]['dsn']
@@ -93,12 +107,16 @@ async def test_sql_repository_update(sql_repository):
     connection = await connect(connection_string)
     async with connection.transaction():
         result = await connection.fetch(
-            f"""--sql
-                SELECT data FROM origin.{sql_repository.table}
+            f"""SELECT data FROM origin.{sql_repository.table}
                 WHERE data->> 'id' = $1;""", uid)
 
-    assert any(json.loads(row['data'])['field_1'] == 'value_4'
+    assert any(json.loads(row['data'])['field_1'] == 'New Value'
                for row in result)
+
+    async with connection.transaction():
+        result = await connection.fetch(
+            f"""DELETE FROM origin.{sql_repository.table}
+                WHERE data->> 'id' = $1;""", uid)
 
 
 async def test_sql_repository_search(sql_repository):
@@ -161,6 +179,29 @@ async def test_sql_repository_remove(sql_repository):
             f"SELECT data FROM origin.{sql_repository.table}")
 
     assert not any(json.loads(row['data'])['id'] == item.id for row in result)
+
+
+async def test_sql_repository_remove_empty(sql_repository):
+    result = await sql_repository.remove([])
+    assert result is False
+
+
+async def test_sql_repository_remove_idempotent(sql_repository):
+    existing_item = DummyEntity(
+        id='328e094e-13ef-40ff-8252-b70d1d7fca6a',
+        field_1='value_33')
+    await sql_repository.add(existing_item)
+    missing_item = DummyEntity(**{'id': 'missing', 'field_1': 'MISSING'})
+
+    deleted = await sql_repository.remove(
+        [existing_item, missing_item])
+
+    assert deleted is True
+
+    deleted = await sql_repository.remove(
+        [existing_item, missing_item])
+
+    assert deleted is False
 
 
 async def test_sql_repository_remove_many(sql_repository):

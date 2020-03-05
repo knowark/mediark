@@ -132,6 +132,8 @@ class SqlRepository(Repository, Generic[T]):
                 for row in result]
 
     async def remove(self, item: Union[T, List[T]]) -> bool:
+        if not item:
+            return False
         tenant = self.tenant_provider.tenant
         user = self.auth_provider.user
         items = item if isinstance(item, list) else [item]
@@ -146,7 +148,7 @@ class SqlRepository(Repository, Generic[T]):
         connection = await self.connection_manager.get(tenant.zone)
         result = await connection.execute(query, *ids)
 
-        return True
+        return bool(int(result.replace('DELETE', '')))
 
     async def count(self, domain: QueryDomain = None) -> int:
         tenant = self.tenant_provider.tenant
