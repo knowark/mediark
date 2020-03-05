@@ -97,7 +97,6 @@ class ImageResource:
         many = True if request.query.get('many') else False
         data = ImageSchema(many=many).loads(await request.text())
 
-        # print('data:::', data)
         await self.image_storage_coordinator.store(data)
 
         return web.Response(status=201)

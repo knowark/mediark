@@ -17,7 +17,4 @@ class StandardFileReporter(FileReporter):
 
     async def load(self, uri: str) -> Dict[str, Any]:
         content, context = await self.file_store_service.load(uri)
-
-        print('context:::', context)
-
-        return {'content': content, **context}
+        return {'body': content, **context}

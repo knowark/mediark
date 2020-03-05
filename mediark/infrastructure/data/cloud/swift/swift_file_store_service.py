@@ -35,15 +35,7 @@ class SwiftFileStoreService(FileStoreService):
     async def load(self, uri: str) -> Tuple[bytes, Dict[str, Any]]:
         token = await self.auth_supplier.authenticate()
         url = self._make_url(uri)
-
-        response = await self._download_object(token, url)
-
-        content = await response.content
-        context = {
-            'status': response.status,
-            'headers': response.headers,
-        }
-        return content, context
+        return await self._download_object(token, url)
 
     def _make_object_name(self, context: Dict[str, str]) -> str:
         object_type = context.get('type', 'general')
@@ -77,7 +69,10 @@ class SwiftFileStoreService(FileStoreService):
             pass
 
     async def _download_object(
-            self, token: str, url: str) -> ClientResponse:
+            self, token: str, url: str) -> Tuple[bytes, Dict[str, Any]]:
         headers = {'X-Auth-Token': token}
         async with self.client.get(url, headers=headers) as response:
-            return response
+            return (await response.read(), {
+                'status': response.status,
+                'headers': response.headers,
+            })
