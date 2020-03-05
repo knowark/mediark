@@ -106,8 +106,9 @@ class SqlRepository(Repository, Generic[T]):
 
         return True
 
-    async def search(self, domain: QueryDomain, limit=1000, offset=0,
+    async def search(self, domain: QueryDomain, limit=10000, offset=0,
                      order_by=None) -> List[T]:
+
         tenant = self.tenant_provider.tenant
         user = self.auth_provider.user
 

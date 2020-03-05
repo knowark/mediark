@@ -85,7 +85,7 @@ class JsonRepository(Repository, Generic[T]):
         return count
 
     async def search(
-            self, domain: QueryDomain, limit=1000, offset=0) -> List[T]:
+            self, domain: QueryDomain, limit=10000, offset=0) -> List[T]:
         with self._file_path.open() as f:
             data = load(f)
             items_dict = data.get(self.collection, {})
