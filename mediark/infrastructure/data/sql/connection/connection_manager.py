@@ -47,5 +47,5 @@ class DefaultConnectionManager(ConnectionManager):
     async def _setup(self):
         self.pools = self.pools or {}
         for settings in self.settings:
-            pool_name = settings.pop('name')
+            pool_name = settings['name']
             self.pools[pool_name] = await create_pool(**settings)
