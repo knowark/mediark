@@ -36,10 +36,8 @@ class SqlFactory(DirectoryFactory):
     def sql_connection_manager(self) -> DefaultConnectionManager:
         settings = []
         for zone, config in self.config['zones'].items():
-            pool_config = config['pool']
-            pool_config['name'] = zone
-            pool_config['dsn'] = config['dsn']
-            settings.append(pool_config)
+            options = {'name': zone, 'dsn': config['dsn']}
+            settings.append(options)
 
         return DefaultConnectionManager(settings)
 

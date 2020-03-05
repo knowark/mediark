@@ -95,7 +95,6 @@ class ProductionConfig(Config):
         self["zones"] = {
             "default": {
                 "dsn": ("postgresql://mediark:mediark"
-                        "@localhost/mediark"),
-                "pool": {}
+                        "@localhost/mediark")
             }
         }
