@@ -30,4 +30,4 @@ class ImageStorageCoordinator:
         uri = await self.file_store_service.store(content_bytes, context)
 
         image.uri = uri
-        await self.image_repository.add(Image(**image_dict))
+        await self.image_repository.add(image)
