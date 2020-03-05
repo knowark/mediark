@@ -30,7 +30,7 @@ def create_api(app: web.Application, injector: Injectark) -> None:
 
     # Download Resource
     app.router.add_route(
-        "get", "/download/{tenant}/{type}/{id_part_one}/{id_part_two}/{id}",
+        "get", r'/download/{uri:(.*)}',
         getattr(DownloadResource(injector), "get", None))
     spec.path(path="/download",
               operations={'get': {}}, resource=DownloadResource)

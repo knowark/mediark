@@ -12,7 +12,9 @@ from ...application.services import (
     FileStoreService, MemoryFileStoreService)
 from ...application.coordinators import (
     SessionCoordinator, ImageStorageCoordinator, AudioStorageCoordinator)
-from ...application.reporters import MediarkReporter, StandardMediarkReporter
+from ...application.reporters import (
+    MediarkReporter, StandardMediarkReporter,
+    FileReporter, StandardFileReporter)
 from ..core import (
     Config, JsonTenantSupplier, TenantSupplier, MemoryTenantSupplier)
 from ..web.helpers import DirectoryLoadSupplier
@@ -96,9 +98,13 @@ class MemoryFactory(Factory):
 
     # Reporters
 
-    def memory_mediark_reporter(self, image_repository: ImageRepository,
-                                audio_repository: AudioRepository,
-                                transaction_manager: TransactionManager
-                                ) -> StandardMediarkReporter:
+    def standard_mediark_reporter(self, image_repository: ImageRepository,
+                                  audio_repository: AudioRepository,
+                                  transaction_manager: TransactionManager
+                                  ) -> StandardMediarkReporter:
         return transaction_manager(StandardMediarkReporter)(
             image_repository, audio_repository)
+
+    def standard_file_reporter(self, file_store_service: FileStoreService
+                               ) -> StandardFileReporter:
+        return StandardFileReporter(file_store_service)

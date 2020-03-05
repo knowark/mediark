@@ -1,6 +1,7 @@
 import time
+from aiohttp import ClientResponse
 from pathlib import Path
-from typing import Tuple, Dict, Union
+from typing import Tuple, Dict, Union, Any
 from base64 import b64decode
 from uuid import UUID
 from .....application.utilities import TenantProvider
@@ -21,7 +22,7 @@ class SwiftFileStoreService(FileStoreService):
         self.data_config = data_config
 
     async def store(self, content: bytes,
-                    context: Dict[str, str]) -> str:
+                    context: Dict[str, Any]) -> str:
 
         token = await self.auth_supplier.authenticate()
         object_name = self._make_object_name(context)
@@ -30,6 +31,19 @@ class SwiftFileStoreService(FileStoreService):
         await self._upload_object(token, url, content)
 
         return object_name
+
+    async def load(self, uri: str) -> Tuple[bytes, Dict[str, Any]]:
+        token = await self.auth_supplier.authenticate()
+        url = self._make_url(uri)
+
+        response = await self._download_object(token, url)
+
+        content = await response.content
+        context = {
+            'status': response.status,
+            'headers': response.headers,
+        }
+        return content, context
 
     def _make_object_name(self, context: Dict[str, str]) -> str:
         object_type = context.get('type', 'general')
@@ -61,3 +75,9 @@ class SwiftFileStoreService(FileStoreService):
         async with self.client.put(
                 url, headers=headers, data=content) as response:
             pass
+
+    async def _download_object(
+            self, token: str, url: str) -> ClientResponse:
+        headers = {'X-Auth-Token': token}
+        async with self.client.get(url, headers=headers) as response:
+            return response

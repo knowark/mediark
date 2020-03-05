@@ -6,6 +6,7 @@ from injectark import Injectark
 class DownloadResource:
     def __init__(self, injector: Injectark) -> None:
         self.directory_load_supplier = injector['DirectoryLoadSupplier']
+        self.file_reporter = injector['FileReporter']
 
     async def get(self, request: web.Request) -> Any:
         """
@@ -24,12 +25,12 @@ class DownloadResource:
                     $ref: '#/components/schemas/Download'
         """
 
-        tenant = request.match_info.get('tenant')
-        type = request.match_info.get('type')
-        id_part_one = request.match_info.get('id_part_one')
-        id_part_two = request.match_info.get('id_part_two')
-        id = request.match_info.get('id')
-        uri = f"{id_part_one}/{id_part_two}/{id}"
+        uri = request.match_info.get('uri')
 
-        path = self.directory_load_supplier.file_path(tenant, type, uri)
-        return web.FileResponse(path)
+        print('uri:::', uri)
+
+        response_dict = await self.file_reporter.load(uri)
+
+        print('response_dict::', response_dict)
+
+        return web.Response(status=404)

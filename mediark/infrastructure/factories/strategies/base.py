@@ -39,7 +39,10 @@ base = {
         "method": "audio_storage_coordinator",
     },
     "MediarkReporter": {
-        "method": "memory_mediark_reporter",
+        "method": "standard_mediark_reporter",
+    },
+    "FileReporter": {
+        "method": "standard_file_reporter",
     },
     "DirectoryLoadSupplier": {
         "method": "directory_load_supplier"

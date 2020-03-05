@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Tuple, Dict
+from typing import Tuple, Dict, Any
 from base64 import b64decode
 from uuid import UUID
 from ....application.utilities import TenantProvider
@@ -35,6 +35,9 @@ class DirectoryFileStoreService(FileStoreService):
         with file_path.open("wb") as f:
             f.write(binary_data)
         return uri
+
+    async def load(self, uri: str) -> Any:
+        pass
 
     def _get_subdirs(self, file_id: str) -> Tuple[str, str]:
         UUID(hex=file_id, version=4)

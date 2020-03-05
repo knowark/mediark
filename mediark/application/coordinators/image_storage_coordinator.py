@@ -1,5 +1,5 @@
 from ..models import Image
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from base64 import b64decode
 from ..repositories import ImageRepository
 from ..services import IdService, FileStoreService
@@ -8,7 +8,8 @@ from .types import ImageDict
 
 
 class ImageStorageCoordinator:
-    def __init__(self, image_repository: ImageRepository,
+    def __init__(self,
+                 image_repository: ImageRepository,
                  id_service: IdService,
                  file_store_service: FileStoreService) -> None:
         self.image_repository = image_repository
