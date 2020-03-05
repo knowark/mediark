@@ -20,10 +20,12 @@ class AudioStorageCoordinator:
             raise ValueError("The audio must have content.")
 
         audio_dict.setdefault('id', self.id_service.generate_id())
-        audio = Audio(**audio_dict)
+        audio, *_ = await self.audio_repository.add(Audio(**audio_dict))
+
         content_bytes = b64decode(content)
         context = {'type': 'audios', **vars(audio)}
 
         uri = await self.file_store_service.store(content_bytes, context)
+
         audio.uri = uri
         await self.audio_repository.add(audio)

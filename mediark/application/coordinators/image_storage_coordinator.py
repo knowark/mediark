@@ -22,10 +22,12 @@ class ImageStorageCoordinator:
             raise ValueError("The image must have content.")
 
         image_dict.setdefault('id', self.id_service.generate_id())
-        image = Image(**image_dict)
+        image, *_ = await self.image_repository.add(Image(**image_dict))
+
         content_bytes = b64decode(content)
         context = {'type': 'images', **vars(image)}
 
         uri = await self.file_store_service.store(content_bytes, context)
+
         image.uri = uri
-        await self.image_repository.add(image)
+        await self.image_repository.add(Image(**image_dict))

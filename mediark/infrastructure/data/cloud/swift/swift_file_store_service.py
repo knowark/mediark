@@ -39,7 +39,7 @@ class SwiftFileStoreService(FileStoreService):
 
     def _make_object_name(self, context: Dict[str, str]) -> str:
         object_type = context.get('type', 'general')
-        timestamp = int(context.get('timestamp', time.time()))
+        timestamp = int(context.get('timestamp', context['created_at']))
         year_month = time.strftime('%Y%m', time.gmtime(timestamp))
         extension = context.get("extension", "txt")
         object_id = context["id"]
