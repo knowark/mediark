@@ -5,10 +5,11 @@ from mediark.application.repositories import (
     MemoryImageRepository, MemoryAudioRepository)
 from mediark.application.utilities import (
     Tenant, StandardTenantProvider, StandardTenantProvider,
-    StandardAuthProvider)
-from mediark.application.utilities.query_parser import QueryParser
+    StandardAuthProvider, QueryParser)
+from mediark.application.services import MemoryFileStoreService
 from mediark.application.reporters import (
-    MediarkReporter, StandardMediarkReporter)
+    MediarkReporter, StandardMediarkReporter,
+    FileReporter, StandardFileReporter)
 
 
 @fixture
@@ -46,3 +47,11 @@ def audio_repository():
 @fixture
 def mediark_reporter(image_repository, audio_repository):
     return StandardMediarkReporter(image_repository, audio_repository)
+
+
+@fixture
+def file_reporter():
+    file_store_service = MemoryFileStoreService(
+        StandardTenantProvider(),
+        StandardAuthProvider())
+    return StandardFileReporter(file_store_service)
