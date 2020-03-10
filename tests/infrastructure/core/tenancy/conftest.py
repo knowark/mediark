@@ -58,3 +58,4 @@ def tenant_dict():
 def json_tenant_supplier(catalog_path, directory_data, directory_template):
     return JsonTenantSupplier(
         str(catalog_path), str(directory_data), directory_template)
+
