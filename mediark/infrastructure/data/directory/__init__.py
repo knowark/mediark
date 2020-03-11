@@ -1,1 +1,2 @@
 from .directory_file_store_service import DirectoryFileStoreService
+from .directory_arranger import DirectoryArranger

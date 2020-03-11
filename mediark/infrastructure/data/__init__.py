@@ -3,6 +3,5 @@ from .json import (
 from .sql import (
     ConnectionManager, DefaultConnectionManager, SqlTransactionManager,
     SqlRepository, SqlAudioRepository, SqlImageRepository)
-from .setup import DirectoryArranger
-from .directory import DirectoryFileStoreService
+from .directory import DirectoryFileStoreService, DirectoryArranger
 from .cloud import SwiftAuthSupplier, SwiftFileStoreService
