@@ -11,21 +11,50 @@ from mediark.application.utilities import StandardTenantProvider, Tenant
 @fixture
 def mock_http_client():
     class MockResponse:
-        headers = {'X-Subject-Token': 'AUTH_TOKEN_123'}
+        def __init__(self, headers=None, json=None, content=None):
+            self.status = 200
+            self.headers = headers
+            self._json = json
+            self._content = content
+
+        async def read(self):
+            return self._content
 
         async def json(self):
-            return {'token': {'expires_at': '2999-03-11T00:36:55.0Z'}}
+            return self._json
 
-    class MockContextManager:
+    class MockAuthContextManager:
+        async def __aenter__(self):
+            return MockResponse(
+                headers={'X-Subject-Token': 'AUTH_TOKEN_123'},
+                json={'token': {'expires_at': '2999-03-11T00:36:55.0Z'}})
+
+        async def __aexit__(self, *args):
+            pass
+
+    class MockUploadContextManager:
         async def __aenter__(self):
             return MockResponse()
 
         async def __aexit__(self, *args):
             pass
 
+    class MockDownloadContextManager:
+        async def __aenter__(self):
+            return MockResponse(headers={}, content=b'BINARY_DATA')
+
+        async def __aexit__(self, *args):
+            pass
+
     class MockHttpClient:
         def post(self, url, json):
-            return MockContextManager()
+            return MockAuthContextManager()
+
+        def put(self, url, headers, data):
+            return MockUploadContextManager()
+
+        def get(self, url, headers):
+            return MockDownloadContextManager()
 
     return MockHttpClient()
 
@@ -41,11 +70,11 @@ def swift_auth_supplier(mock_http_client):
 
 
 @fixture
-def swift_file_store_service(tmp_path):
-    config = build_config('DEV')['data']
-    config['dir_path'] = tmp_path / 'data'
+def swift_file_store_service(swift_auth_supplier, mock_http_client):
+    data_config = build_config('', 'DEV')['data']
+
     standard_tenant_provider = StandardTenantProvider()
     standard_tenant_provider.setup(Tenant(id='2', name="custom-tenant"))
     return SwiftFileStoreService(
-        standard_tenant_provider, config,
-        'images', 'png')
+        standard_tenant_provider, swift_auth_supplier,
+        mock_http_client, data_config)

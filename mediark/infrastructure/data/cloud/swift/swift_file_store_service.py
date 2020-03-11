@@ -25,12 +25,13 @@ class SwiftFileStoreService(FileStoreService):
                     context: Dict[str, Any]) -> str:
 
         token = await self.auth_supplier.authenticate()
-        object_name = self._make_object_name(context)
-        url = self._make_url(object_name)
+        uri = self._make_object_name(context)
+
+        url = self._make_url(uri)
 
         await self._upload_object(token, url, content)
 
-        return object_name
+        return uri
 
     async def load(self, uri: str) -> Tuple[bytes, Dict[str, Any]]:
         token = await self.auth_supplier.authenticate()
