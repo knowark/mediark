@@ -16,7 +16,7 @@ class SchemaSetupSupplier(MemorySetupSupplier):
         migrations_path = str(
             (Path(__file__).parent.parent / 'data' /
              'sql' / 'migrations').absolute())
-        for zone, config in self.zones.items():
-            database_uri = config['dsn']
+        for zone, dsn in self.zones.items():
+            database_uri = dsn
             sql_migrate(database_uri, migrations_path, schema,
                         target_version=target_version)
