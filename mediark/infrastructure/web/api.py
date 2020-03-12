@@ -19,23 +19,21 @@ def create_api(app: web.Application, injector: Injectark) -> None:
     # Images Resource
     bind_routes(app, "/images", ImageResource(injector))
     spec.path(path="/images", operations={
-        'get': {}, 'post': {}, 'put': {}, 'head': {}}, resource=ImageResource)
-    spec.path(path="/images/<id>", operations={
-        'put': {}}, resource=ImageResource)
+        'head': {}, 'get': {}, 'put': {}}, resource=ImageResource)
 
     # Audios Resource
     bind_routes(app, "/audios", AudioResource(injector))
     spec.path(path="/audios", operations={
-        'get': {}, 'post': {}, 'put': {}, 'head': {}}, resource=AudioResource)
-    spec.path(path="/audios/<id>", operations={
-        'put': {}}, resource=AudioResource)
+        'head': {}, 'get': {}, 'put': {}}, resource=AudioResource)
 
     # Download Resource
     app.router.add_route(
         "get", r'/download/{uri:(.*)}',
         getattr(DownloadResource(injector), "get", None))
-    spec.path(path="/download",
-              operations={'get': {}}, resource=DownloadResource)
+    # app.router.add_route(
+    #     "get", r'/download/{uri:(.*)}', DownloadResource(injector))
+    spec.path(path="/download", operations={
+        'get': {}}, resource=DownloadResource)
 
 
 def bind_routes(app: web.Application, path: str, resource: Any):

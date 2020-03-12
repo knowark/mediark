@@ -16,12 +16,6 @@ class DownloadResource:
         responses:
           200:
             description: "Successful response"
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Download'
         """
 
         uri = request.match_info.get('uri')

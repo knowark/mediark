@@ -55,28 +55,6 @@ class AudioResource:
 
         return web.json_response(audios, dumps=dumps)
 
-    # async def post(self, request: web.Request) -> web.Response:
-    #     """
-    #     ---
-    #     summary: Register audio.
-    #     tags:
-    #       - Audios
-    #     requestBody:
-    #       required: true
-    #       content:
-    #         application/json:
-    #           schema:
-    #             $ref: '#/components/schemas/Audio'
-    #     responses:
-    #       201:
-    #         description: "Audio created"
-    #     """
-
-    #     data = AudioSchema().loads(await request.text())
-    #     await self.audio_storage_coordinator.store(data)
-
-    #     return web.Response(status=201)
-
     async def put(self, request: web.Request) -> web.Response:
         """
         ---
