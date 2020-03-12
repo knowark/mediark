@@ -12,9 +12,7 @@ async def test_config(test_data):
         resolver = Injectark(
             strategy=strategy, factory=factory)
         resolver["TenantProvider"].setup(Tenant(id="1", name="default"))
-        print('\n\nfactory:::', factory)
         for resource in strategy.keys():
-            print('\n resource:::', resource)
             result = resolver.resolve(resource)
             classes = inspect.getmro(type(result))
             assert resource in [item.__name__ for item in classes]
