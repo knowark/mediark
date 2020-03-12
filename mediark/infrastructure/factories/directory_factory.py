@@ -5,10 +5,10 @@ from ...infrastructure.data import (
     DirectoryFileStoreService)
 from ..core import Config
 from .memory_factory import MemoryFactory
-from .json_factory import JsonFactory
+from .http_factory import HttpFactory
 
 
-class DirectoryFactory(JsonFactory):
+class DirectoryFactory(HttpFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
 

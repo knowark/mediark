@@ -2,7 +2,6 @@ from typing import List, Dict, Any
 from .base import base
 from .http import http
 from .check import check
-from .json import json
 from .sql import sql
 from .swift import swift
 from .directory import directory
@@ -12,7 +11,6 @@ STRATEGIES = {
     'base': base,
     'http': http,
     'check': check,
-    'json': json,
     'sql': sql,
     'swift': swift,
     'directory': directory
