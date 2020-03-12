@@ -17,7 +17,6 @@ from ...application.reporters import (
     FileReporter, StandardFileReporter)
 from ..core import (
     Config, MemoryTenantSupplier, MemorySetupSupplier)
-from ..web.helpers import DirectoryLoadSupplier
 
 
 class MemoryFactory(Factory):
@@ -41,11 +40,6 @@ class MemoryFactory(Factory):
 
     def standard_auth_provider(self) -> StandardAuthProvider:
         return StandardAuthProvider(User(id="1", name="John Doe"))
-
-    def directory_load_supplier(self) -> DirectoryLoadSupplier:
-        return DirectoryLoadSupplier(
-            data_path=self.config['data']['dir_path'],
-            media_dir=self.config['data']['media']['dir_path'])
 
     # Repositories
 

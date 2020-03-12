@@ -47,9 +47,6 @@ base = {
     "FileReporter": {
         "method": "standard_file_reporter",
     },
-    "DirectoryLoadSupplier": {
-        "method": "directory_load_supplier"
-    },
     "FileStoreService": {
         "method": "memory_file_store_service"
     }
