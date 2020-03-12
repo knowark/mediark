@@ -30,9 +30,9 @@ class CheckFactory(HttpFactory):
             query_parser, tenant_provider, auth_provider)
         image_repository.load({
             "default": {
-                "1": Image(id='1', reference='ref 1',  uri='value_1'),
-                "2": Image(id='2', reference='ref 2', uri='value_2'),
-                "3": Image(id='3', reference='ref 3', uri='value_3')
+                "1": Image(id='1', reference='ref_1',  uri='value_1'),
+                "2": Image(id='2', reference='ref_2', uri='value_2'),
+                "3": Image(id='3', reference='ref_3', uri='value_3')
             }
         })
         return image_repository
@@ -44,8 +44,8 @@ class CheckFactory(HttpFactory):
             query_parser, tenant_provider, auth_provider)
         audio_repository.load({
             "default": {
-                "1": Audio(id='1', reference='ref 1',  uri='value_1'),
-                "2": Audio(id='2', reference='ref 2', uri='value_2')
+                "1": Audio(id='1', reference='ref_1',  uri='value_1'),
+                "2": Audio(id='2', reference='ref_2', uri='value_2')
             }
         })
         return audio_repository

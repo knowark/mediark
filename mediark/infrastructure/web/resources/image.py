@@ -56,27 +56,27 @@ class ImageResource:
 
         return web.json_response(images, dumps=dumps)
 
-    async def post(self, request: web.Request) -> web.Response:
-        """
-        ---
-        summary: Register image.
-        tags:
-          - Images
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Image'
-        responses:
-          201:
-            description: "Image created"
-        """
+    # async def post(self, request: web.Request) -> web.Response:
+    #     """
+    #     ---
+    #     summary: Register image.
+    #     tags:
+    #       - Images
+    #     requestBody:
+    #       required: true
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/Image'
+    #     responses:
+    #       201:
+    #         description: "Image created"
+    #     """
 
-        data = ImageSchema().loads(await request.text())
-        await self.image_storage_coordinator.store(data)
+    #     data = ImageSchema().loads(await request.text())
+    #     await self.image_storage_coordinator.store(data)
 
-        return web.Response(status=201)
+    #     return web.Response(status=201)
 
     async def put(self, request: web.Request) -> web.Response:
         """
@@ -99,4 +99,4 @@ class ImageResource:
 
         await self.image_storage_coordinator.store(data)
 
-        return web.Response(status=201)
+        return web.Response(status=200)
