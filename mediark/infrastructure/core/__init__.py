@@ -3,7 +3,8 @@ from .client import HttpClientSupplier
 from .configuration import (
     load_config, build_config, Config, DevelopmentConfig,
     ProductionConfig)
-from .setup import setup_environment
+from .setup import (
+    SetupSupplier, MemorySetupSupplier, SchemaSetupSupplier)
 from .tenancy import (
     TenantSupplier, MemoryTenantSupplier, JsonTenantSupplier,
     SchemaTenantSupplier)

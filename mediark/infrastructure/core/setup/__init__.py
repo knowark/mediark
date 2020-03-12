@@ -1,6 +1,3 @@
-from injectark import Injectark
-from ..configuration import Config
-
-
-def setup_environment(config: Config, injector: Injectark):
-    pass
+from .setup_supplier import SetupSupplier
+from .memory_setup_supplier import MemorySetupSupplier
+from .schema_setup_supplier import SchemaSetupSupplier

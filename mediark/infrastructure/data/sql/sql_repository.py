@@ -81,31 +81,6 @@ class SqlRepository(Repository, Generic[T]):
 
         return [self.constructor(**json.loads(row['data'])) for row in rows]
 
-    async def update(self, item: Union[T, List[T]]) -> bool:
-        tenant = self.tenant_provider.tenant
-        user = self.auth_provider.user
-
-        records = []
-        items = item if isinstance(item, list) else [item]
-        for item in items:
-            item.updated_at = int(time.time())
-            item.updated_by = user.id
-            records.append((json.dumps(vars(item)),))
-
-        query = f"""
-            UPDATE "{tenant.slug}".{self.table} AS t
-            SET data = d.data
-            FROM (
-                SELECT * FROM unnest($1::"{tenant.slug}".{self.table}[])
-            ) AS d (data)
-            WHERE t.data->>'id' = d.data->>'id';
-        """
-
-        connection = await self.connection_manager.get(tenant.zone)
-        result = await connection.execute(query, records)
-
-        return True
-
     async def search(self, domain: QueryDomain, limit=10000, offset=0,
                      order_by=None) -> List[T]:
 

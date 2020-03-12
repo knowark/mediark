@@ -5,6 +5,7 @@ from .check import check
 from .json import json
 from .sql import sql
 from .swift import swift
+from .directory import directory
 
 
 STRATEGIES = {
@@ -13,7 +14,8 @@ STRATEGIES = {
     'check': check,
     'json': json,
     'sql': sql,
-    'swift': swift
+    'swift': swift,
+    'directory': directory
 }
 
 

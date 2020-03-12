@@ -16,7 +16,7 @@ from ...application.reporters import (
     MediarkReporter, StandardMediarkReporter,
     FileReporter, StandardFileReporter)
 from ..core import (
-    Config, JsonTenantSupplier, TenantSupplier, MemoryTenantSupplier)
+    Config, MemoryTenantSupplier, MemorySetupSupplier)
 from ..web.helpers import DirectoryLoadSupplier
 
 
@@ -29,6 +29,9 @@ class MemoryFactory(Factory):
 
     def memory_tenant_supplier(self) -> MemoryTenantSupplier:
         return MemoryTenantSupplier()
+
+    def memory_setup_supplier(self) -> MemorySetupSupplier:
+        return MemorySetupSupplier()
 
     def memory_transaction_manager(self) -> MemoryTransactionManager:
         return MemoryTransactionManager()

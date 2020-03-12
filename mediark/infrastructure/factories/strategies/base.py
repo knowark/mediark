@@ -23,6 +23,9 @@ base = {
     "TenantSupplier": {
         "method": "memory_tenant_supplier"
     },
+    "SetupSupplier": {
+        "method": "memory_setup_supplier"
+    },
     "TransactionManager": {
         "method": "memory_transaction_manager",
     },
@@ -46,9 +49,6 @@ base = {
     },
     "DirectoryLoadSupplier": {
         "method": "directory_load_supplier"
-    },
-    "MediarkReporter": {
-        "method": "memory_mediark_reporter",
     },
     "FileStoreService": {
         "method": "memory_file_store_service"

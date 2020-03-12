@@ -2,11 +2,11 @@ import json
 from pathlib import Path
 from uuid import uuid4
 from filtrark import SqlParser, SafeEval
-from migrark import sql_migrate
 from ...application.utilities import (
     AuthProvider, StandardAuthProvider, StandardTenantProvider,
     TenantProvider, User)
-from ..core import Config, TenantSupplier, SchemaTenantSupplier
+from ..core import (
+    Config, TenantSupplier, SchemaTenantSupplier, SchemaSetupSupplier)
 from ..data import (
     ConnectionManager, DefaultConnectionManager, SqlTransactionManager,
     SqlRepository, SqlAudioRepository, SqlImageRepository)
@@ -16,19 +16,6 @@ from .directory_factory import DirectoryFactory
 class SqlFactory(DirectoryFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
-        # self._setup()
-
-    def _setup(self):
-        target_version = '001'
-        schema = '__template__'
-
-        migrations_path = str(
-            (Path(__file__).parent.parent / 'data' /
-             'sql' / 'migrations').absolute())
-        for zone, config in self.config['zones'].items():
-            database_uri = config['dsn']
-            sql_migrate(database_uri, migrations_path, schema,
-                        target_version=target_version)
 
     def sql_query_parser(self) -> SqlParser:
         return SqlParser(SafeEval())
@@ -47,12 +34,17 @@ class SqlFactory(DirectoryFactory):
     ) -> SqlTransactionManager:
         return SqlTransactionManager(connection_manager, tenant_provider)
 
-    def schema_tenant_supplier(self) -> TenantSupplier:
+    def schema_tenant_supplier(self) -> SchemaTenantSupplier:
         catalog = self.config['tenancy']['dsn']
         zones = {key: value['dsn'] for key, value in
                  self.config['zones'].items()}
 
         return SchemaTenantSupplier(catalog, zones)
+
+    def schema_setup_supplier(self) -> SchemaSetupSupplier:
+        zones = {key: value['dsn'] for key, value in
+                 self.config['zones'].items()}
+        return SchemaSetupSupplier(zones)
 
     def sql_audio_repository(
         self, auth_provider: AuthProvider,
