@@ -16,22 +16,6 @@ class ImageStorageCoordinator:
         self.id_service = id_service
         self.file_store_service = file_store_service
 
-    # async def __store(self, image_dict: ImageDict) -> None:
-    #     content = image_dict.pop('data', None)
-    #     if not content:
-    #         raise ValueError("The image must have content.")
-
-    #     image_dict.setdefault('id', self.id_service.generate_id())
-    #     image, *_ = await self.image_repository.add(Image(**image_dict))
-
-    #     content_bytes = b64decode(content)
-    #     context = {'type': 'images', **vars(image), 'content': content_bytes}
-
-    #     uri = await self.file_store_service.store(context)
-
-    #     image.uri = uri
-    #     await self.image_repository.add(image)
-
     async def store(self, image_records: RecordList) -> None:
         contexts, image_records = self._build_contexts(image_records)
         images = await self.image_repository.add(

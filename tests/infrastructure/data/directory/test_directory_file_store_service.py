@@ -19,19 +19,49 @@ async def test_directory_file_store_service_store(
     data_type = 'images'
 
     content = encoded_image
-    context = {
+    contexts = [{
         'id': id_,
         'created_at': 1583964551,
         'type': data_type,
         'extension': extension,
         'content': content
-    }
+    }]
 
-    uri = await directory_file_store_service.store(context)
+    uri, *_ = await directory_file_store_service.store(contexts)
 
     image_path = base_path / uri
     assert image_path.is_file()
     assert uri == "images/2020/03/11/abca8e11-0719-44ab-bd3f-ed5aa1bd2918.png"
+
+
+async def test_directory_file_store_service_store_many(
+        directory_file_store_service, base_path, encoded_image):
+    contexts = [
+        {
+            'id': "abca8e11-0719-44ab-bd3f-ed5aa1bd2918",
+            'created_at': 1583964551,
+            'type': 'images',
+            'extension': "png",
+            'content': encoded_image
+        },
+        {
+            'id': "c41cc73c-b252-4072-82e2-0f5c081d9f4c",
+            'created_at': 1583964551,
+            'type': 'images',
+            'extension': "png",
+            'content': encoded_image
+        }
+    ]
+
+    uris = await directory_file_store_service.store(contexts)
+    for uri in uris:
+        image_path = base_path / uri
+        assert image_path.is_file()
+
+    assert uris[0] == (
+        "images/2020/03/11/abca8e11-0719-44ab-bd3f-ed5aa1bd2918.png")
+    assert uris[1] == (
+        "images/2020/03/11/c41cc73c-b252-4072-82e2-0f5c081d9f4c.png")
 
 
 async def test_directory_file_store_service_load(
@@ -41,15 +71,15 @@ async def test_directory_file_store_service_load(
     data_type = 'images'
 
     content = encoded_image
-    context = {
+    contexts = [{
         'id': id_,
         'created_at': 1583964551,
         'type': data_type,
         'extension': extension,
         'content': content
-    }
+    }]
 
-    uri = await directory_file_store_service.store(context)
+    uri, *_ = await directory_file_store_service.store(contexts)
 
     content, context = await directory_file_store_service.load(uri)
 
