@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
-from ...application.repositories import ImageRepository, AudioRepository
+from ...application.repositories import (
+    MediaRepository, ImageRepository, AudioRepository)
 from ...application.coordinators import SessionCoordinator
 from ...application.utilities import TransactionManager, TenantProvider
 from ..core import (
@@ -15,13 +16,14 @@ class HttpFactory(MemoryFactory):
 
     def http_mediark_reporter(
         self, tenant_provider: TenantProvider,
+        media_repository: MediaRepository,
         image_repository: ImageRepository,
         audio_repository: AudioRepository,
         transaction_manager: TransactionManager
     ) -> HttpMediarkReporter:
         return transaction_manager(HttpMediarkReporter)(
             self.config['domain'], tenant_provider,
-            image_repository, audio_repository)
+            media_repository, image_repository, audio_repository)
 
     def http_client_supplier(self) -> HttpClientSupplier:
         return HttpClientSupplier()

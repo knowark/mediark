@@ -69,7 +69,6 @@ class SwiftFileStoreService(FileStoreService):
 
         url = f'{object_store_url}/{container}'
         if object_name:
-            print('object name:::', object_name)
             url = f'{url}/{object_name}'
 
         return url

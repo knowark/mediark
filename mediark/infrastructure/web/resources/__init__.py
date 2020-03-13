@@ -3,6 +3,7 @@ from aiohttp_jinja2 import render_template
 from .... import __version__
 from .image import ImageResource
 from .audio import AudioResource
+from .media import MediaResource
 from .download import DownloadResource
 
 

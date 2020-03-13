@@ -1,7 +1,7 @@
 from apispec import APISpec, BasePlugin
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec.yaml_utils import load_yaml_from_docstring
-from .schemas import AudioSchema, ImageSchema
+from .schemas import MediaSchema, AudioSchema, ImageSchema
 
 
 class ResourcePlugin(BasePlugin):
@@ -46,4 +46,5 @@ def create_spec() -> APISpec:
 
 def _register_schemas(spec):
     spec.components.schema("Audio", schema=AudioSchema)
+    spec.components.schema("Media", schema=MediaSchema)
     spec.components.schema("Image", schema=ImageSchema)

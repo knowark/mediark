@@ -10,12 +10,13 @@ class SchemaSetupSupplier(MemorySetupSupplier):
         self.zones = zones
 
     def setup(self):
-        target_version = '001'
+        target_version = '002'
         schema = '__template__'
 
         migrations_path = str(
-            (Path(__file__).parent.parent / 'data' /
+            (Path(__file__).parent.parent.parent / 'data' /
              'sql' / 'migrations').absolute())
+
         for zone, dsn in self.zones.items():
             database_uri = dsn
             sql_migrate(database_uri, migrations_path, schema,

@@ -1,6 +1,7 @@
 from pathlib import Path
 from .factory import Factory
 from ...application.repositories import (
+    MediaRepository, MemoryMediaRepository,
     ImageRepository, MemoryImageRepository,
     AudioRepository, MemoryAudioRepository)
 from ...application.utilities import (
@@ -11,7 +12,8 @@ from ...application.services import (
     IdService, StandardIdService,
     FileStoreService, MemoryFileStoreService)
 from ...application.coordinators import (
-    SessionCoordinator, ImageStorageCoordinator, AudioStorageCoordinator)
+    SessionCoordinator, MediaStorageCoordinator,
+    ImageStorageCoordinator, AudioStorageCoordinator)
 from ...application.reporters import (
     MediarkReporter, StandardMediarkReporter,
     FileReporter, StandardFileReporter)
@@ -42,6 +44,12 @@ class MemoryFactory(Factory):
         return StandardAuthProvider(User(id="1", name="John Doe"))
 
     # Repositories
+
+    def memory_media_repository(
+            self, query_parser: QueryParser, tenant_provider: TenantProvider,
+            auth_provider: AuthProvider) -> MemoryMediaRepository:
+        return MemoryMediaRepository(
+            query_parser, tenant_provider, auth_provider)
 
     def memory_image_repository(
             self, query_parser: QueryParser, tenant_provider: TenantProvider,
@@ -75,6 +83,15 @@ class MemoryFactory(Factory):
         return transaction_manager(SessionCoordinator)(
             tenant_provider, auth_provider)
 
+    def media_storage_coordinator(self, media_repository: MediaRepository,
+                                  id_service: IdService,
+                                  file_store_service: FileStoreService,
+                                  transaction_manager: TransactionManager
+                                  ) -> ImageStorageCoordinator:
+        return transaction_manager(MediaStorageCoordinator)(
+            media_repository, id_service,
+            file_store_service)
+
     def image_storage_coordinator(self, image_repository: ImageRepository,
                                   id_service: IdService,
                                   file_store_service: FileStoreService,
@@ -95,12 +112,14 @@ class MemoryFactory(Factory):
 
     # Reporters
 
-    def standard_mediark_reporter(self, image_repository: ImageRepository,
+    def standard_mediark_reporter(self,
+                                  media_repository: MediaRepository,
+                                  image_repository: ImageRepository,
                                   audio_repository: AudioRepository,
                                   transaction_manager: TransactionManager
                                   ) -> StandardMediarkReporter:
         return transaction_manager(StandardMediarkReporter)(
-            image_repository, audio_repository)
+            media_repository, image_repository, audio_repository)
 
     def standard_file_reporter(self, file_store_service: FileStoreService
                                ) -> StandardFileReporter:

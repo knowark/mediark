@@ -3,7 +3,7 @@ from typing import Dict, Any
 from aiohttp import web
 from apispec import APISpec
 from injectark import Injectark
-from .resources import (RootResource, ImageResource,
+from .resources import (RootResource, MediaResource, ImageResource,
                         AudioResource, DownloadResource)
 from .spec import create_spec
 
@@ -15,6 +15,11 @@ def create_api(app: web.Application, injector: Injectark) -> None:
 
     # Root Resource
     bind_routes(app, '/', RootResource(spec))
+
+    # Media Resource
+    bind_routes(app, "/media", MediaResource(injector))
+    spec.path(path="/media", operations={
+        'head': {}, 'get': {}, 'put': {}}, resource=MediaResource)
 
     # Images Resource
     bind_routes(app, "/images", ImageResource(injector))
@@ -30,8 +35,6 @@ def create_api(app: web.Application, injector: Injectark) -> None:
     app.router.add_route(
         "get", r'/download/{uri:(.*)}',
         getattr(DownloadResource(injector), "get", None))
-    # app.router.add_route(
-    #     "get", r'/download/{uri:(.*)}', DownloadResource(injector))
     spec.path(path="/download", operations={
         'get': {}}, resource=DownloadResource)
 

@@ -29,8 +29,14 @@ base = {
     "TransactionManager": {
         "method": "memory_transaction_manager",
     },
+    "MediaRepository": {
+        "method": "memory_media_repository",
+    },
     "ImageRepository": {
         "method": "memory_image_repository",
+    },
+    "MediaStorageCoordinator": {
+        "method": "media_storage_coordinator",
     },
     "ImageStorageCoordinator": {
         "method": "image_storage_coordinator",

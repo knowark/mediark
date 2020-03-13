@@ -36,14 +36,14 @@ async def test_root_resource_request_none(app: web.Application) -> None:
 
 
 async def test_invalid_headers(app: web.Application) -> None:
-    response = await app.get('/audios')
+    response = await app.get('/media')
     data = loads(await response.text())
     assert data["errors"]
 
 
 async def test_filter_get_route_filter(app, headers) -> None:
     response = await app.get(
-        '/images?filter=[["reference", "=", "ref_1"]]',
+        '/media?filter=[["reference", "=", "ref_1"]]',
         headers=headers)
     content = await response.text()
     data_dict = loads(content)
@@ -51,63 +51,37 @@ async def test_filter_get_route_filter(app, headers) -> None:
 
 
 async def test_bad_filter_get_route_filter(app, headers) -> None:
-    response = await app.get('/images?filter=[[**BAD FILTER**]]',
+    response = await app.get('/media?filter=[[**BAD FILTER**]]',
                              headers=headers)
     content = await response.text()
     data_dict = loads(content)
     assert len(data_dict) == 3
 
 
-async def test_api_images_get(app: web.Application, headers: dict) -> None:
-    response = await app.get('/images', headers=headers)
+async def test_api_media_get(app: web.Application, headers: dict) -> None:
+    response = await app.get('/media', headers=headers)
     content = await response.text()
     assert response.status == 200
     data_dict = loads(content)
     assert len(data_dict) == 3
 
 
-async def test_images_head(app, headers) -> None:
-    response = await app.head('/images', headers=headers)
+async def test_media_head(app, headers) -> None:
+    response = await app.head('/media', headers=headers)
     count = response.headers.get('Total-Count')
 
     assert int(count) == 3
 
 
-async def test_api_audios_get(app: web.Application, headers: dict) -> None:
-    response = await app.get('/audios', headers=headers)
-    content = await response.text()
-    assert response.status == 200
-    data_dict = loads(content)
-    assert len(data_dict) == 2
-
-
-async def test_audios_head(app, headers) -> None:
-    response = await app.head('/audios', headers=headers)
-    count = response.headers.get('Total-Count')
-
-    assert int(count) == 2
-
-
-async def test_api_images_put(
+async def test_api_media_put(
         app: web.Application, headers: dict) -> None:
     custom_uuid = "932eff07-175a-44b5-871b-4bdaae6ad054"
     base64data = b'SU1BR0VfREFUQQ=='
-    image = [{'data': base64data, 'reference': custom_uuid,
+    image = [{'data': base64data, 'type': 'images', 'reference': custom_uuid,
               'extension': 'jpg', 'namespace': 'https://example.org'}]
 
-    response = await app.put('/images', data=dumps(image), headers=headers)
+    response = await app.put('/media', data=dumps(image), headers=headers)
     assert response.status == 200
-
-
-# async def test_api_audios_put(
-#         app: web.Application, headers: dict) -> None:
-#     custom_uuid = "fe67dacf-773f-4be6-bb6d-78ea74d5081f"
-#     base64data = 'QVVESU9fREFUQQ=='
-#     audio = [{'data': base64data, 'reference': custom_uuid,
-#               'extension': 'mp3', 'namespace': 'https://example.org'}]
-
-#     response = await app.put('/audios', data=dumps(audio), headers=headers)
-#     assert response.status == 200
 
 
 async def test_api_download_get(

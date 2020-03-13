@@ -9,7 +9,7 @@ from ..core import (
     Config, TenantSupplier, SchemaTenantSupplier, SchemaSetupSupplier)
 from ..data import (
     ConnectionManager, DefaultConnectionManager, SqlTransactionManager,
-    SqlRepository, SqlAudioRepository, SqlImageRepository)
+    SqlRepository, SqlMediaRepository, SqlAudioRepository, SqlImageRepository)
 from .directory_factory import DirectoryFactory
 
 
@@ -55,6 +55,15 @@ class SqlFactory(DirectoryFactory):
         tenant_provider: TenantProvider
     ) -> SqlImageRepository:
         return SqlImageRepository(
+            tenant_provider, auth_provider, connection_manager, sql_parser)
+
+    def sql_media_repository(
+        self, auth_provider: AuthProvider,
+        connection_manager: ConnectionManager,
+        sql_parser: SqlParser,
+        tenant_provider: TenantProvider
+    ) -> SqlMediaRepository:
+        return SqlMediaRepository(
             tenant_provider, auth_provider, connection_manager, sql_parser)
 
     def schema_setup_supplier(self) -> SchemaSetupSupplier:

@@ -1,6 +1,7 @@
 from pathlib import Path
-from ...application.models import (Image, Audio)
+from ...application.models import Media, Image, Audio
 from ...application.repositories import (
+    MediaRepository, MemoryMediaRepository,
     ImageRepository, MemoryImageRepository,
     AudioRepository, MemoryAudioRepository)
 from ...application.utilities import (
@@ -22,6 +23,20 @@ class CheckFactory(HttpFactory):
             'zone': 'default'
         })
         return tenant_supplier
+
+    def check_media_repository(
+            self, query_parser: QueryParser, tenant_provider: TenantProvider,
+            auth_provider: AuthProvider) -> MemoryMediaRepository:
+        media_repository = MemoryMediaRepository(
+            query_parser, tenant_provider, auth_provider)
+        media_repository.load({
+            "default": {
+                "1": Media(id='1', reference='ref_1',  uri='value_1'),
+                "2": Media(id='2', reference='ref_2', uri='value_2'),
+                "3": Media(id='3', reference='ref_3', uri='value_3')
+            }
+        })
+        return media_repository
 
     def check_image_repository(
             self, query_parser: QueryParser, tenant_provider: TenantProvider,

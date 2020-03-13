@@ -13,6 +13,9 @@ sql = {
     },
 
     # Repositories
+    "MediaRepository": {
+        "method": "sql_media_repository",
+    },
     "ImageRepository": {
         "method": "sql_image_repository",
     },
