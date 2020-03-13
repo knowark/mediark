@@ -13,9 +13,9 @@ from mediark.infrastructure.core import (
 
 def test_build_configurations() -> None:
     config_path = ".config.json"
-    config = build_config(config_path, "DEV")
+    config = build_config("DEV", config_path)
     assert isinstance(config, DevelopmentConfig)
-    config = build_config(config_path, "PROD")
+    config = build_config("PROD", config_path)
     assert isinstance(config, ProductionConfig)
 
 

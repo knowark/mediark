@@ -15,19 +15,19 @@ def test_load_config_missing_file(config_file):
 
 
 def test_build_config_development(config_file):
-    result = build_config(config_file, 'DEV')
+    result = build_config('DEV', config_file)
 
     assert isinstance(result, DevelopmentConfig)
 
 
 def test_build_config_production(config_file):
-    result = build_config(config_file, 'PROD')
+    result = build_config('PROD', config_file)
 
     assert isinstance(result, ProductionConfig)
 
 
 def test_build_config_production_no_file():
     path = 'missing_config.json'
-    result = build_config(path, 'PROD')
+    result = build_config('PROD', path)
 
     assert isinstance(result, ProductionConfig)

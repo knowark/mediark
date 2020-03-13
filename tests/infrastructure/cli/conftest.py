@@ -7,7 +7,7 @@ from mediark.infrastructure.cli import Cli
 
 @fixture
 def cli(tmp_path) -> Cli:
-    config = build_config('', 'DEV')
+    config = build_config('DEV')
     config['tenancy']['json'] = str(tmp_path / 'tenants.json')
     config['data']['dir_path'] = str(tmp_path / 'data')
     template_dir = tmp_path / 'data' / '__template__'

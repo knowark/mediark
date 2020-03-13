@@ -25,7 +25,6 @@ class SqlFactory(DirectoryFactory):
         for zone, config in self.config['zones'].items():
             options = {'name': zone, 'dsn': config['dsn']}
             settings.append(options)
-
         return DefaultConnectionManager(settings)
 
     def sql_transaction_manager(
@@ -38,13 +37,7 @@ class SqlFactory(DirectoryFactory):
         catalog = self.config['tenancy']['dsn']
         zones = {key: value['dsn'] for key, value in
                  self.config['zones'].items()}
-
         return SchemaTenantSupplier(catalog, zones)
-
-    def schema_setup_supplier(self) -> SchemaSetupSupplier:
-        zones = {key: value['dsn'] for key, value in
-                 self.config['zones'].items()}
-        return SchemaSetupSupplier(zones)
 
     def sql_audio_repository(
         self, auth_provider: AuthProvider,
@@ -63,3 +56,8 @@ class SqlFactory(DirectoryFactory):
     ) -> SqlImageRepository:
         return SqlImageRepository(
             tenant_provider, auth_provider, connection_manager, sql_parser)
+
+    def schema_setup_supplier(self) -> SchemaSetupSupplier:
+        zones = {key: value['dsn'] for key, value in
+                 self.config['zones'].items()}
+        return SchemaSetupSupplier(zones)

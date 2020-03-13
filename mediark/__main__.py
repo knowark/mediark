@@ -15,14 +15,14 @@ from .infrastructure.cli import Cli
 async def main(args=None):  # pragma: no cover
     mode = os.environ.get('MEDIARK_MODE', 'PROD')
     config_path = os.environ.get('MEDIARK_CONFIG', 'config.json')
-    config = build_config(config_path, mode)
+    config = build_config(mode, config_path)
 
     factory = build_factory(config)
     strategy = build_strategy(config['strategies'], config['strategy'])
     injector = Injectark(strategy=strategy, factory=factory)
     injector['SetupSupplier'].setup()
 
-    await Cli(config, injector).run(sys.argv[1:])
+    await Cli(config, injector).run(args or [])
 
 
 if __name__ == '__main__':  # pragma: no cover

@@ -7,7 +7,7 @@ from mediark.infrastructure.web import base as base_module
 
 
 def test_create_app():
-    config = build_config('', 'DEV')
+    config = build_config('DEV')
     strategy = build_strategy(config['strategies'], config['strategy'])
     factory = build_factory(config)
 

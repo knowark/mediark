@@ -5,7 +5,7 @@ from typing import Optional
 from .config import Config, DevelopmentConfig, ProductionConfig
 
 
-def build_config(config_path: str, mode: str) -> Config:
+def build_config(mode: str, config_path: str = "") -> Config:
     if mode == 'DEV':
         return DevelopmentConfig()
     production_config: Config = ProductionConfig()
