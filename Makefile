@@ -11,7 +11,7 @@ COVFILE ?= .coverage
 PROJECT = mediark
 
 coverage-application:
-	mypy $(PROJECT)/application
+	# mypy $(PROJECT)/application
 	export COVERAGE_FILE=$(COVFILE); pytest -x \
 	--cov=$(PROJECT)/application tests/application/ \
 	--cov-report term-missing -s -vv \

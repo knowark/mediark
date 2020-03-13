@@ -7,37 +7,61 @@ def test_storage_coordinator_instantiation(audio_storage_coordinator):
 
 
 async def test_storage_coordinator_store_no_data(audio_storage_coordinator):
-    audio_dict = {
+    audio_records = [{
         'namespace': 'https://example.com',
         'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
-        'extension': 'mp4'}
+        'extension': 'mp4'}]
 
     with raises(ValueError):
-        await audio_storage_coordinator.store(audio_dict)
+        await audio_storage_coordinator.store(audio_records)
 
 
 async def test_storage_coordinator_store_data(audio_storage_coordinator):
-    audio_dict = {
+    audio_records = [{
         'namespace': 'https://example.com',
         'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
         'data': 'QkFTRTY0X0RBVEE=',  # BASE64_DATA
         'extension': 'mp4'
-    }
+    }]
 
-    await audio_storage_coordinator.store(audio_dict)
+    await audio_storage_coordinator.store(audio_records)
 
-    assert len(audio_storage_coordinator.audio_repository.data) == 1
+    assert len(
+        audio_storage_coordinator.audio_repository.data['default']) == 1
 
 
 async def test_storage_coordinator_store_file(audio_storage_coordinator):
-    audio_dict = {
+    audio_records = [{
         'namespace': 'https://example.com',
         'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
         'data': ('"iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42'
                  'mNk+H+1noEIwDiqkL4KAUP4F0koL9m+AAAAAElFTkSuQmCC",'),
         'extension': 'png'
-    }
+    }]
 
-    await audio_storage_coordinator.store(audio_dict)
+    await audio_storage_coordinator.store(audio_records)
 
-    assert len(audio_storage_coordinator.audio_repository.data) == 1
+    assert len(
+        audio_storage_coordinator.audio_repository.data['default']) == 1
+
+
+async def test_storage_coordinator_store_data_many(audio_storage_coordinator):
+    audio_records = [
+        {
+            'namespace': 'https://example.com',
+            'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
+            'data': 'QkFTRTY0X0RBVEE=',  # BASE64_DATA
+            'extension': 'mp4'
+        },
+        {
+            'namespace': 'https://example.com',
+            'reference': '43806ecf-2ea4-42d9-ba88-ffa02fcd0af2',
+            'data': 'T1RIRVJfQkFTRTY0X0RBVEE=',  # OTHER_BASE64_DATA
+            'extension': 'mp4'
+        }
+    ]
+
+    await audio_storage_coordinator.store(audio_records)
+
+    assert len(
+        audio_storage_coordinator.audio_repository.data['default']) == 2

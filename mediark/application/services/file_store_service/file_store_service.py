@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Tuple, Union, Any
+from typing import Dict, List, Tuple, Any
 
 
 class FileStoreService(ABC):
     @abstractmethod
-    async def store(self, context: Dict[str, Any]) -> str:
+    async def store(self, contexts: List[Dict[str, Any]]) -> List[str]:
         "Store method to be implemented."
 
     @abstractmethod

@@ -2,7 +2,7 @@ import uuid
 from abc import ABC, abstractmethod
 from base64 import b64decode
 from collections import defaultdict
-from typing import Dict, Tuple, Union, Any, cast
+from typing import Dict, List, Tuple, Union, Any, cast
 from ...utilities import TenantProvider, AuthProvider
 from .file_store_service import FileStoreService
 
@@ -13,11 +13,14 @@ class MemoryFileStoreService(FileStoreService):
         self.files: Dict[str, Dict[str, bytes]] = defaultdict(dict)
         self.tenant_service = tenant_service
 
-    async def store(self, context: Dict[str, Any]) -> str:
-        file_id = context['id']
-        content: bytes = context.pop('content')
-        self.files[self._location][file_id] = content
-        return file_id
+    async def store(self, contexts: List[Dict[str, Any]]) -> List[str]:
+        file_ids = []
+        for context in contexts:
+            file_id = context['id']
+            content: bytes = context.pop('content')
+            self.files[self._location][file_id] = content
+            file_ids.append(file_id)
+        return file_ids
 
     async def load(self, uri: str) -> Tuple[bytes, Dict[str, Any]]:
         content = b''
