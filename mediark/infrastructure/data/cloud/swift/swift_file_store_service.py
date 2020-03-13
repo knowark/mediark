@@ -1,7 +1,9 @@
 import time
+import io
+import tarfile
 from aiohttp import ClientResponse
 from pathlib import Path
-from typing import Tuple, Dict, Union, Any
+from typing import List, Tuple, Dict, Union, Any
 from base64 import b64decode
 from uuid import UUID
 from .....application.utilities import TenantProvider
@@ -21,16 +23,22 @@ class SwiftFileStoreService(FileStoreService):
         self.client = client
         self.data_config = data_config
 
-    async def store(self, context: Dict[str, Any]) -> str:
-        content: bytes = context.pop('content')
+    async def store(self, contexts: List[Dict[str, Any]]) -> List[str]:
+        uri_content_pairs: List[Tuple[str, bytes]] = []
+        for context in contexts:
+            content: bytes = context.pop('content')
+            uri = self._make_object_name(context)
+            uri_content_pairs.append((uri, content))
+
+        url = self._make_url()
+        archive_content = self._tar_contents(uri_content_pairs)
+        if not archive_content:
+            raise ValueError(f'Not archive content: <{archive_content}>')
+
         token = await self.auth_supplier.authenticate()
-        uri = self._make_object_name(context)
+        await self._upload_object(token, url, archive_content)
 
-        url = self._make_url(uri)
-
-        await self._upload_object(token, url, content)
-
-        return uri
+        return [pair[0] for pair in uri_content_pairs]
 
     async def load(self, uri: str) -> Tuple[bytes, Dict[str, Any]]:
         token = await self.auth_supplier.authenticate()
@@ -46,7 +54,7 @@ class SwiftFileStoreService(FileStoreService):
 
         return f'{object_type}/{year_month_day}/{object_id}.{extension}'
 
-    def _make_url(self, object_name: str) -> str:
+    def _make_url(self, object_name: str = "") -> str:
         config = self.data_config['cloud']['swift']
         object_store_url = config['object_store_url']
         container_list = []
@@ -59,14 +67,32 @@ class SwiftFileStoreService(FileStoreService):
             container_list.append(suffix)
         container = "-".join(container_list)
 
-        return f'{object_store_url}/{container}/{object_name}'
+        url = f'{object_store_url}/{container}'
+        if object_name:
+            print('object name:::', object_name)
+            url = f'{url}/{object_name}'
+
+        return url
+
+    def _tar_contents(
+            self, uri_content_pairs: List[Tuple[str, bytes]]) -> bytes:
+        archive = io.BytesIO()
+        with tarfile.open(fileobj=archive, mode='w:gz') as tar:
+            for uri, content in uri_content_pairs:
+                tarinfo = tarfile.TarInfo(uri)
+                tarinfo.size = len(content)
+                fileobj = io.BytesIO(content)
+                tar.addfile(tarinfo, fileobj)
+
+        return archive.getvalue()
 
     async def _upload_object(
             self, token: str, url: str, content: bytes) -> None:
         headers = {'X-Auth-Token': token}
+        url = f'{url}?extract-archive=tar.gz'
         async with self.client.put(
                 url, headers=headers, data=content) as response:
-            pass
+            body = await response.read()
 
     async def _download_object(
             self, token: str, url: str) -> Tuple[bytes, Dict[str, Any]]:

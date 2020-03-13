@@ -18,7 +18,7 @@ class MemoryRepository(Repository, Generic[T]):
         self.parser: QueryParser = parser
         self.tenant_provider: TenantProvider = tenant_provider
         self.auth_provider: AuthProvider = auth_provider
-        self.max_items = 1000
+        self.max_items = 10_000
 
     async def get(self, id: str, default: Any = ...) -> T:
         item = self.data[self._location].get(id)
@@ -48,7 +48,7 @@ class MemoryRepository(Repository, Generic[T]):
         return items
 
     async def search(self, domain: QueryDomain,
-                     limit=10000, offset=0) -> List[T]:
+                     limit=10_000, offset=0) -> List[T]:
         items = []
         filter_function = self.parser.parse(domain)
         for item in list(self.data[self._location].values()):

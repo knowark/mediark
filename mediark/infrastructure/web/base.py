@@ -10,7 +10,9 @@ from .middleware import middlewares
 
 
 def create_app(config, injector: Injectark) -> web.Application:
-    app = web.Application(middlewares=middlewares(injector))
+    aiohttp_config = config['aiohttp']
+    aiohttp_config['middlewares'] = middlewares(injector)
+    app = web.Application(**aiohttp_config)
     templates = str(Path(__file__).parent / 'templates')
     setup(app, loader=FileSystemLoader(templates))
     setup_generators(app, injector)

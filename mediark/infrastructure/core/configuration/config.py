@@ -12,6 +12,9 @@ class Config(defaultdict, ABC):
         self['mode'] = 'BASE'
         self['factory'] = 'CloudFactory'
         self['port'] = 8080
+        self['aiohttp'] = {
+            'client_max_size': 10 * 1024**2
+        }
         self['strategies'] = ['base']
         self['strategy'] = {}
         self['tenancy'] = {

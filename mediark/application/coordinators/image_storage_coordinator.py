@@ -17,9 +17,14 @@ class ImageStorageCoordinator:
         self.file_store_service = file_store_service
 
     async def store(self, image_records: RecordList) -> None:
-        contexts, image_records = self._build_contexts(image_records)
+        contents = self._extract_contents(image_records)
         images = await self.image_repository.add(
             [Image(**image_dict) for image_dict in image_records])
+
+        contexts = [{'content': content, 'type': 'images', **vars(image)}
+                    for image, content in zip(images, contents)]
+        
+        
 
         uris = await self.file_store_service.store(contexts)
         for image, uri in zip(images, uris):
@@ -27,13 +32,11 @@ class ImageStorageCoordinator:
 
         await self.image_repository.add(images)
 
-    def _build_contexts(self, image_records: RecordList
-                        ) -> Tuple[List[Dict[str, Any]], RecordList]:
-        contexts: List[Dict[str, Any]] = []
+    def _extract_contents(self, image_records: RecordList) -> List[bytes]:
+        contents: List[bytes] = []
         for image_dict in image_records:
             content = image_dict.pop('data', None)
             if not content:
                 raise ValueError("All the images must have content.")
-            image_dict.setdefault('id', self.id_service.generate_id())
-            contexts.append({'content': b64decode(content), **image_dict})
-        return contexts, image_records
+            contents.append(b64decode(content))
+        return contents

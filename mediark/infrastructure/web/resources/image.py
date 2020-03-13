@@ -72,9 +72,8 @@ class ImageResource:
           200:
             description: "Success"
         """
-        many = True if request.query.get('many') else False
-        data = ImageSchema(many=many).loads(await request.text())
+        image_records = ImageSchema(many=True).loads(await request.text())
 
-        await self.image_storage_coordinator.store(data)
+        await self.image_storage_coordinator.store(image_records)
 
         return web.Response(status=200)
