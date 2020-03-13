@@ -25,9 +25,9 @@ class ImageStorageCoordinator:
         image, *_ = await self.image_repository.add(Image(**image_dict))
 
         content_bytes = b64decode(content)
-        context = {'type': 'images', **vars(image)}
+        context = {'type': 'images', **vars(image), 'content': content_bytes}
 
-        uri = await self.file_store_service.store(content_bytes, context)
+        uri = await self.file_store_service.store(context)
 
         image.uri = uri
         await self.image_repository.add(image)

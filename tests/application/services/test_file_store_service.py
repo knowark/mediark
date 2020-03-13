@@ -17,13 +17,14 @@ async def test_memory_file_store_service_store() -> None:
     file_id = 'ec892a1e-a05b-4152-b0e4-1be9b276005c'
     content = b'BASE64_ENCODED_CONTENT'
     context = {
-        'id': file_id
+        'id': file_id,
+        'content': content
     }
 
     file_store_service = MemoryFileStoreService(
         StandardTenantProvider(),
         StandardAuthProvider())
-    uri = await file_store_service.store(content, context)
+    uri = await file_store_service.store(context)
 
     assert isinstance(uri, str)
     assert uri == file_id

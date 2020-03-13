@@ -13,9 +13,9 @@ class MemoryFileStoreService(FileStoreService):
         self.files: Dict[str, Dict[str, bytes]] = defaultdict(dict)
         self.tenant_service = tenant_service
 
-    async def store(self, content: bytes,
-                    context: Dict[str, str]) -> str:
+    async def store(self, context: Dict[str, Any]) -> str:
         file_id = context['id']
+        content = context['content']
         self.files[self._location][file_id] = content
         return file_id
 

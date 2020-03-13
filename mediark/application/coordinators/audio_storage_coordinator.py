@@ -23,9 +23,9 @@ class AudioStorageCoordinator:
         audio, *_ = await self.audio_repository.add(Audio(**audio_dict))
 
         content_bytes = b64decode(content)
-        context = {'type': 'audios', **vars(audio)}
+        context = {'type': 'audios', **vars(audio), 'content': content_bytes}
 
-        uri = await self.file_store_service.store(content_bytes, context)
+        uri = await self.file_store_service.store(context)
 
         audio.uri = uri
         await self.audio_repository.add(audio)

@@ -4,8 +4,7 @@ from typing import Dict, Tuple, Union, Any
 
 class FileStoreService(ABC):
     @abstractmethod
-    async def store(self, content: bytes,
-                    context: Dict[str, str]) -> str:
+    async def store(self, context: Dict[str, Any]) -> str:
         "Store method to be implemented."
 
     @abstractmethod
