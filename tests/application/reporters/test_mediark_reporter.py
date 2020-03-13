@@ -6,6 +6,11 @@ def test_mediark_reporter_instantiation(mediark_reporter):
     assert isinstance(mediark_reporter, MediarkReporter)
 
 
+async def test_mediark_reporter_search_media(mediark_reporter):
+    result = await mediark_reporter.search_media([])
+    assert len(result) == 2
+
+
 async def test_mediark_reporter_search_images(mediark_reporter):
     result = await mediark_reporter.search_images([])
     assert len(result) == 2

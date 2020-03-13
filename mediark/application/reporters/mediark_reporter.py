@@ -1,9 +1,13 @@
 from abc import ABC, abstractmethod
-from ..repositories import ImageRepository, AudioRepository
-from .types import ImageDictList, AudioDictList, SearchDomain
+from ..repositories import MediaRepository, ImageRepository, AudioRepository
+from .types import MediaDictList, ImageDictList, AudioDictList, SearchDomain
 
 
 class MediarkReporter(ABC):
+
+    @abstractmethod
+    async def search_media(self, domain: SearchDomain) -> MediaDictList:
+        """Search Mediark's Media"""
 
     @abstractmethod
     async def search_images(self, domain: SearchDomain) -> ImageDictList:
@@ -16,10 +20,16 @@ class MediarkReporter(ABC):
 
 class StandardMediarkReporter(MediarkReporter):
 
-    def __init__(self, image_repository: ImageRepository,
+    def __init__(self, media_repository: MediaRepository,
+                 image_repository: ImageRepository,
                  audio_repository: AudioRepository) -> None:
+        self.media_repository = media_repository
         self.image_repository = image_repository
         self.audio_repository = audio_repository
+
+    async def search_media(self, domain: SearchDomain) -> MediaDictList:
+        return [vars(media) for media in
+                (await self.media_repository.search(domain))]
 
     async def search_images(self, domain: SearchDomain) -> ImageDictList:
         return [vars(image) for image in
