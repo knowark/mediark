@@ -23,10 +23,11 @@ async def test_directory_file_store_service_store(
         'id': id_,
         'created_at': 1583964551,
         'type': data_type,
-        'extension': extension
+        'extension': extension,
+        'content': content
     }
 
-    uri = await directory_file_store_service.store(content, context)
+    uri = await directory_file_store_service.store(context)
 
     image_path = base_path / uri
     assert image_path.is_file()
@@ -44,10 +45,11 @@ async def test_directory_file_store_service_load(
         'id': id_,
         'created_at': 1583964551,
         'type': data_type,
-        'extension': extension
+        'extension': extension,
+        'content': content
     }
 
-    uri = await directory_file_store_service.store(content, context)
+    uri = await directory_file_store_service.store(context)
 
     content, context = await directory_file_store_service.load(uri)
 

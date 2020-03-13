@@ -21,9 +21,8 @@ class SwiftFileStoreService(FileStoreService):
         self.client = client
         self.data_config = data_config
 
-    async def store(self, content: bytes,
-                    context: Dict[str, Any]) -> str:
-
+    async def store(self, context: Dict[str, Any]) -> str:
+        content: bytes = context.pop('content')
         token = await self.auth_supplier.authenticate()
         uri = self._make_object_name(context)
 

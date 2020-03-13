@@ -1,6 +1,6 @@
 import time
 from pathlib import Path
-from typing import Tuple, Dict, Any
+from typing import Tuple, Dict, Any, cast
 from base64 import b64decode
 from uuid import UUID
 from ....application.utilities import TenantProvider
@@ -10,11 +10,11 @@ from ....application.services import FileStoreService
 class DirectoryFileStoreService(FileStoreService):
     def __init__(self, tenant_service: TenantProvider,
                  data_config: dict) -> None:
-
         self.tenant_service = tenant_service
         self.data_config = data_config
 
-    async def store(self, content: bytes, context: Dict[str, str]) -> str:
+    async def store(self, context: Dict[str, Any]) -> str:
+        content: bytes = context.pop('content')
         binary_data = b64decode(content)
         uri = self._make_object_name(context)
         file_path = self._make_file_path(uri)

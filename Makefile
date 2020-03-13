@@ -11,7 +11,7 @@ COVFILE ?= .coverage
 PROJECT = mediark
 
 coverage-application:
-	# mypy $(PROJECT)/application
+	mypy $(PROJECT)/application
 	export COVERAGE_FILE=$(COVFILE); pytest -x \
 	--cov=$(PROJECT)/application tests/application/ \
 	--cov-report term-missing -s -vv \
@@ -25,7 +25,7 @@ coverage-infrastructure:
 	-o cache_dir=/tmp/pytest/cache
 
 coverage: 
-	# mypy $(PROJECT)
+	mypy $(PROJECT)
 	export COVERAGE_FILE=$(COVFILE); pytest -x \
 	--cov=$(PROJECT) tests/ \
 	--cov-report term-missing -s -vv \

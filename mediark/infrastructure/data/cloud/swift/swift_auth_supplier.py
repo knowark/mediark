@@ -1,5 +1,5 @@
 import time
-from typing import Tuple, Dict, Any
+from typing import Tuple, Dict, Optional, Any
 from ....core import HttpClientSupplier
 
 
@@ -11,8 +11,8 @@ class SwiftAuthSupplier:
         self.auth_url = auth_url
         self.username = username
         self.password = password
-        self.expires_at: time.struct_time = None
-        self.token: str = None
+        self.expires_at: Optional[time.struct_time] = None
+        self.token: str = ""
 
     async def authenticate(self) -> str:
         if self.expires_at and time.gmtime() < self.expires_at:

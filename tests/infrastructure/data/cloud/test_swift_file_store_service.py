@@ -10,9 +10,10 @@ def test_swift_file_store_service_instantiation(swift_file_store_service):
 async def test_swift_file_store_service_store(swift_file_store_service):
     context = {
         'id': 'f91bde0b-d094-45fd-bcf5-8cf24de853c0',
-        'created_at': 1583933912
+        'created_at': 1583933912,
+        'content': b'BINARY_MEDIA_DATA'
     }
-    uri = await swift_file_store_service.store(b'BINARY_MEDIA_DATA', context)
+    uri = await swift_file_store_service.store(context)
 
     assert uri == 'general/2020/03/11/f91bde0b-d094-45fd-bcf5-8cf24de853c0.txt'
 
