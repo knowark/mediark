@@ -32,20 +32,8 @@ base = {
     "MediaRepository": {
         "method": "memory_media_repository",
     },
-    "ImageRepository": {
-        "method": "memory_image_repository",
-    },
     "MediaStorageCoordinator": {
         "method": "media_storage_coordinator",
-    },
-    "ImageStorageCoordinator": {
-        "method": "image_storage_coordinator",
-    },
-    "AudioRepository": {
-        "method": "memory_audio_repository",
-    },
-    "AudioStorageCoordinator": {
-        "method": "audio_storage_coordinator",
     },
     "MediarkReporter": {
         "method": "standard_mediark_reporter",

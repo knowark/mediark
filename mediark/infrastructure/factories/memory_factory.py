@@ -1,9 +1,7 @@
 from pathlib import Path
 from .factory import Factory
 from ...application.repositories import (
-    MediaRepository, MemoryMediaRepository,
-    ImageRepository, MemoryImageRepository,
-    AudioRepository, MemoryAudioRepository)
+    MediaRepository, MemoryMediaRepository)
 from ...application.utilities import (
     User, QueryParser, TenantProvider, StandardTenantProvider,
     AuthProvider, StandardAuthProvider, TransactionManager,
@@ -12,8 +10,7 @@ from ...application.services import (
     IdService, StandardIdService,
     FileStoreService, MemoryFileStoreService)
 from ...application.coordinators import (
-    SessionCoordinator, MediaStorageCoordinator,
-    ImageStorageCoordinator, AudioStorageCoordinator)
+    SessionCoordinator, MediaStorageCoordinator)
 from ...application.reporters import (
     MediarkReporter, StandardMediarkReporter,
     FileReporter, StandardFileReporter)
@@ -51,18 +48,6 @@ class MemoryFactory(Factory):
         return MemoryMediaRepository(
             query_parser, tenant_provider, auth_provider)
 
-    def memory_image_repository(
-            self, query_parser: QueryParser, tenant_provider: TenantProvider,
-            auth_provider: AuthProvider) -> MemoryImageRepository:
-        return MemoryImageRepository(
-            query_parser, tenant_provider, auth_provider)
-
-    def memory_audio_repository(
-            self, query_parser: QueryParser, tenant_provider: TenantProvider,
-            auth_provider: AuthProvider) -> MemoryAudioRepository:
-        return MemoryAudioRepository(
-            query_parser, tenant_provider, auth_provider)
-
     # Services
 
     def standard_id_service(self) -> StandardIdService:
@@ -87,39 +72,19 @@ class MemoryFactory(Factory):
                                   id_service: IdService,
                                   file_store_service: FileStoreService,
                                   transaction_manager: TransactionManager
-                                  ) -> ImageStorageCoordinator:
+                                  ) -> MediaStorageCoordinator:
         return transaction_manager(MediaStorageCoordinator)(
             media_repository, id_service,
-            file_store_service)
-
-    def image_storage_coordinator(self, image_repository: ImageRepository,
-                                  id_service: IdService,
-                                  file_store_service: FileStoreService,
-                                  transaction_manager: TransactionManager
-                                  ) -> ImageStorageCoordinator:
-        return transaction_manager(ImageStorageCoordinator)(
-            image_repository, id_service,
-            file_store_service)
-
-    def audio_storage_coordinator(self, audio_repository: AudioRepository,
-                                  id_service: IdService,
-                                  file_store_service: FileStoreService,
-                                  transaction_manager: TransactionManager
-                                  ) -> AudioStorageCoordinator:
-        return transaction_manager(AudioStorageCoordinator)(
-            audio_repository, id_service,
             file_store_service)
 
     # Reporters
 
     def standard_mediark_reporter(self,
                                   media_repository: MediaRepository,
-                                  image_repository: ImageRepository,
-                                  audio_repository: AudioRepository,
                                   transaction_manager: TransactionManager
                                   ) -> StandardMediarkReporter:
-        return transaction_manager(StandardMediarkReporter)(
-            media_repository, image_repository, audio_repository)
+        return transaction_manager(
+            StandardMediarkReporter)(media_repository)
 
     def standard_file_reporter(self, file_store_service: FileStoreService
                                ) -> StandardFileReporter:

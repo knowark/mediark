@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any
-from ..repositories import ImageRepository, AudioRepository
 from ..services import FileStoreService
-from .types import ImageDictList, AudioDictList, SearchDomain
 
 
 class FileReporter(ABC):

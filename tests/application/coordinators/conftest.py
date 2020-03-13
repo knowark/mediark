@@ -5,10 +5,8 @@ from mediark.application.utilities import (
     User,  StandardAuthProvider)
 from mediark.application.services import (
     StandardIdService, MemoryFileStoreService)
-from mediark.application.repositories import (
-    MemoryMediaRepository, MemoryAudioRepository, MemoryImageRepository)
-from mediark.application.coordinators import (
-    MediaStorageCoordinator, ImageStorageCoordinator, AudioStorageCoordinator)
+from mediark.application.repositories import MemoryMediaRepository
+from mediark.application.coordinators import MediaStorageCoordinator
 from mediark.application.coordinators import SessionCoordinator
 
 
@@ -42,35 +40,11 @@ def file_store_service(tenant_provider, auth_provider):
 # Repositories
 
 @fixture
-def audio_repository(query_parser, tenant_provider, auth_provider):
-    return MemoryAudioRepository(query_parser, tenant_provider, auth_provider)
-
-
-@fixture
-def image_repository(query_parser, tenant_provider, auth_provider):
-    return MemoryImageRepository(query_parser, tenant_provider, auth_provider)
-
-
-@fixture
 def media_repository(query_parser, tenant_provider, auth_provider):
     return MemoryMediaRepository(query_parser, tenant_provider, auth_provider)
 
 
 # Coordinators
-
-
-@fixture
-def audio_storage_coordinator(
-        audio_repository, standard_id_service, file_store_service):
-    return AudioStorageCoordinator(
-        audio_repository, standard_id_service, file_store_service)
-
-
-@fixture
-def image_storage_coordinator(
-        image_repository, standard_id_service, file_store_service):
-    return ImageStorageCoordinator(
-        image_repository, standard_id_service, file_store_service)
 
 
 @fixture

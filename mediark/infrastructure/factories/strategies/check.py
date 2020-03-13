@@ -4,11 +4,5 @@ check = {
     },
     "MediaRepository": {
         "method": "check_media_repository",
-    },
-    "ImageRepository": {
-        "method": "check_image_repository",
-    },
-    "AudioRepository": {
-        "method": "check_audio_repository",
     }
 }

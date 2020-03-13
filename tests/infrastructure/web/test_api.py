@@ -4,7 +4,6 @@ from aiohttp import web
 from rapidjson import loads, dumps
 from marshmallow import ValidationError
 from base64 import b64encode
-from mediark.application.models import Audio, Image
 from mediark.infrastructure.web.resources import RootResource
 from mediark.infrastructure.web.spec import create_spec
 from mediark.infrastructure.core import (

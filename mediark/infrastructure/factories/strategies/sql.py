@@ -16,13 +16,7 @@ sql = {
     "MediaRepository": {
         "method": "sql_media_repository",
     },
-    "ImageRepository": {
-        "method": "sql_image_repository",
-    },
-    "AudioRepository": {
-        "method": "sql_audio_repository",
-    },
-
+    
     # Suppliers
     "TenantSupplier": {
         "method": "schema_tenant_supplier"

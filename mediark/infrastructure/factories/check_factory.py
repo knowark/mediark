@@ -1,9 +1,7 @@
 from pathlib import Path
-from ...application.models import Media, Image, Audio
+from ...application.models import Media
 from ...application.repositories import (
-    MediaRepository, MemoryMediaRepository,
-    ImageRepository, MemoryImageRepository,
-    AudioRepository, MemoryAudioRepository)
+    MediaRepository, MemoryMediaRepository)
 from ...application.utilities import (
     QueryParser, TenantProvider, StandardTenantProvider,
     AuthProvider, StandardAuthProvider)
@@ -37,30 +35,3 @@ class CheckFactory(HttpFactory):
             }
         })
         return media_repository
-
-    def check_image_repository(
-            self, query_parser: QueryParser, tenant_provider: TenantProvider,
-            auth_provider: AuthProvider) -> MemoryImageRepository:
-        image_repository = MemoryImageRepository(
-            query_parser, tenant_provider, auth_provider)
-        image_repository.load({
-            "default": {
-                "1": Image(id='1', reference='ref_1',  uri='value_1'),
-                "2": Image(id='2', reference='ref_2', uri='value_2'),
-                "3": Image(id='3', reference='ref_3', uri='value_3')
-            }
-        })
-        return image_repository
-
-    def check_audio_repository(
-            self, query_parser: QueryParser, tenant_provider: TenantProvider,
-            auth_provider: AuthProvider) -> MemoryAudioRepository:
-        audio_repository = MemoryAudioRepository(
-            query_parser, tenant_provider, auth_provider)
-        audio_repository.load({
-            "default": {
-                "1": Audio(id='1', reference='ref_1',  uri='value_1'),
-                "2": Audio(id='2', reference='ref_2', uri='value_2')
-            }
-        })
-        return audio_repository

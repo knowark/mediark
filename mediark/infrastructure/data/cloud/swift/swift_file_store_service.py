@@ -32,8 +32,6 @@ class SwiftFileStoreService(FileStoreService):
 
         url = self._make_url()
         archive_content = self._tar_contents(uri_content_pairs)
-        if not archive_content:
-            raise ValueError(f'Not archive content: <{archive_content}>')
 
         token = await self.auth_supplier.authenticate()
         await self._upload_object(token, url, archive_content)

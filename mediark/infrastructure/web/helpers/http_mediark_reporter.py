@@ -1,7 +1,7 @@
 from typing import List, Any
 from ....application.utilities import TenantProvider
 from ....application.reporters import (
-    StandardMediarkReporter, ImageDictList, AudioDictList, SearchDomain)
+    StandardMediarkReporter, MediaDictList, SearchDomain)
 
 
 class HttpMediarkReporter(StandardMediarkReporter):
@@ -19,12 +19,7 @@ class HttpMediarkReporter(StandardMediarkReporter):
             item['url'] = download_url + '/' + uri
         return items
 
-    async def search_images(self, domain: SearchDomain) -> ImageDictList:
-        result = await super().search_images(domain)
-        image_download = f"{self.domain}/download"
-        return self._prepend_download(image_download, result)
-
-    async def search_audios(self, domain: SearchDomain) -> AudioDictList:
-        result = await super().search_audios(domain)
-        audio_download = f"{self.domain}/download"
-        return self._prepend_download(audio_download, result)
+    async def search_media(self, domain: SearchDomain) -> MediaDictList:
+        result = await super().search_media(domain)
+        media_download = f"{self.domain}/download"
+        return self._prepend_download(media_download, result)
