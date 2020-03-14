@@ -7,5 +7,5 @@ class HttpClientSupplier:
 
     def __getattribute__(self, name):
         # Proxy all attribute/method accesses to self.client
-        # Because inheriting from ClientSessions is discouraged in aiohttp
+        # Because inheriting from ClientSession is discouraged in aiohttp
         return getattr(object.__getattribute__(self, 'client'), name)
