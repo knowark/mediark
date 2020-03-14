@@ -50,23 +50,6 @@ def test_memory_repository_tenant_provider(filled_memory_repository) -> None:
     assert filled_memory_repository.tenant_provider is not None
 
 
-async def test_memory_repository_get(filled_memory_repository) -> None:
-    item = await filled_memory_repository.get("1")
-
-    assert item and item.field_1 == "value_1"
-
-
-async def test_memory_repository_get_missing(filled_memory_repository) -> None:
-    with raises(EntityNotFoundError):
-        await filled_memory_repository.get("999999999")
-
-
-async def test_memory_repository_get_missing_with_default(
-        filled_memory_repository) -> None:
-    result = await filled_memory_repository.get("999999999", None)
-    assert result is None
-
-
 async def test_memory_repository_add(memory_repository) -> None:
     item = DummyEntity(id="1", field_1="value_1")
 

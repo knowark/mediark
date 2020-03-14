@@ -28,28 +28,6 @@ class SqlRepository(Repository, Generic[T]):
         self.parser = parser
         self.max_items = 1000
 
-    async def get(self, id: str, default=...) -> T:
-
-        tenant = self.tenant_provider.tenant
-        user = self.auth_provider.user
-
-        query = f"""
-            SELECT data FROM "{tenant.slug}".{self.table}
-            WHERE (data->>'id') = $1;
-        """
-
-        connection = await self.connection_manager.get(tenant.zone)
-        row = await connection.fetchrow(query, id)
-
-        if not (row and row['data']):
-            if default is not ...:
-                return default
-
-            raise EntityNotFoundError(
-                f"The entity with id {id} was not found.")
-
-        return self.constructor(**json.loads(row['data']))
-
     async def add(self, item: Union[T, List[T]]) -> List[T]:
         tenant = self.tenant_provider.tenant
         user = self.auth_provider.user

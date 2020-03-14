@@ -20,15 +20,6 @@ class MemoryRepository(Repository, Generic[T]):
         self.auth_provider: AuthProvider = auth_provider
         self.max_items = 10_000
 
-    async def get(self, id: str, default: Any = ...) -> T:
-        item = self.data[self._location].get(id)
-        if not item:
-            if default is not ...:
-                return default
-            raise EntityNotFoundError(
-                f"The entity with id {id} was not found.")
-        return item
-
     async def add(self, item: Union[T, List[T]]) -> List[T]:
         user = self.auth_provider.user
         items = item if isinstance(item, list) else [item]

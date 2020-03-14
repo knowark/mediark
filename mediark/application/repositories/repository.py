@@ -7,10 +7,6 @@ from ..utilities import QueryDomain
 class Repository(ABC, Generic[T]):
 
     @abstractmethod
-    async def get(self, id: str, default: Any = ...) -> T:
-        "Get method to be implemented."
-
-    @abstractmethod
     async def add(self, item: Union[T, List[T]]) -> List[T]:
         "Add or update method to be implemented."
 

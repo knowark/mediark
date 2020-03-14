@@ -66,26 +66,6 @@ async def test_sql_repository_add(sql_repository):
                for row in result)
 
 
-async def test_sql_repository_get(sql_repository):
-    uid = '99cc4dc3-4a6e-43a6-ae5f-1c126bf7c0c6'
-    item = await sql_repository.get(uid)
-
-    assert item.id == uid
-    assert item.field_1 == 'value_1'
-
-
-async def test_sql_repository_get_not_found(sql_repository):
-    uid = '99cc4dc3-4a6e-43a6-ae5f-1c126bf7dddd'
-    with raises(EntityNotFoundError):
-        item = await sql_repository.get(uid)
-
-
-async def test_sql_repository_get_not_found_with_default(
-        sql_repository) -> None:
-    result = await sql_repository.get("999999999", None)
-    assert result is None
-
-
 async def test_sql_repository_add_update(sql_repository):
     uid = '5fdda850-ac85-41e2-a105-f8b5ba593ecd'
     created_entity = DummyEntity(id=uid, field_1="value_99")
