@@ -1,12 +1,12 @@
 import sys
 import rapidjson as json
 import logging
+from typing import List
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from injectark import Injectark
 from migrark import sql_migrate
-from ..core.configuration import Config
-from typing import List
+from ..config import Config
 from ..data import DirectoryArranger
 from ..web import create_app, run_app
 

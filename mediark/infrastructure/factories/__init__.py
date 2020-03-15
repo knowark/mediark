@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from ..core import Config
+from ..config import Config
 from .factory import Factory
 from .directory_factory import DirectoryFactory
 from .http_factory import HttpFactory

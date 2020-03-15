@@ -3,7 +3,8 @@ from ...application.utilities import (
     TenantProvider, StandardTenantProvider)
 from ...infrastructure.data import (
     SwiftAuthSupplier, SwiftFileStoreService)
-from ..core import Config, HttpClientSupplier
+from ..config import Config
+from ..core import HttpClientSupplier
 from .memory_factory import MemoryFactory
 from .directory_factory import DirectoryFactory
 from .sql_factory import SqlFactory

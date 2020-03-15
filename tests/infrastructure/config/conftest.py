@@ -4,7 +4,7 @@ from pytest import fixture
 from datetime import datetime
 from typing import cast, List
 from injectark import Injectark
-from mediark.infrastructure.core import build_config, Config
+from mediark.infrastructure.config import build_config, Config
 from mediark.infrastructure.factories import build_factory
 from mediark.infrastructure.web import create_app
 from uuid import uuid4

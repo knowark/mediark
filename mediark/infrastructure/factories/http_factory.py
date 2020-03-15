@@ -3,8 +3,9 @@ from pathlib import Path
 from ...application.repositories import MediaRepository
 from ...application.coordinators import SessionCoordinator
 from ...application.utilities import TransactionManager, TenantProvider
+from ..config import Config
 from ..core import (
-    Config, TenantSupplier, MemoryTenantSupplier, HttpClientSupplier)
+    TenantSupplier, MemoryTenantSupplier, HttpClientSupplier)
 from ..web import HttpMediarkReporter
 from .memory_factory import MemoryFactory
 

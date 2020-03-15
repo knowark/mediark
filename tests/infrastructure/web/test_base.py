@@ -1,6 +1,6 @@
 from aiohttp import web
 from injectark import Injectark
-from mediark.infrastructure.core import build_config
+from mediark.infrastructure.config import build_config
 from mediark.infrastructure.factories import build_strategy,  build_factory
 from mediark.infrastructure.web import create_app, run_app
 from mediark.infrastructure.web import base as base_module

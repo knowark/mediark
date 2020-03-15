@@ -1,5 +1,4 @@
 from pathlib import Path
-from .factory import Factory
 from ...application.repositories import (
     MediaRepository, MemoryMediaRepository)
 from ...application.utilities import (
@@ -14,8 +13,9 @@ from ...application.coordinators import (
 from ...application.reporters import (
     MediarkReporter, StandardMediarkReporter,
     FileReporter, StandardFileReporter)
-from ..core import (
-    Config, MemoryTenantSupplier, MemorySetupSupplier)
+from ..config import Config
+from ..core import MemoryTenantSupplier, MemorySetupSupplier
+from .factory import Factory
 
 
 class MemoryFactory(Factory):

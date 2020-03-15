@@ -7,7 +7,7 @@ import uvloop
 import asyncio
 import uvloop
 from injectark import Injectark
-from .infrastructure.core import build_config
+from .infrastructure.config import build_config
 from .infrastructure.factories import build_strategy, build_factory
 from .infrastructure.cli import Cli
 

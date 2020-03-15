@@ -6,7 +6,7 @@ from marshmallow import ValidationError
 from base64 import b64encode
 from mediark.infrastructure.web.resources import RootResource
 from mediark.infrastructure.web.spec import create_spec
-from mediark.infrastructure.core import (
+from mediark.infrastructure.config import (
     DevelopmentConfig, ProductionConfig, build_config, Config)
 
 

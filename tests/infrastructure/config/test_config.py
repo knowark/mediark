@@ -1,4 +1,4 @@
-from mediark.infrastructure.core.configuration import (
+from mediark.infrastructure.config import (
     load_config, build_config, DevelopmentConfig, ProductionConfig)
 
 

@@ -7,7 +7,7 @@ from base64 import b64encode
 from typing import cast, List
 from injectark import Injectark
 from mediark.application.utilities import QueryParser, User
-from mediark.infrastructure.core import build_config, Config
+from mediark.infrastructure.config import build_config, Config
 from mediark.infrastructure.factories import build_strategy, build_factory
 from mediark.infrastructure.web import create_app
 from migrark import sql_migrate

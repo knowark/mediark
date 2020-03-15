@@ -5,7 +5,8 @@ from ...application.repositories import (
 from ...application.utilities import (
     QueryParser, TenantProvider, StandardTenantProvider,
     AuthProvider, StandardAuthProvider)
-from ..core import Config, TenantSupplier, MemoryTenantSupplier
+from ..config import Config
+from ..core import TenantSupplier, MemoryTenantSupplier
 from .http_factory import HttpFactory
 
 

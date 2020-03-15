@@ -4,7 +4,7 @@ from pytest import fixture
 from base64 import b64encode
 from mediark.infrastructure.data import (
     DirectoryArranger, DirectoryFileStoreService)
-from mediark.infrastructure.core import build_config
+from mediark.infrastructure.config import build_config
 from mediark.application.utilities import StandardTenantProvider, Tenant
 
 

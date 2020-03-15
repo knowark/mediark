@@ -3,7 +3,7 @@ from ...application.utilities import (
     TenantProvider, StandardTenantProvider)
 from ...infrastructure.data import (
     DirectoryFileStoreService)
-from ..core import Config
+from ..config import Config
 from .memory_factory import MemoryFactory
 from .http_factory import HttpFactory
 

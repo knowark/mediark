@@ -2,7 +2,7 @@ from pathlib import Path
 from pytest import fixture
 from json import dump
 from injectark import Injectark
-from mediark.infrastructure.core import DevelopmentConfig, ProductionConfig
+from mediark.infrastructure.config import DevelopmentConfig, ProductionConfig
 
 
 @fixture

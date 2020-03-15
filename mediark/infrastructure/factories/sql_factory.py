@@ -5,8 +5,9 @@ from filtrark import SqlParser, SafeEval
 from ...application.utilities import (
     AuthProvider, StandardAuthProvider, StandardTenantProvider,
     TenantProvider, User)
+from ..config import Config
 from ..core import (
-    Config, TenantSupplier, SchemaTenantSupplier, SchemaSetupSupplier)
+    TenantSupplier, SchemaTenantSupplier, SchemaSetupSupplier)
 from ..data import (
     ConnectionManager, DefaultConnectionManager, SqlTransactionManager,
     SqlRepository, SqlMediaRepository)
