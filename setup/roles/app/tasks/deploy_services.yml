@@ -1,0 +1,14 @@
+- name: "Deploy {{ app_user }} Systemd Service File"
+  template:
+    src: service.j2
+    dest: "{{ service_path }}/{{ app_user }}.service"
+    mode: 0755
+
+#Start Services
+
+- name: "Restart {{ app_user }} Service"
+  systemd:
+    name: "{{ app_user }}"
+    enabled: true
+    state: restarted
+    daemon_reload: true

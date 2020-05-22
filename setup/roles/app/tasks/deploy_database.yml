@@ -1,0 +1,16 @@
+- name: "Create {{ app_user }} Database User"
+  become: yes
+  become_user: postgres
+  postgresql_user:
+      name: "{{ app_user }}"
+      password: "{{ app_user }}"
+      role_attr_flags: SUPERUSER
+      encrypted: yes
+
+- name: "Create {{ app_user }} Database"
+  become: yes
+  become_user: postgres
+  postgresql_db:
+      name: "{{ app_user }}"
+      encoding: UTF-8
+      owner: "{{ app_user }}"

@@ -1,0 +1,20 @@
+- name: "Deploy {{ app_user }}'s Nginx Configuration File"
+  template:
+    src: nginx_config.j2
+    dest: "{{ sites_available }}/{{ app_user }}"
+
+- name: "Symlink {{ app_user }} Nginx File"
+  file:
+    src: "{{ sites_available }}/{{ app_user }}"
+    dest: "{{ sites_enabled }}/{{ app_user }}"
+    state: link
+
+- name: Delete Default Nginx File
+  file:
+    path: "{{ sites_enabled }}/default"
+    state: absent
+
+- name: Restart Nginx Service
+  systemd:
+    name: nginx
+    state: restarted

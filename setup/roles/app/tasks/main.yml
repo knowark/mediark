@@ -1,0 +1,4 @@
+- import_tasks: configure_system.yml
+- import_tasks: deploy_database.yml
+- import_tasks: deploy_proxy.yml
+- import_tasks: deploy_services.yml

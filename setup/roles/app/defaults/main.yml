@@ -1,0 +1,47 @@
+# System
+
+app_user: "{{ app_user }}"
+
+app_home: /opt/{{ app_user }}
+
+# Directories
+
+app_configuration_directory: /etc/opt/{{ app_user }}
+
+app_data_directory: /var/opt/{{ app_user }}/data
+
+app_log_directory: /var/opt/{{ app_user }}/log
+
+app_backup_directory: /var/opt/{{ app_user }}/backup
+
+# Repositories
+
+app_url: "https://github.com/knowark/{{ app_user }}.git"
+
+app_repository: "{{ app_home }}/{{ app_user }}"
+
+app_env: "{{ app_home }}/env"
+
+app_requirements_path: "{{ app_repository }}/requirements.txt"
+
+# Configuration
+
+app_configuration_path: "{{ app_configuration_directory }}/config.json"
+
+app_database_path: "{{ app_data_directory }}/data.json"
+
+# Database
+
+postgresql_version: 10
+
+# Nginx Configuration
+
+port: 8080
+
+sites_available: "/etc/nginx/sites-available"
+
+sites_enabled: "/etc/nginx/sites-enabled"
+
+# Service 
+
+service_path: "/etc/systemd/system"

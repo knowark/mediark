@@ -55,3 +55,6 @@ upgrade:
 
 dev-deploy:
 	 bin/dev_deploy.sh
+
+deploy:
+	./setup/deploy.sh

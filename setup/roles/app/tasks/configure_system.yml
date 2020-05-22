@@ -1,0 +1,61 @@
+- name: Create Application User
+  user:
+    name: "{{ app_user }}"
+    home: "{{ app_home }}"
+    system: yes
+    shell: /bin/bash
+
+- name: Create Configuration Directory
+  file:
+    path: "{{ app_configuration_directory }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: 0775
+
+- name: Create Log Directory
+  file:
+    path: "{{ app_log_directory }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: 0775
+
+- name: Create Data Directory
+  file:
+    path: "{{ app_data_directory }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: 0775
+
+- name: Create Backup Directory
+  file:
+    path: "{{ app_backup_directory }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: 0775
+
+- name: "Symlink {{ app_user }} Repository"
+  file:
+    src: "/var/git/{{ app_user }}"
+    dest: "{{ app_repository }}"
+    state: link
+
+- name: "Create {{ app_user }} Virtualenv and Install Packages"
+  become: yes
+  become_user: "{{ app_user }}"
+  pip:
+    requirements: "{{ app_requirements_path }}"
+    virtualenv: "{{ app_env }}"
+    virtualenv_python: "python3"
+
+- name:  "Create Cron Job {{ app_user }}"
+  cron: 
+    name: "{{ app_user }} deploy updates with Cron Job"
+    user: "root"
+    hour: "*"
+    minute: "0"
+    job: "cd /opt/{{ app_user }}/{{ app_user }} && git pull"
+    cron_file: "{{ app_user }}_update"

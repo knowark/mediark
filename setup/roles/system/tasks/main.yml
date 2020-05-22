@@ -1,0 +1,40 @@
+- name: Update Ubuntu
+  apt:
+    update_cache: yes
+
+- name: Install Git
+  apt:
+    name: git
+
+- name: Install Python PIP
+  apt:
+    name: python3-pip
+
+- name: Install Python Psycopg2
+  apt:
+    name: python3-psycopg2
+
+- name: Install Python Psycopg2 with Python 2
+  apt:
+    name: python-psycopg2    
+
+- name: Install Python Virtualenvwrapper
+  apt:
+    name: virtualenvwrapper
+
+- name: Install NGINX
+  apt:
+    pkg: nginx
+    state: latest
+
+- name: "Install PostgreSQL {{ postgresql_version }}"
+  apt:
+    name: "postgresql-{{ postgresql_version }}"
+    state: present
+    update_cache: yes
+
+- name: "Install PostgreSQL Server Dev {{ postgresql_version }}"
+  apt:
+    name: "postgresql-server-dev-10"
+    state: present
+    update_cache: yes

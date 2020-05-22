@@ -1,0 +1,14 @@
+[Unit]
+Description={{ app_user }} Service
+
+[Service]
+Environment=MEDIARK_CONFIG=/etc/opt/{{ app_user }}/config.json
+User={{ app_user }}
+Group={{ app_user }}
+WorkingDirectory=/opt/{{ app_user }}/{{ app_user }}
+ExecStart=/opt/{{ app_user }}/env/bin/python -m {{ app_user }} serve
+Restart=on-failure
+SyslogIdentifier={{ app_user }}
+
+[Install]
+WantedBy=multi-user.target
