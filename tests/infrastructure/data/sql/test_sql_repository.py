@@ -10,7 +10,7 @@ from mediark.application.utilities import (
     QueryParser, EntityNotFoundError, StandardTenantProvider, Tenant,
     StandardAuthProvider, User)
 from mediark.application.repositories import Repository
-from mediark.infrastructure.data import SqlRepository
+from mediark.infrastructure.data.sql import SqlRepository
 
 
 class DummyEntity(Entity):

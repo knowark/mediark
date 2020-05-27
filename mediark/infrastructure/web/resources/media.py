@@ -23,7 +23,7 @@ class MediaResource:
           - Media
         """
 
-        domain, _, _ = get_request_filter(request)
+        domain, _, _ = await get_request_filter(request)
 
         headers = {
             'Total-Count': str(len(
@@ -49,7 +49,7 @@ class MediaResource:
                     $ref: '#/components/schemas/Media'
         """
 
-        domain, limit, offset = get_request_filter(request)
+        domain, limit, offset = await get_request_filter(request)
 
         medias = MediaSchema().dump(
             await self.mediark_reporter.search_media(domain), many=True)
