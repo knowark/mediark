@@ -28,7 +28,7 @@ class DefaultConnectionManager(ConnectionManager):
         self.default = default or self.settings[0]['name']
 
     async def get(self, pool: str = "") -> Connection:
-        connection: Connection = connections_var.get(default=None)
+        connection: Connection = connections_var.get(None)
 
         if connection is None:
             if self.pools == {}:
