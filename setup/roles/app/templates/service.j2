@@ -2,11 +2,11 @@
 Description={{ app_user }} Service
 
 [Service]
-Environment=MEDIARK_CONFIG=/etc/opt/{{ app_user }}/config.json
+EnvironmentFile=/etc/profile.d/{{ app_user }}.sh
 User={{ app_user }}
 Group={{ app_user }}
 WorkingDirectory=/opt/{{ app_user }}/{{ app_user }}
-ExecStart=/opt/{{ app_user }}/env/bin/python -m {{ app_user }} serve
+ExecStart=/opt/{{ app_user }}/env/bin/python -u -m {{ app_user }} serve
 Restart=on-failure
 SyslogIdentifier={{ app_user }}
 
