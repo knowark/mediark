@@ -4,7 +4,11 @@
     dest: "{{ service_path }}/{{ app_user }}.service"
     mode: 0755
 
-#Start Services
+- name: "Deploy Environment Variables Empty File"
+  template:
+    src: mediark.sh.j2
+    dest: "/etc/profile.d/{{ app_user }}.sh"
+    mode: 0644
 
 - name: "Restart {{ app_user }} Service"
   systemd:

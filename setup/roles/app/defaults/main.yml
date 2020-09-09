@@ -30,13 +30,13 @@ app_configuration_path: "{{ app_configuration_directory }}/config.json"
 
 app_database_path: "{{ app_data_directory }}/data.json"
 
+app_port: 8080
+
 # Database
 
-postgresql_version: 10
+postgresql_version: 12
 
 # Nginx Configuration
-
-port: 8080
 
 sites_available: "/etc/nginx/sites-available"
 

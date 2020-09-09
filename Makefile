@@ -57,8 +57,11 @@ dev-deploy:
 	 bin/dev_deploy.sh
 
 deploy:
-	./setup/deploy.sh
+	ansible-playbook -c local -i localhost, setup/deploy.yml
 
+local:
+	./setup/local.sh
+	
 update:
 	git clean -xdf
 	git reset --hard

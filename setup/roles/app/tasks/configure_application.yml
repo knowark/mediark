@@ -37,19 +37,40 @@
     group: "{{ app_user }}"
     mode: 0775
 
+- name: Change Repository Permissions
+  file:
+    path: "/var/git/{{ app_user }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    recurse: yes
+    mode: 0775
+  ignore_errors: true
+
 - name: "Symlink {{ app_user }} Repository"
+  become: yes
+  become_user: "{{ app_user }}"
   file:
     src: "/var/git/{{ app_user }}"
     dest: "{{ app_repository }}"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
     state: link
+  ignore_errors: true
 
-- name: "Create {{ app_user }} Virtualenv and Install Packages"
+- name: "Install Wheels in Virtualenv"
+  become: yes
+  become_user: "{{ app_user }}"
+  pip:
+    name: "wheel"
+    virtualenv: "{{ app_env }}"
+
+- name: "Install Requirements Inside Virtualenv"
   become: yes
   become_user: "{{ app_user }}"
   pip:
     requirements: "{{ app_requirements_path }}"
     virtualenv: "{{ app_env }}"
-    virtualenv_python: "python3"
 
 - name:  "Create Cron Job {{ app_user }}"
   cron: 
