@@ -47,13 +47,18 @@ class EntityNotFoundError(RepositoryError):
 class EntityValidationError(RepositoryError):
     """Entity consistency validation error"""
 
-
-# Coordinators
-
-
-class CoordinatorError(ApplicationError):
-    """Coordinators' base error class."""
+# Managers
 
 
-class DataValidationError(CoordinatorError):
-    """Data Validation Error."""
+class ManagerError(ApplicationError):
+    """Managers' base error class."""
+
+
+class DataValidationError(ManagerError):
+    """Data Validation"""
+
+# Infrastructure
+
+
+class InfrastructureError(ApplicationError):
+    """Infrastructure's base error class."""

@@ -1,7 +1,7 @@
 from mediark.application.domain.services import (
     FileStoreService, MemoryFileStoreService)
 from mediark.application.domain.common import (
-    Tenant, StandardTenantProvider, StandardAuthProvider)
+    Tenant, User, StandardTenantProvider, StandardAuthProvider)
 
 
 def test_file_store_service() -> None:
@@ -20,10 +20,13 @@ async def test_memory_file_store_service_store() -> None:
         'id': file_id,
         'content': content
     }]
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(name="Default"))
+    auth_provider = StandardAuthProvider()
+    auth_provider.setup(User(id='001', name='johndoe'))
 
     file_store_service = MemoryFileStoreService(
-        StandardTenantProvider(),
-        StandardAuthProvider())
+        tenant_provider, auth_provider)
     uri, *_ = await file_store_service.store(contexts)
 
     assert isinstance(uri, str)
@@ -41,6 +44,10 @@ async def test_memory_file_store_service_store_many() -> None:
             'content': b'BASE64_ENCODED_CONTENT'
         }
     ]
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(name="Default"))
+    auth_provider = StandardAuthProvider()
+    auth_provider.setup(User(id='001', name='johndoe'))
 
     file_store_service = MemoryFileStoreService(
         StandardTenantProvider(),

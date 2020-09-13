@@ -1,5 +1,5 @@
 from pytest import fixture, raises
-from mediark.application.domain.common import TenantLocationError, Tenant
+from mediark.application.domain.common import Tenant
 
 
 @fixture

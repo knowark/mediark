@@ -1,6 +1,6 @@
 from pytest import fixture, raises
 from mediark.application.domain.common import (
-    TenantProvider, StandardTenantProvider, Tenant)
+    TenantProvider, Tenant)
 
 
 def test_tenant_provider_methods():
