@@ -1,5 +1,6 @@
 import os
 from typing import Dict, Any
+from pathlib import Path
 
 
 Config = Dict[str, Any]
@@ -42,7 +43,7 @@ config: Config = {
         }
     },
     'data': {
-            # 'dir_path': Path.home() / 'data',
+            'dir_path': Path.home() / 'data',
             'media': {
                 'dir_path': 'media',
                 'audios': {
@@ -65,10 +66,21 @@ config: Config = {
                     'database': 'images.db'
                 },
             },
+            'json':  {
+                'dir_path': 'json',
+                'audios': {
+                    'dir_path': 'audios',
+                    'database': 'audios.json'
+                },
+                'images': {
+                    'dir_path': 'images',
+                    'database': 'images.json'
+                },
+            },
     },
     'domain': {
         'https://mediark.dev.nubark.cloud'
-    }
+    },
 }
 
 

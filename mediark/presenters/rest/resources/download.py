@@ -5,7 +5,7 @@ from injectark import Injectark
 
 class DownloadResource:
     def __init__(self, injector: Injectark) -> None:
-        self.file_reporter = injector['FileReporter']
+        self.file_informer = injector['FileInformer']
 
     async def get(self, request: web.Request) -> Any:
         """
@@ -19,5 +19,5 @@ class DownloadResource:
         """
 
         uri = request.match_info.get('uri')
-        response_dict = await self.file_reporter.load(uri)
+        response_dict = await self.file_informer.load(uri)
         return web.Response(**response_dict)

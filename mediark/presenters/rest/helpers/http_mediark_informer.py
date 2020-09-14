@@ -1,10 +1,10 @@
 from typing import List, Any
-from ....application.utilities import TenantProvider
-from ....application.reporters import (
-    StandardMediarkReporter, MediaDictList, SearchDomain)
+from ....application.domain.common import TenantProvider
+from ....application.informers import (
+    StandardMediarkInformer, MediaDictList, SearchDomain)
 
 
-class HttpMediarkReporter(StandardMediarkReporter):
+class HttpMediarkInformer(StandardMediarkInformer):
 
     def __init__(self, domain: str, tenant_provider: TenantProvider,
                  *args) -> None:

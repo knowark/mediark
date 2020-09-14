@@ -3,8 +3,8 @@ base = {
     "AuthProvider": {
         "method": "standard_auth_provider"
     },
-    "SessionCoordinator": {
-        "method": "session_coordinator"
+    "SessionManager": {
+        "method": "session_manager"
     },
     # Query parser
     "QueryParser": {
@@ -23,8 +23,8 @@ base = {
     "TenantSupplier": {
         "method": "memory_tenant_supplier"
     },
-    "SetupSupplier": {
-        "method": "memory_setup_supplier"
+    "MigrationSupplier": {
+        "method": "memory_migration_supplier"
     },
     "TransactionManager": {
         "method": "memory_transaction_manager",
@@ -32,14 +32,14 @@ base = {
     "MediaRepository": {
         "method": "memory_media_repository",
     },
-    "MediaStorageCoordinator": {
-        "method": "media_storage_coordinator",
+    "MediaStorageManager": {
+        "method": "media_storage_manager",
     },
-    "MediarkReporter": {
-        "method": "standard_mediark_reporter",
+    "MediarkInformer": {
+        "method": "standard_mediark_informer",
     },
-    "FileReporter": {
-        "method": "standard_file_reporter",
+    "FileInformer": {
+        "method": "standard_file_informer",
     },
     "FileStoreService": {
         "method": "memory_file_store_service"

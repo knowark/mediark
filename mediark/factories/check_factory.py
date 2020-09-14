@@ -1,12 +1,11 @@
-from pathlib import Path
-from ...application.models import Media
-from ...application.repositories import (
+from ..application.domain.models import Media
+from ..application.domain.repositories import (
     MediaRepository, MemoryMediaRepository)
-from ...application.utilities import (
+from ..application.domain.common import (
     QueryParser, TenantProvider, StandardTenantProvider,
     AuthProvider, StandardAuthProvider)
-from ..config import Config
-from ..core import TenantSupplier, MemoryTenantSupplier
+from ..core import Config
+from ..core.suppliers.common.tenancy import TenantSupplier, MemoryTenantSupplier
 from .http_factory import HttpFactory
 
 
@@ -16,7 +15,7 @@ class CheckFactory(HttpFactory):
 
     def check_tenant_supplier(self) -> MemoryTenantSupplier:
         tenant_supplier = MemoryTenantSupplier()
-        tenant_supplier.create_tenant({
+        tenant_supplier.ensure_tenant({
             'id': '001',
             'name': 'Default',
             'zone': 'default'

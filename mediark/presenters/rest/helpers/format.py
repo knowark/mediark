@@ -1,5 +1,5 @@
 import re
-from rapidjson import loads, JSONDecodeError
+from json import loads, JSONDecodeError
 from typing import Tuple, List, Dict, Any
 
 

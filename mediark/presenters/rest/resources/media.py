@@ -1,5 +1,5 @@
 from aiohttp import web
-from rapidjson import dumps, loads
+from json import dumps, loads
 from typing import Any, Dict, Tuple
 from injectark import Injectark
 from marshmallow import ValidationError
@@ -11,9 +11,9 @@ class MediaResource:
 
     def __init__(self, injector: Injectark) -> None:
         self.injector = injector
-        self.media_storage_coordinator = self.injector[
-            'MediaStorageCoordinator']
-        self.mediark_reporter = self.injector['MediarkReporter']
+        self.media_storage_manager = self.injector[
+            'MediaStorageManager']
+        self.mediark_informer = self.injector['MediarkInformer']
 
     async def head(self, request: web.Request) -> web.Response:
         """
@@ -27,7 +27,7 @@ class MediaResource:
 
         headers = {
             'Total-Count': str(len(
-                await self.mediark_reporter.search_media(domain)))
+                await self.mediark_informer.search_media(domain)))
         }
 
         return web.Response(headers=headers)
@@ -52,7 +52,7 @@ class MediaResource:
         domain, limit, offset = get_request_filter(request)
 
         medias = MediaSchema().dump(
-            await self.mediark_reporter.search_media(domain), many=True)
+            await self.mediark_informer.search_media(domain), many=True)
 
         return web.json_response(medias, dumps=dumps)
 
@@ -74,6 +74,6 @@ class MediaResource:
         """
         media_records = MediaSchema(many=True).loads(await request.text())
 
-        await self.media_storage_coordinator.store(media_records)
+        await self.media_storage_manager.store(media_records)
 
         return web.Response(status=200)

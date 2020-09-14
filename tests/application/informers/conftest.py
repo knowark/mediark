@@ -6,9 +6,9 @@
 #     Tenant, StandardTenantProvider, StandardTenantProvider,
 #     StandardAuthProvider, QueryParser)
 # from mediark.application.services import MemoryFileStoreService
-# from mediark.application.reporters import (
-#     MediarkReporter, StandardMediarkReporter,
-#     FileReporter, StandardFileReporter)
+# from mediark.application.informers import (
+#     MediarkInformer, StandardMediarkInformer,
+#     FileInformer, StandardFileInformer)
 
 
 # @fixture
@@ -28,13 +28,13 @@
 
 
 # @fixture
-# def mediark_reporter(media_repository):
-#     return StandardMediarkReporter(media_repository)
+# def mediark_informer(media_repository):
+#     return StandardMediarkInformer(media_repository)
 
 
 # @fixture
-# def file_reporter():
+# def file_informer():
 #     file_store_service = MemoryFileStoreService(
 #         StandardTenantProvider(),
 #         StandardAuthProvider())
-#     return StandardFileReporter(file_store_service)
+#     return StandardFileInformer(file_store_service)

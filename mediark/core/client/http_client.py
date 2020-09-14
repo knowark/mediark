@@ -2,6 +2,7 @@ from aiohttp import ClientSession
 
 
 class HttpClientSupplier:
+
     def __init__(self):
         self.client = ClientSession()
 

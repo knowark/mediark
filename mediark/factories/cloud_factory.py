@@ -1,10 +1,10 @@
 from pathlib import Path
-from ...application.utilities import (
+from ..application.domain.common import (
     TenantProvider, StandardTenantProvider)
-from ...infrastructure.data import (
+from ..core.suppliers import (
     SwiftAuthSupplier, SwiftFileStoreService)
-from ..config import Config
-from ..core import HttpClientSupplier
+from ..core import Config
+from ..core.client import HttpClientSupplier
 from .memory_factory import MemoryFactory
 from .directory_factory import DirectoryFactory
 from .sql_factory import SqlFactory

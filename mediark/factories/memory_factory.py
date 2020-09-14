@@ -1,21 +1,21 @@
 from pathlib import Path
-from ...application.repositories import (
+from ..application.domain.repositories import (
     MediaRepository, MemoryMediaRepository)
-from ...application.utilities import (
+from ..application.domain.common import (
     User, QueryParser, TenantProvider, StandardTenantProvider,
     AuthProvider, StandardAuthProvider, TransactionManager,
     MemoryTransactionManager)
-from ...application.services import (
+from ..application.domain.services import (
     IdService, StandardIdService,
     FileStoreService, MemoryFileStoreService)
-from ...application.coordinators import (
-    SessionCoordinator, MediaStorageCoordinator)
-from ...application.reporters import (
-    MediarkReporter, StandardMediarkReporter,
-    FileReporter, StandardFileReporter)
-from ..config import Config
-from ..core import MemoryTenantSupplier, MemorySetupSupplier
-from .factory import Factory
+from ..application.managers import (
+    SessionManager, MediaStorageManager)
+from ..application.informers import (
+    MediarkInformer, StandardMediarkInformer,
+    FileInformer, StandardFileInformer)
+from ..core import Config, MemoryMigrationSupplier
+from ..core.suppliers.common.tenancy import MemoryTenantSupplier
+from injectark import Factory
 
 
 class MemoryFactory(Factory):
@@ -28,8 +28,8 @@ class MemoryFactory(Factory):
     def memory_tenant_supplier(self) -> MemoryTenantSupplier:
         return MemoryTenantSupplier()
 
-    def memory_setup_supplier(self) -> MemorySetupSupplier:
-        return MemorySetupSupplier()
+    def memory_migration_supplier(self) -> MemoryMigrationSupplier:
+        return MemoryMigrationSupplier()
 
     def memory_transaction_manager(self) -> MemoryTransactionManager:
         return MemoryTransactionManager()
@@ -38,7 +38,7 @@ class MemoryFactory(Factory):
         return StandardTenantProvider()
 
     def standard_auth_provider(self) -> StandardAuthProvider:
-        return StandardAuthProvider(User(id="1", name="John Doe"))
+        return StandardAuthProvider()
 
     # Repositories
 
@@ -59,33 +59,33 @@ class MemoryFactory(Factory):
     ) -> MemoryFileStoreService:
         return MemoryFileStoreService(tenant_provider, auth_provider)
 
-    # Coordinators
+    # Managers
 
-    def session_coordinator(self, tenant_provider: TenantProvider,
-                            auth_provider: AuthProvider,
-                            transaction_manager: TransactionManager
-                            ) -> SessionCoordinator:
-        return transaction_manager(SessionCoordinator)(
+    def session_manager(self, tenant_provider: TenantProvider,
+                        auth_provider: AuthProvider,
+                        transaction_manager: TransactionManager
+                        ) -> SessionManager:
+        return transaction_manager(SessionManager)(
             tenant_provider, auth_provider)
 
-    def media_storage_coordinator(self, media_repository: MediaRepository,
-                                  id_service: IdService,
-                                  file_store_service: FileStoreService,
-                                  transaction_manager: TransactionManager
-                                  ) -> MediaStorageCoordinator:
-        return transaction_manager(MediaStorageCoordinator)(
+    def media_storage_manager(self, media_repository: MediaRepository,
+                              id_service: IdService,
+                              file_store_service: FileStoreService,
+                              transaction_manager: TransactionManager
+                              ) -> MediaStorageManager:
+        return transaction_manager(MediaStorageManager)(
             media_repository, id_service,
             file_store_service)
 
-    # Reporters
+    # Informers
 
-    def standard_mediark_reporter(self,
+    def standard_mediark_informer(self,
                                   media_repository: MediaRepository,
                                   transaction_manager: TransactionManager
-                                  ) -> StandardMediarkReporter:
+                                  ) -> StandardMediarkInformer:
         return transaction_manager(
-            StandardMediarkReporter)(media_repository)
+            StandardMediarkInformer)(media_repository)
 
-    def standard_file_reporter(self, file_store_service: FileStoreService
-                               ) -> StandardFileReporter:
-        return StandardFileReporter(file_store_service)
+    def standard_file_informer(self, file_store_service: FileStoreService
+                               ) -> StandardFileInformer:
+        return StandardFileInformer(file_store_service)

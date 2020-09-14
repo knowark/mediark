@@ -1,7 +1,7 @@
 # from typing import List
 # from pytest import fixture, raises
 # from aiohttp import web
-# from rapidjson import loads, dumps
+# from json import loads, dumps
 # from marshmallow import ValidationError
 # from base64 import b64encode
 # from mediark.infrastructure.web.resources import RootResource

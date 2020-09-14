@@ -1,18 +1,27 @@
 # import inspect
-# from pytest import fixture, mark
 # from injectark import Injectark
-# from mediark.application.utilities.tenancy import Tenant
-# from mediark.infrastructure.factories import build_strategy, build_factory
+# from mediark.core import config
+# from mediark.factories import factory_builder, strategy_builder
 
 
-# async def test_config(test_data):
-#     for config in test_data:
-#         factory = build_factory(config)
-#         strategy = build_strategy(config['strategies'], config['strategy'])
-#         resolver = Injectark(
-#             strategy=strategy, factory=factory)
-#         resolver["TenantProvider"].setup(Tenant(id="1", name="default"))
+# test_tuples = [
+#     ('CheckFactory',        ['base', 'http', 'check']),
+#     ('CloudFactory',        ['base', 'sql', 'swift']),
+#     ('DirectoryFactory',    ['base', 'http', 'directory']),
+#     ('HttpFactory',         ['base', 'http']),
+#     ('MemoryFactory',       ['base']),
+#     ('SqlFactory',          ['base''directory', 'sql']),
+# ]
+
+
+# def test_factories():
+#     for factory_name, strategy_names in test_tuples:
+#         factory = factory_builder.build(config, name=factory_name)
+#         strategy = strategy_builder.build(strategy_names)
+
+#         injector = Injectark(strategy=strategy, factory=factory)
+
 #         for resource in strategy.keys():
-#             result = resolver.resolve(resource)
+#             result = injector.resolve(resource)
 #             classes = inspect.getmro(type(result))
 #             assert resource in [item.__name__ for item in classes]
