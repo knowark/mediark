@@ -8,9 +8,11 @@ Config = Dict[str, Any]
 config: Config = {
     'port': int(os.environ.get('MEDIARK_PORT', 6291)),
     'auto': bool(os.environ.get('MEDIARK_AUTO', True)),
-    'factory': os.environ.get('MEDIARK_FACTORY', 'SqlFactory'),
+    # 'factory': os.environ.get('MEDIARK_FACTORY', 'SqlFactory'),
+    'factory': os.environ.get('MEDIARK_FACTORY', 'CloudFactory'),
     'strategies': os.environ.get(
-        'MEDIARK_STRATEGIES', 'base,sql').split(','),
+        # 'MEDIARK_STRATEGIES', 'base,sql').split(','),
+        'MEDIARK_STRATEGIES', 'base,sql,swift').split(','),
     'tenancy': {
         "dsn": os.environ.get('MEDIARK_TENANCY_DSN', (
             "postgresql://mediark:mediark@localhost/mediark"))

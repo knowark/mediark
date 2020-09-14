@@ -2,7 +2,7 @@ http = {
     "HttpClientSupplier": {
         "method": "http_client_supplier",
     },
-    "MediarkInformer": {
+    "HttpMediarkInformer": {
         "method": "http_mediark_informer",
     }
 }

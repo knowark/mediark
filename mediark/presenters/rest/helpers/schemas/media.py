@@ -1,9 +1,8 @@
 from marshmallow import Schema, fields
+from .entity import EntitySchema
 
 
-class MediaSchema(Schema):
-    id = fields.Str(
-        required=False, example="637250d6-dc57-4d96-9f8a-2697ca5c55c3")
+class MediaSchema(EntitySchema):
     name = fields.Str(
         required=False, example="company_logo")
     type = fields.Str(

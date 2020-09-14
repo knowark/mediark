@@ -1,79 +1,88 @@
-from aiohttp import web
-from json import dumps, loads
-from typing import Any, Dict, Tuple
+from functools import partial
 from injectark import Injectark
-from marshmallow import ValidationError
-from ..helpers import get_request_filter
-from ..schemas import MediaSchema
+from ..helpers.schemas import MediaSchema
+from ..helpers import missing
+from .resource import Resource
 
 
-class MediaResource:
-
+class MediaResource(Resource):
     def __init__(self, injector: Injectark) -> None:
-        self.injector = injector
-        self.media_storage_manager = self.injector[
-            'MediaStorageManager']
-        self.mediark_informer = self.injector['MediarkInformer']
+        informer = injector['MediarkInformer']
+        #informer = injector['HttpMediarkInformer']
+        manager = injector['MediaStorageManager']
 
-    async def head(self, request: web.Request) -> web.Response:
-        """
-        ---
-        summary: Return medias HEAD headers.
-        tags:
-          - Media
-        """
+        super().__init__(
+            MediaSchema,
+            missing,
+            partial(informer.search_media, 'media'),
+            manager.store,
+            missing)
 
-        domain, _, _ = get_request_filter(request)
+    # def __init__(self, injector: Injectark) -> None:
+    #     self.injector = injector
+    #     self.media_storage_manager = self.injector[
+    #         'MediaStorageManager']
+    #     self.mediark_informer = self.injector['MediarkInformer']
 
-        headers = {
-            'Total-Count': str(len(
-                await self.mediark_informer.search_media(domain)))
-        }
+    # async def head(self, request: web.Request) -> web.Response:
+    #     """
+    #     ---
+    #     summary: Return medias HEAD headers.
+    #     tags:
+    #       - Media
+    #     """
 
-        return web.Response(headers=headers)
+    #     domain, _, _ = get_request_filter(request)
 
-    async def get(self, request: web.Request) -> web.Response:
-        """
-        ---
-        summary: Return all medias.
-        tags:
-          - Media
-        responses:
-          200:
-            description: "Successful response"
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Media'
-        """
+    #     headers = {
+    #         'Total-Count': str(len(
+    #             await self.mediark_informer.search_media(domain)))
+    #     }
 
-        domain, limit, offset = get_request_filter(request)
+    #     return web.Response(headers=headers)
 
-        medias = MediaSchema().dump(
-            await self.mediark_informer.search_media(domain), many=True)
+    # async def get(self, request: web.Request) -> web.Response:
+    #     """
+    #     ---
+    #     summary: Return all medias.
+    #     tags:
+    #       - Media
+    #     responses:
+    #       200:
+    #         description: "Successful response"
+    #         content:
+    #           application/json:
+    #             schema:
+    #               type: array
+    #               items:
+    #                 $ref: '#/components/schemas/Media'
+    #     """
 
-        return web.json_response(medias, dumps=dumps)
+    #     domain, limit, offset = get_request_filter(request)
 
-    async def put(self, request: web.Request) -> web.Response:
-        """
-        ---
-        summary: Create or update an media.
-        tags:
-          - Media
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Media'
-        responses:
-          200:
-            description: "Success"
-        """
-        media_records = MediaSchema(many=True).loads(await request.text())
+    #     medias = MediaSchema().dump(
+    #         await self.mediark_informer.search_media(domain), many=True)
 
-        await self.media_storage_manager.store(media_records)
+    #     return web.json_response(medias, dumps=dumps)
 
-        return web.Response(status=200)
+    # async def put(self, request: web.Request) -> web.Response:
+    #     """
+    #     ---
+    #     summary: Create or update an media.
+    #     tags:
+    #       - Media
+    #     requestBody:
+    #       required: true
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/Media'
+    #     responses:
+    #       200:
+    #         description: "Success"
+    #     """
+    #     media_records = MediaSchema(many=True).loads(await request.text())
+
+    #     await self.media_storage_manager.store(media_records)
+
+    #     return web.Response(status=200)

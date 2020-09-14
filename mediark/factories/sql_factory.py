@@ -9,6 +9,7 @@ from ..core.suppliers.common.tenancy import (
     TenantSupplier, SchemaTenantSupplier)
 from ..core import Config
 from ..core.suppliers.migration import SchemaMigrationSupplier
+from ..core.suppliers.common.connection import SchemaConnection
 from ..core.data import (
     ConnectionManager, DefaultConnectionManager, SqlTransactionManager,
     SqlMediaRepository)
@@ -35,12 +36,6 @@ class SqlFactory(DirectoryFactory):
     ) -> SqlTransactionManager:
         return SqlTransactionManager(connection_manager, tenant_provider)
 
-    def schema_tenant_supplier(self) -> SchemaTenantSupplier:
-        catalog = self.config['tenancy']['dsn']
-        zones = {key: value['dsn'] for key, value in
-                 self.config['zones'].items()}
-        return SchemaTenantSupplier(catalog, zones)
-
     def sql_media_repository(
         self, auth_provider: AuthProvider,
         connection_manager: ConnectionManager,
@@ -49,6 +44,18 @@ class SqlFactory(DirectoryFactory):
     ) -> SqlMediaRepository:
         return SqlMediaRepository(
             tenant_provider, auth_provider, connection_manager, sql_parser)
+
+    # def schema_tenant_supplier(self) -> SchemaTenantSupplier:
+    #     catalog = self.config['tenancy']['dsn']
+    #     zones = {key: value['dsn'] for key, value in
+    #              self.config['zones'].items()}
+    #     return SchemaTenantSupplier(catalog, zones)
+
+    def schema_tenant_supplier(self) -> SchemaTenantSupplier:
+        zones = {key: value['dsn'] for key, value in
+                 self.config['zones'].items()}
+        connection = SchemaConnection(self.config['tenancy']['dsn'])
+        return SchemaTenantSupplier(connection, zones)
 
     def schema_migration_supplier(
             self, tenant_supplier: TenantSupplier) -> SchemaMigrationSupplier:

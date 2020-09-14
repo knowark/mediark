@@ -7,7 +7,7 @@ from ..core import Config
 from ..core.suppliers.common.tenancy import (
     TenantSupplier, MemoryTenantSupplier)
 from ..core.client import HttpClientSupplier
-from ..presenters.rest import HttpMediarkInformer
+from ..presenters.rest.helpers import HttpMediarkInformer
 from .memory_factory import MemoryFactory
 
 

@@ -53,6 +53,12 @@ def test_mediark_informer_instantiation(mediark_informer):
     assert isinstance(mediark_informer, MediarkInformer)
 
 
-async def test_mediark_informer_search_media(mediark_informer):
-    result = await mediark_informer.search_media([])
-    assert len(result) == 2
+async def test_mediark_informer_search_medias(
+        mediark_informer: MediarkInformer) -> None:
+    domain: QueryDomain = []
+    medias = await mediark_informer.search_media('media', domain)
+    assert len(medias) == 2
+
+# async def test_mediark_informer_search_media(mediark_informer):
+#     result = await mediark_informer.search_media([])
+#     assert len(result) == 2
