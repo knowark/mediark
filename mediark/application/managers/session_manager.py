@@ -1,10 +1,8 @@
-import time
-import datetime
-from typing import Dict, Union, Any
-from ..utilities import TenantProvider, Tenant, AuthProvider, User
+from typing import Dict, Any
+from ..domain.common import TenantProvider, Tenant, AuthProvider, User
 
 
-class SessionCoordinator:
+class SessionManager:
     def __init__(self, tenant_provider: TenantProvider,
                  auth_provider: AuthProvider) -> None:
         self.tenant_provider = tenant_provider

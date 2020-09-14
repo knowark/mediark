@@ -1,15 +1,15 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any
-from ..services import FileStoreService
+from ..domain.services import FileStoreService
 
 
-class FileReporter(ABC):
+class FileInformer(ABC):
     @abstractmethod
     async def load(self, uri: str) -> Dict[str, Any]:
         """Load file from it's location"""
 
 
-class StandardFileReporter(FileReporter):
+class StandardFileInformer(FileInformer):
     def __init__(self, file_store_service: FileStoreService) -> None:
         self.file_store_service = file_store_service
 

@@ -1,16 +1,16 @@
 from abc import ABC, abstractmethod
-from ..repositories import MediaRepository
+from ..domain.repositories import MediaRepository
 from .types import MediaDictList, SearchDomain
 
 
-class MediarkReporter(ABC):
+class MediarkInformer(ABC):
 
     @abstractmethod
     async def search_media(self, domain: SearchDomain) -> MediaDictList:
         """Search Mediark's Media"""
 
 
-class StandardMediarkReporter(MediarkReporter):
+class StandardMediarkInformer(MediarkInformer):
 
     def __init__(self, media_repository: MediaRepository) -> None:
         self.media_repository = media_repository

@@ -1,13 +1,12 @@
-from ..models import Media
-from typing import List, Tuple, Dict, Any
+from ..domain.models import Media
+from typing import List
 from base64 import b64decode
-from ..repositories import MediaRepository
-from ..services import IdService, FileStoreService
-from ..utilities import EntityNotFoundError
+from ..domain.repositories import MediaRepository
+from ..domain.services import IdService, FileStoreService
 from .types import RecordList
 
 
-class MediaStorageCoordinator:
+class MediaStorageManager:
     def __init__(self,
                  media_repository: MediaRepository,
                  id_service: IdService,
