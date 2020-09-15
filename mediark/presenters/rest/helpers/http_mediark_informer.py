@@ -1,8 +1,7 @@
 from typing import List, Any
 from ....application.domain.common import TenantProvider
-from ....application.informers import (
-    StandardMediarkInformer, MediaDictList)
-from ....application.informers.types import QueryDomain
+from ....application.informers import StandardMediarkInformer
+from ....application.domain.common import QueryDomain, RecordList
 from ....application.domain.models import Media
 
 
@@ -21,7 +20,15 @@ class HttpMediarkInformer(StandardMediarkInformer):
             item['url'] = download_url + '/' + uri
         return items
 
-    async def search_media(self, domain: QueryDomain) -> MediaDictList:
-        result = await super().search_media(Media, domain)
+    async def search_media(self,
+                           model: str,
+                           domain: QueryDomain = None,
+                           limit: int = 1000,
+                           offset: int = 0) -> RecordList:
+        result = await super().search('media', domain)
         media_download = f"{self.domain}/download"
         return self._prepend_download(media_download, result)
+        # result = await super().search('media',
+        #                               domain or [], limit=limit, offset=offset)
+        # media_download = f"{self.domain}/download"
+        # return self._prepend_download(media_download, result)

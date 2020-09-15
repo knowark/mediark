@@ -1,11 +1,9 @@
 from ..application.domain.models import Media
-from ..application.domain.repositories import (
-    MediaRepository, MemoryMediaRepository)
+from ..application.domain.repositories import MemoryMediaRepository
 from ..application.domain.common import (
-    QueryParser, TenantProvider, StandardTenantProvider,
-    AuthProvider, StandardAuthProvider)
+    QueryParser, TenantProvider, AuthProvider)
 from ..core import Config
-from ..core.suppliers.common.tenancy import TenantSupplier, MemoryTenantSupplier
+from ..core.suppliers.common.tenancy import MemoryTenantSupplier
 from .http_factory import HttpFactory
 
 
@@ -18,7 +16,6 @@ class CheckFactory(HttpFactory):
         tenant_supplier.ensure_tenant({
             'id': '001',
             'name': 'Default',
-            'zone': 'default'
         })
         return tenant_supplier
 
@@ -28,10 +25,21 @@ class CheckFactory(HttpFactory):
         media_repository = MemoryMediaRepository(
             query_parser, tenant_provider, auth_provider)
         media_repository.load({
+            # "default": {
+            #     "1": Media(id='1', reference='ref_1', uri='value_1'),
+            #     "2": Media(id='2', reference='ref_2', uri='value_2'),
+            #     "3": Media(id='3', reference='ref_3', uri='value_3')
+            # }
             "default": {
-                "1": Media(id='1', reference='ref_1',  uri='value_1'),
-                "2": Media(id='2', reference='ref_2', uri='value_2'),
-                "3": Media(id='3', reference='ref_3', uri='value_3')
+                '1': Media(
+                    **{'id': '1', 'reference': 'ref_1', 'uri': 'value_1'}
+                ),
+                '2': Media(
+                    **{'id': '2', 'reference': 'ref_2', 'uri': 'value_2'}
+                ),
+                '3': Media(
+                    **{'id': '3', 'reference': 'ref_3', 'uri': 'value_3'}
+                )
             }
         })
         return media_repository

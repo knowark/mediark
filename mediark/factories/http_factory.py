@@ -4,8 +4,6 @@ from ..application.domain.repositories import MediaRepository
 from ..application.managers import SessionManager
 from ..application.domain.common import TransactionManager, TenantProvider
 from ..core import Config
-from ..core.suppliers.common.tenancy import (
-    TenantSupplier, MemoryTenantSupplier)
 from ..core.client import HttpClientSupplier
 from ..presenters.rest.helpers import HttpMediarkInformer
 from .memory_factory import MemoryFactory

@@ -1,4 +1,4 @@
-from typing import List, Dict, Any
+from typing import Dict
 from pathlib import Path
 from migrark import sql_migrate
 from ..common.connection import SchemaConnection

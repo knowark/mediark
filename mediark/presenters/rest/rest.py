@@ -64,10 +64,3 @@ class RestApplication(web.Application):
         self._bind('/', RootResource(spec))
         self._bind('/medias', MediaResource(self.injector))
         self._bind('/downloads', DownloadResource(self.injector))
-
-        # Download Resource
-        # web.Application.router.add_route(
-        #     "get", r'/download/{uri:(.*)}',
-        #     getattr(DownloadResource(self.injector), "get", None))
-        # spec.path(path="/download", operations={
-        #     'get': {}}, resource=DownloadResource)

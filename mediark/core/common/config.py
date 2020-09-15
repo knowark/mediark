@@ -12,7 +12,7 @@ config: Config = {
     'factory': os.environ.get('MEDIARK_FACTORY', 'CloudFactory'),
     'strategies': os.environ.get(
         # 'MEDIARK_STRATEGIES', 'base,sql').split(','),
-        'MEDIARK_STRATEGIES', 'base,sql,swift').split(','),
+        'MEDIARK_STRATEGIES', 'base,http,directory,sql,swift').split(','),
     'tenancy': {
         "dsn": os.environ.get('MEDIARK_TENANCY_DSN', (
             "postgresql://mediark:mediark@localhost/mediark"))

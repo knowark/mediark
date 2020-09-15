@@ -7,7 +7,7 @@ from mediark.factories import factory_builder, strategy_builder
 
 @fixture
 def shell() -> Shell:
-    config['factory'] = 'BaseFactory'
+    config['factory'] = 'MemoryFactory'
     config['strategies'] = ['base']
 
     strategy = strategy_builder.build(config['strategies'])

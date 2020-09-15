@@ -4,7 +4,7 @@ sql = {
         "method": "sql_query_parser"
     },
 
-    # Connections
+    # Managers
     "ConnectionManager": {
         "method": "sql_connection_manager",
     },
@@ -16,7 +16,7 @@ sql = {
     "MediaRepository": {
         "method": "sql_media_repository",
     },
-    
+
     # Suppliers
     "TenantSupplier": {
         "method": "schema_tenant_supplier"

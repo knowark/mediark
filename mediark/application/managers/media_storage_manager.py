@@ -3,7 +3,7 @@ from typing import List
 from base64 import b64decode
 from ..domain.repositories import MediaRepository
 from ..domain.services import IdService, FileStoreService
-from .types import RecordList
+from ..domain.common import RecordList
 
 
 class MediaStorageManager:

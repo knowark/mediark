@@ -1,5 +1,4 @@
-from typing import Dict, Any
-from tenark.models import Tenant
+from typing import Dict
 from tenark.resolver import resolve_managers
 from ..connection import SchemaConnection
 from .memory_tenant_supplier import MemoryTenantSupplier

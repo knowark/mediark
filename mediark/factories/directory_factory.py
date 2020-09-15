@@ -1,10 +1,8 @@
 from pathlib import Path
-from ..application.domain.common import (
-    TenantProvider, StandardTenantProvider)
+from ..application.domain.common import TenantProvider
 from ..core.suppliers import (
     DirectoryFileStoreService)
 from ..core import Config
-from .memory_factory import MemoryFactory
 from .http_factory import HttpFactory
 
 

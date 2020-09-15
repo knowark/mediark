@@ -1,6 +1,6 @@
 import time
 from pathlib import Path
-from typing import Tuple, List, Dict, Any, cast
+from typing import List, Dict, Any
 from base64 import b64decode
 from uuid import UUID
 from ....application.domain.common import TenantProvider

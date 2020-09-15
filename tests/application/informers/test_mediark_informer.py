@@ -56,9 +56,11 @@ def test_mediark_informer_instantiation(mediark_informer):
 async def test_mediark_informer_search_medias(
         mediark_informer: MediarkInformer) -> None:
     domain: QueryDomain = []
-    medias = await mediark_informer.search_media('media', domain)
+    medias = await mediark_informer.search('media', domain)
     assert len(medias) == 2
 
-# async def test_mediark_informer_search_media(mediark_informer):
-#     result = await mediark_informer.search_media([])
-#     assert len(result) == 2
+
+async def test_mediark_informer_count_medias(
+        mediark_informer: MediarkInformer) -> None:
+    medias_count = await mediark_informer.count('media')
+    assert medias_count == 2

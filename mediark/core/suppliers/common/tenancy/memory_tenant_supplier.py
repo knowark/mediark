@@ -1,5 +1,4 @@
 from typing import List, Dict, Any
-from tenark.models import Tenant
 from tenark.resolver import resolve_managers
 from .tenant_supplier import TenantSupplier
 

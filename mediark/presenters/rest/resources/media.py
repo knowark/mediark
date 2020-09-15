@@ -7,13 +7,13 @@ from .resource import Resource
 
 class MediaResource(Resource):
     def __init__(self, injector: Injectark) -> None:
-        informer = injector['MediarkInformer']
-        #informer = injector['HttpMediarkInformer']
+        #informer = injector['MediarkInformer']
+        informer = injector['HttpMediarkInformer']
         manager = injector['MediaStorageManager']
 
         super().__init__(
             MediaSchema,
-            missing,
+            partial(informer.count, 'media'),
             partial(informer.search_media, 'media'),
             manager.store,
             missing)

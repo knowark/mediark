@@ -69,7 +69,6 @@ def swift_auth_supplier(mock_http_client):
 
 @fixture
 def swift_file_store_service(swift_auth_supplier, mock_http_client):
-    #data_config = build_config('DEV')['data']
     data_config = config
 
     standard_tenant_provider = StandardTenantProvider()

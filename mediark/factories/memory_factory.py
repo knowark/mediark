@@ -11,8 +11,7 @@ from ..application.domain.services import (
 from ..application.managers import (
     SessionManager, MediaStorageManager)
 from ..application.informers import (
-    MediarkInformer, StandardMediarkInformer,
-    FileInformer, StandardFileInformer)
+    StandardMediarkInformer, StandardFileInformer)
 from ..core import Config, MemoryMigrationSupplier
 from ..core.suppliers.common.tenancy import MemoryTenantSupplier
 from injectark import Factory
@@ -25,20 +24,21 @@ class MemoryFactory(Factory):
     def query_parser(self) -> QueryParser:
         return QueryParser()
 
-    def memory_tenant_supplier(self) -> MemoryTenantSupplier:
-        return MemoryTenantSupplier()
-
-    def memory_migration_supplier(self) -> MemoryMigrationSupplier:
-        return MemoryMigrationSupplier()
-
-    def memory_transaction_manager(self) -> MemoryTransactionManager:
-        return MemoryTransactionManager()
+    # Providers
 
     def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
 
     def standard_auth_provider(self) -> StandardAuthProvider:
         return StandardAuthProvider()
+
+    # Suppliers
+
+    def memory_tenant_supplier(self) -> MemoryTenantSupplier:
+        return MemoryTenantSupplier()
+
+    def memory_migration_supplier(self) -> MemoryMigrationSupplier:
+        return MemoryMigrationSupplier()
 
     # Repositories
 
@@ -48,18 +48,10 @@ class MemoryFactory(Factory):
         return MemoryMediaRepository(
             query_parser, tenant_provider, auth_provider)
 
-    # Services
-
-    def standard_id_service(self) -> StandardIdService:
-        return StandardIdService()
-
-    def memory_file_store_service(
-            self, tenant_provider: TenantProvider,
-            auth_provider: AuthProvider
-    ) -> MemoryFileStoreService:
-        return MemoryFileStoreService(tenant_provider, auth_provider)
-
     # Managers
+
+    def memory_transaction_manager(self) -> MemoryTransactionManager:
+        return MemoryTransactionManager()
 
     def session_manager(self, tenant_provider: TenantProvider,
                         auth_provider: AuthProvider,
@@ -89,3 +81,14 @@ class MemoryFactory(Factory):
     def standard_file_informer(self, file_store_service: FileStoreService
                                ) -> StandardFileInformer:
         return StandardFileInformer(file_store_service)
+
+    # Services
+
+    def standard_id_service(self) -> StandardIdService:
+        return StandardIdService()
+
+    def memory_file_store_service(
+            self, tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
+    ) -> MemoryFileStoreService:
+        return MemoryFileStoreService(tenant_provider, auth_provider)

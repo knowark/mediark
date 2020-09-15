@@ -13,5 +13,5 @@ class SqlMediaRepository(SqlRepository, MediaRepository):
                  auth_provider: AuthProvider,
                  connection_manager: ConnectionManager,
                  parser: SqlParser) -> None:
-        super().__init__('media', Media, tenant_provider,
-                         auth_provider, connection_manager, parser)
+        super().__init__('media', Media, connection_manager,
+                         parser, tenant_provider, auth_provider)
