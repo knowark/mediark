@@ -18,11 +18,6 @@ def parse_domain(filter: str) -> List[Any]:
     return domain
 
 
-def parse_dict(data: Dict[str, Any]) -> Dict[str, Any]:
-    return {camel_to_snake(key): value
-            for key, value in data.items()}
-
-
 def camel_to_snake(value: str) -> str:
     value = re.sub(r"[\-\.\s]", '_', str(value))
     return (value[0].lower() +

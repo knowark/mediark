@@ -1,10 +1,7 @@
 import time
 import io
 import tarfile
-from aiohttp import ClientResponse
-from pathlib import Path
-from typing import List, Tuple, Dict, Union, Any
-from base64 import b64decode
+from typing import List, Tuple, Dict, Any
 from uuid import UUID
 from .....application.domain.common import TenantProvider
 from .....application.domain.services import FileStoreService

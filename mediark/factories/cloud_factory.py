@@ -16,9 +16,6 @@ class CloudFactory(SqlFactory):
 
     def swift_auth_supplier(
             self, client: HttpClientSupplier) -> SwiftAuthSupplier:
-        # auth_url = self.config['data']['cloud']['swift']['auth_url']
-        # username = self.config['data']['cloud']['swift']['username']
-        # password = self.config['data']['cloud']['swift']['password']
         auth_url = self.config['cloud']['swift']['auth_url']
         username = self.config['cloud']['swift']['username']
         password = self.config['cloud']['swift']['password']

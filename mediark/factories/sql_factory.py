@@ -1,10 +1,5 @@
-import json
-from pathlib import Path
-from uuid import uuid4
 from filtrark import SqlParser, SafeEval
-from ..application.domain.common import (
-    AuthProvider, StandardAuthProvider, StandardTenantProvider,
-    TenantProvider, User)
+from ..application.domain.common import AuthProvider, TenantProvider
 from ..core.suppliers.common.tenancy import (
     TenantSupplier, SchemaTenantSupplier)
 from ..core import Config
@@ -44,12 +39,6 @@ class SqlFactory(DirectoryFactory):
     ) -> SqlMediaRepository:
         return SqlMediaRepository(
             tenant_provider, auth_provider, connection_manager, sql_parser)
-
-    # def schema_tenant_supplier(self) -> SchemaTenantSupplier:
-    #     catalog = self.config['tenancy']['dsn']
-    #     zones = {key: value['dsn'] for key, value in
-    #              self.config['zones'].items()}
-    #     return SchemaTenantSupplier(catalog, zones)
 
     def schema_tenant_supplier(self) -> SchemaTenantSupplier:
         zones = {key: value['dsn'] for key, value in

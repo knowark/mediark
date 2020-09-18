@@ -36,17 +36,6 @@ class Shell:
         serve_parser.add_argument('-p', '--port')
         serve_parser.set_defaults(func=self.serve)
 
-        # Migrate
-        # migrate_parser = subparsers.add_parser(
-        # 'migrate', help='Upgrade tenant schema version.')
-        # migrate_parser.set_defaults(func=self.migrate)
-        # migrate_parser.add_argument(
-        # "-t", "--tenant", help="Target tenant to upgrade",
-        # required=True)
-        # migrate_parser.add_argument(
-        # "-v", "--version", help="Migration version to upgrade",
-        # default='999')
-
         if len(argv) == 0:
             self.parser.print_help()
             self.parser.exit()
@@ -67,16 +56,3 @@ class Shell:
         logger.info("Creating tenant:", tenant_dict)
         tenant_supplier.ensure_tenant(tenant_dict)
         logger.info('END PROVISION')
-
-    # async def migrate(self, options: Dict[str, str]) -> None:
-        # logger.info(f'MIGRATE: {options}')
-        # tenant_supplier = self.injector['TenantSupplier']
-        # tenant = tenant_supplier.resolve_tenant(options['tenant'])
-        # zone = tenant['zone'] or 'default'
-
-        # database_uri = self.config['zones'][zone]['dsn']
-        # migrations_path = str((Path(__file__).parent.parent / 'data' /
-        # 'sql' / 'migrations').absolute())
-        # sql_migrate(database_uri, migrations_path, schema=tenant['slug'],
-        # target_version=options['version'])
-        # logger.info('END MIGRATE')

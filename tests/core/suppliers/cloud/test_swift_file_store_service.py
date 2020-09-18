@@ -55,3 +55,27 @@ async def test_swift_file_store_service_load(swift_file_store_service):
         'status': 200,
         'headers': {}
     }
+
+
+async def test_swift_file_store_service_make_url_no_suffix(
+        swift_file_store_service):
+    data_config = {
+        'cloud': {
+            'swift': {
+                'object_store_url': 'https://storage.cloud',
+                'container_prefix': 'north',
+            }
+        }
+    }
+    swift_file_store_service.data_config = data_config
+    contexts = [{
+        'id': 'f91bde0b-d094-45fd-bcf5-8cf24de853c0',
+        'created_at': 1583933912
+    }]
+    uri = 'images/2020/02/15/5db7ec47-8bb1-4707-89c1-ad5aa76355e9.jpg'
+
+    url = swift_file_store_service._make_url(uri)
+
+    assert url == (
+        'https://storage.cloud/north-custom-tenant/'
+        'images/2020/02/15/5db7ec47-8bb1-4707-89c1-ad5aa76355e9.jpg')

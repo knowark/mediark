@@ -62,5 +62,5 @@ class RestApplication(web.Application):
 
         # Resources
         self._bind('/', RootResource(spec))
-        self._bind('/medias', MediaResource(self.injector))
-        self._bind('/downloads', DownloadResource(self.injector))
+        self._bind('/media', MediaResource(self.injector))
+        self._bind('/download', DownloadResource(self.injector))

@@ -28,7 +28,4 @@ class HttpMediarkInformer(StandardMediarkInformer):
         result = await super().search('media', domain)
         media_download = f"{self.domain}/download"
         return self._prepend_download(media_download, result)
-        # result = await super().search('media',
-        #                               domain or [], limit=limit, offset=offset)
-        # media_download = f"{self.domain}/download"
-        # return self._prepend_download(media_download, result)
+

@@ -25,11 +25,6 @@ class CheckFactory(HttpFactory):
         media_repository = MemoryMediaRepository(
             query_parser, tenant_provider, auth_provider)
         media_repository.load({
-            # "default": {
-            #     "1": Media(id='1', reference='ref_1', uri='value_1'),
-            #     "2": Media(id='2', reference='ref_2', uri='value_2'),
-            #     "3": Media(id='3', reference='ref_3', uri='value_3')
-            # }
             "default": {
                 '1': Media(
                     **{'id': '1', 'reference': 'ref_1', 'uri': 'value_1'}
