@@ -28,7 +28,7 @@ def _register_schemas(spec):
 
 def _register_paths(spec):
     resources = [
-        ('Medias', 'Media'),
+        ('Media', 'Media'),
     ]
     for resource in resources:
         _append_path(spec, *resource)
@@ -46,10 +46,10 @@ def _append_path(spec, endpoint, schema):
                 'tags': [schema],
                 'responses': _respond(f"Modify {endpoint}", schema)
             },
-            'delete': {
-                'tags': [schema],
-                'responses': _respond(f"Delete {endpoint}", schema)
-            }
+            # 'delete': {
+            #     'tags': [schema],
+            #     'responses': _respond(f"Delete {endpoint}", schema)
+            # }
         }
     )
 

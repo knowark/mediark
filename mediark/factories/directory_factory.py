@@ -13,5 +13,7 @@ class DirectoryFactory(HttpFactory):
     def directory_file_store_service(
         self, tenant_provider: TenantProvider
     ) -> DirectoryFileStoreService:
+        # return DirectoryFileStoreService(
+        #     tenant_provider, self.config["data"])
         return DirectoryFileStoreService(
-            tenant_provider, self.config["data"])
+            tenant_provider, self.config)

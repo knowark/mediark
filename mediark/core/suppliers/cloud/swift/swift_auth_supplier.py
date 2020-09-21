@@ -21,6 +21,13 @@ class SwiftAuthSupplier:
         request = self._make_request()
 
         async with self.client.post(self.auth_url, json=request) as response:
+            print("@"*120)
+            print("self.auth_url   ", self.auth_url)
+            print("request  ", request)
+            print("response   ", response)
+            print("response header  ", response.headers)
+            print("@"*120)
+            self.token = response.headers['X-Subject-Token']
             self.token = response.headers['X-Subject-Token']
             payload = await response.json()
             self.expires_at = time.strptime(

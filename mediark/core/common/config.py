@@ -42,43 +42,85 @@ config: Config = {
             'extension': 'jpg'
         }
     },
-    'data': {
-            'dir_path': Path.home() / 'data',
-            'media': {
-                'dir_path': 'media',
-                'audios': {
-                    'dir_path': 'audios',
-                    'extension': 'webm'
-                },
-                'images': {
-                    'dir_path': './images',
-                    'extension': 'jpg'
-                },
+    'shelve':  {
+            'dir_path': 'shelve',
+            'audios': {
+                'dir_path': 'audios',
+                'database': 'audios.db'
             },
-            'shelve':  {
-                'dir_path': 'shelve',
-                'audios': {
-                    'dir_path': 'audios',
-                    'database': 'audios.db'
-                },
-                'images': {
-                    'dir_path': 'images',
-                    'database': 'images.db'
-                },
+            'images': {
+                'dir_path': 'images',
+                'database': 'images.db'
             },
-            'json':  {
-                'dir_path': 'json',
-                'audios': {
-                    'dir_path': 'audios',
-                    'database': 'audios.json'
-                },
-                'images': {
-                    'dir_path': 'images',
-                    'database': 'images.json'
-                },
+    },
+    'json':  {
+            'dir_path': 'json',
+            'audios': {
+                'dir_path': 'audios',
+                'database': 'audios.json'
             },
+            'images': {
+                'dir_path': 'images',
+                'database': 'images.json'
+            },
+    },
+    'cloud': {
+        "swift": {
+            "auth_url": "https://auth.cloud.ovh.net/v3/auth/tokens",
+            "object_store_url": "",
+            "username": "",
+            "password": "",
+            "container_prefix": "",
+            "container_suffix": "dev"
+        }
     },
     'domain': {
         'https://mediark.dev.nubark.cloud'
     },
+    # 'data': {
+    #         'dir_path': Path.home() / 'data',
+    #     'media': {
+    #         'dir_path': 'media',
+    #         'audios': {
+    #             'dir_path': 'audios',
+    #             'extension': 'webm'
+    #         },
+    #         'images': {
+    #             'dir_path': './images',
+    #             'extension': 'jpg'
+    #         },
+    #     },
+    #     'shelve':  {
+    #         'dir_path': 'shelve',
+    #         'audios': {
+    #             'dir_path': 'audios',
+    #             'database': 'audios.db'
+    #         },
+    #         'images': {
+    #             'dir_path': 'images',
+    #             'database': 'images.db'
+    #         },
+    #     },
+    #     'json':  {
+    #         'dir_path': 'json',
+    #         'audios': {
+    #             'dir_path': 'audios',
+    #             'database': 'audios.json'
+    #         },
+    #         'images': {
+    #             'dir_path': 'images',
+    #             'database': 'images.json'
+    #         },
+    #     },
+    #     'cloud': {
+    #         "swift": {
+    #             "auth_url": "https://auth.cloud.ovh.net/v3/auth/tokens",
+    #             "object_store_url": "",
+    #             "username": "",
+    #             "password": "",
+    #             "container_prefix": "",
+    #             "container_suffix": "dev"
+    #         }
+    #     },
+    # },
 }
