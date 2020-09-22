@@ -6,7 +6,8 @@ from pathlib import Path
 Config = Dict[str, Any]
 
 config: Config = {
-    'port': int(os.environ.get('MEDIARK_PORT', 6291)),
+    'port': int(os.environ.get('MEDIARK_PORT', 8080)),
+    # 'port': int(os.environ.get('MEDIARK_PORT', 6291)),
     'auto': bool(os.environ.get('MEDIARK_AUTO', True)),
     'factory': os.environ.get('MEDIARK_FACTORY', 'CloudFactory'),
     'strategies': os.environ.get(
@@ -20,6 +21,9 @@ config: Config = {
             "dsn": os.environ.get('MEDIARK_ZONES_DEFAULT_DSN', (
                 "postgresql://mediark:mediark@localhost/mediark"))
         }
+    },
+    'domain': {
+        'https://mediark.dev.nubark.cloud'
     },
     'cloud': {
         "swift": {
@@ -64,63 +68,59 @@ config: Config = {
                 'database': 'images.json'
             },
     },
-    'cloud': {
-        "swift": {
-            "auth_url": "https://auth.cloud.ovh.net/v3/auth/tokens",
-            "object_store_url": "",
-            "username": "",
-            "password": "",
-            "container_prefix": "",
-            "container_suffix": "dev"
-        }
+    'environment': {
+        'home': '/opt/mediark'
     },
-    'domain': {
-        'https://mediark.dev.nubark.cloud'
+    'aiohttp': {
+        'client_max_size': 10 * 1024**2
     },
-    # 'data': {
-    #         'dir_path': Path.home() / 'data',
-    #     'media': {
-    #         'dir_path': 'media',
-    #         'audios': {
-    #             'dir_path': 'audios',
-    #             'extension': 'webm'
-    #         },
-    #         'images': {
-    #             'dir_path': './images',
-    #             'extension': 'jpg'
-    #         },
-    #     },
-    #     'shelve':  {
-    #         'dir_path': 'shelve',
-    #         'audios': {
-    #             'dir_path': 'audios',
-    #             'database': 'audios.db'
-    #         },
-    #         'images': {
-    #             'dir_path': 'images',
-    #             'database': 'images.db'
-    #         },
-    #     },
-    #     'json':  {
-    #         'dir_path': 'json',
-    #         'audios': {
-    #             'dir_path': 'audios',
-    #             'database': 'audios.json'
-    #         },
-    #         'images': {
-    #             'dir_path': 'images',
-    #             'database': 'images.json'
-    #         },
-    #     },
-    #     'cloud': {
-    #         "swift": {
-    #             "auth_url": "https://auth.cloud.ovh.net/v3/auth/tokens",
-    #             "object_store_url": "",
-    #             "username": "",
-    #             "password": "",
-    #             "container_prefix": "",
-    #             "container_suffix": "dev"
-    #         }
-    #     },
-    # },
 }
+
+
+# 'data': {
+#         'dir_path': Path.home() / 'data',
+#     'media': {
+#         'dir_path': 'media',
+#         'audios': {
+#             'dir_path': 'audios',
+#             'extension': 'webm'
+#         },
+#         'images': {
+#             'dir_path': './images',
+#             'extension': 'jpg'
+#         },
+#     },
+#     'shelve':  {
+#         'dir_path': 'shelve',
+#         'audios': {
+#             'dir_path': 'audios',
+#             'database': 'audios.db'
+#         },
+#         'images': {
+#             'dir_path': 'images',
+#             'database': 'images.db'
+#         },
+#     },
+#     'json':  {
+#         'dir_path': 'json',
+#         'audios': {
+#             'dir_path': 'audios',
+#             'database': 'audios.json'
+#         },
+#         'images': {
+#             'dir_path': 'images',
+#             'database': 'images.json'
+#         },
+#     },
+#     'cloud': {
+#         "swift": {
+#             "auth_url": "https://auth.cloud.ovh.net/v3/auth/tokens",
+#             "object_store_url": "",
+#             "username": "",
+#             "password": "",
+#             "container_prefix": "",
+#             "container_suffix": "dev"
+#         }
+#     },
+# },
+# }
