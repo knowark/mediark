@@ -18,7 +18,7 @@ class MediaStorageManager:
     async def store(self, media_records: RecordList) -> None:
         contents = self._extract_contents(media_records)
         medias = await self.media_repository.add(
-            [Media(**media_dict) for media_dict in media_records])
+            [Media(**media_record) for media_record in media_records])
 
         contexts = [{'content': content, **vars(media)}
                     for media, content in zip(medias, contents)]
@@ -31,8 +31,8 @@ class MediaStorageManager:
 
     def _extract_contents(self, media_records: RecordList) -> List[bytes]:
         contents: List[bytes] = []
-        for media_dict in media_records:
-            content = media_dict.pop('data', None)
+        for media_record in media_records:
+            content = media_record.pop('data', None)
             if not content:
                 raise ValueError("All the medias must have content.")
             contents.append(b64decode(content))

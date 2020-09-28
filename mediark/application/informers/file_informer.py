@@ -21,8 +21,7 @@ class StandardFileInformer(FileInformer):
     async def load(self,
                    uri: str,
                    domain: QueryDomain = None,
-                   limit: int = 0,
+                   limit: int = 1000,
                    offset: int = 0) -> Dict[str, Any]:
         content, context = await self.file_store_service.load(uri)
         return {'body': content, **context}
-
