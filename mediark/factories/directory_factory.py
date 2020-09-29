@@ -14,4 +14,4 @@ class DirectoryFactory(HttpFactory):
         self, tenant_provider: TenantProvider
     ) -> DirectoryFileStoreService:
         return DirectoryFileStoreService(
-            tenant_provider, self.config['data'])
+            tenant_provider, self.config)

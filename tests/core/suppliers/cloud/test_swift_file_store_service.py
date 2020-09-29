@@ -20,13 +20,11 @@ async def test_swift_file_store_service_store(swift_file_store_service):
 
 async def test_swift_file_store_service_make_url(swift_file_store_service):
     data_config = {
-        'data': {
-            'cloud': {
-                'swift': {
-                    'object_store_url': 'https://storage.cloud',
-                    'container_prefix': 'north',
-                    'container_suffix': 'prod'
-                }
+        'cloud': {
+            'swift': {
+                'object_store_url': 'https://storage.cloud',
+                'container_prefix': 'north',
+                'container_suffix': 'prod'
             }
         }
     }
@@ -62,12 +60,10 @@ async def test_swift_file_store_service_load(swift_file_store_service):
 async def test_swift_file_store_service_make_url_no_suffix(
         swift_file_store_service):
     data_config = {
-        'data': {
-            'cloud': {
-                'swift': {
-                    'object_store_url': 'https://storage.cloud',
-                    'container_prefix': 'north',
-                }
+        'cloud': {
+            'swift': {
+                'object_store_url': 'https://storage.cloud',
+                'container_prefix': 'north',
             }
         }
     }

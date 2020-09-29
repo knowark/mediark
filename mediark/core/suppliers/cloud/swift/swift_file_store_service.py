@@ -50,7 +50,7 @@ class SwiftFileStoreService(FileStoreService):
         return f'{object_type}/{year_month_day}/{object_id}.{extension}'
 
     def _make_url(self, object_name: str = "") -> str:
-        config = self.data_config['data']['cloud']['swift']
+        config = self.data_config['cloud']['swift']
 
         object_store_url = config['object_store_url']
         container_list = []

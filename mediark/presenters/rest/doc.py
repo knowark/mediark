@@ -28,7 +28,7 @@ def _register_schemas(spec):
 
 def _register_paths(spec):
     resources = [
-        ('Media', 'Media'),
+        ('medias', 'Media'),
     ]
     for resource in resources:
         _append_path(spec, *resource)

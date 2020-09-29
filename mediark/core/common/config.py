@@ -25,9 +25,8 @@ config: Config = {
     'domain': os.environ.get('MEDIARK_DOMAIN', "https://mediark.dev.nubark.cloud"),
     # "domain": "https://api.credigana.com/rest/media",
     # "domain": "https://mediark.dev.nubark.cloud",
-    "data": {
-        "dir_path": "data",
-        "media": {
+    "dir_path": "data",
+    "media": {
             "dir_path": "media",
             "audios": {
                 "dir_path": "audios",
@@ -37,8 +36,8 @@ config: Config = {
                 "dir_path": "./images",
                 "extension": "jpg"
             }
-        },
-        "shelve": {
+    },
+    "shelve": {
             "dir_path": "shelve",
             "audios": {
                 "dir_path": "audios",
@@ -48,8 +47,8 @@ config: Config = {
                 "dir_path": "images",
                 "database": "images.db"
             }
-        },
-        "json": {
+    },
+    "json": {
             "dir_path": "json",
             "audios": {
                 "dir_path": "audios",
@@ -59,8 +58,8 @@ config: Config = {
                 "dir_path": "images",
                 "database": "images.json"
             }
-        },
-        "cloud": {
+    },
+    "cloud": {
             "swift": {
                 "auth_url": "https://auth.cloud.ovh.net/v3/auth/tokens",
                 # "object_store_url": "https://storage.bhs.cloud.ovh.net/v1/AUTH_e737167b6b424d92ae257f2d94bc1b83",
@@ -74,18 +73,17 @@ config: Config = {
                 # "container_suffix": "main",
                 "container_suffix": os.environ.get('CONTAINER_SUFFIX', "main"),
             }
-        },
-        # 'cloud': {
-        #     "swift": {
-        #         "auth_url": "https://auth.cloud.ovh.net/v3/auth/tokens",
-        #         "object_store_url": "",
-        #         "username": "",
-        #         "password": "",
-        #         "container_prefix": "",
-        #         "container_suffix": "dev"
-        #     }
-        # }
     },
+    # 'cloud': {
+    #     "swift": {
+    #         "auth_url": "https://auth.cloud.ovh.net/v3/auth/tokens",
+    #         "object_store_url": "",
+    #         "username": "",
+    #         "password": "",
+    #         "container_prefix": "",
+    #         "container_suffix": "dev"
+    #     }
+    # }
     'environment': {
         'home': '/opt/mediark'
     },
