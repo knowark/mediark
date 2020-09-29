@@ -23,8 +23,6 @@ config: Config = {
         }
     },
     'domain': os.environ.get('MEDIARK_DOMAIN', "https://mediark.dev.nubark.cloud"),
-    # "domain": "https://api.credigana.com/rest/media",
-    # "domain": "https://mediark.dev.nubark.cloud",
     "dir_path": "data",
     "media": {
             "dir_path": "media",
@@ -62,28 +60,13 @@ config: Config = {
     "cloud": {
             "swift": {
                 "auth_url": "https://auth.cloud.ovh.net/v3/auth/tokens",
-                # "object_store_url": "https://storage.bhs.cloud.ovh.net/v1/AUTH_e737167b6b424d92ae257f2d94bc1b83",
                 "object_store_url": os.environ.get('OBJECT_STORE_URL', "https://storage.bhs.cloud.ovh.net/v1/AUTH_e737167b6b424d92ae257f2d94bc1b83"),
-                "username": os.environ.get('USER_NAME', "zNEBsNszwRnP"),
-                # "username": "zNEBsNszwRnP",
-                "password": os.environ.get('PASSWORD', "sazdk7jU84Fpfqv9T8tNcDbuEcfGp8bH"),
-                # "password": "sazdk7jU84Fpfqv9T8tNcDbuEcfGp8bH",
-                # "container_prefix": "",
+                "username": os.environ.get('USER_NAME', ""),
+                "password": os.environ.get('PASSWORD', ""),
                 "container_prefix": os.environ.get('CONTAINER_PREFIX', ""),
-                # "container_suffix": "main",
                 "container_suffix": os.environ.get('CONTAINER_SUFFIX', "main"),
             }
     },
-    # 'cloud': {
-    #     "swift": {
-    #         "auth_url": "https://auth.cloud.ovh.net/v3/auth/tokens",
-    #         "object_store_url": "",
-    #         "username": "",
-    #         "password": "",
-    #         "container_prefix": "",
-    #         "container_suffix": "dev"
-    #     }
-    # }
     'environment': {
         'home': '/opt/mediark'
     },
