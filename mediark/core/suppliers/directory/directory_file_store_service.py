@@ -42,8 +42,7 @@ class DirectoryFileStoreService(FileStoreService):
         base_path = Path("{0}/{1}/{2}".format(
             self.data_config["dir_path"],
             self.tenant_service.tenant.slug,
-            self.data_config["media"]["dir_path"]))
-        # self.data_config["data"]["media"]["dir_path"]))
+            self.data_config["data"]["media"]["dir_path"]))
 
         return Path(base_path).joinpath(uri)
 

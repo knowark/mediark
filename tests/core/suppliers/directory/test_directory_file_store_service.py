@@ -8,7 +8,7 @@ def base_path(directory_file_store_service):
     base_path = Path("{0}/{1}/{2}".format(
         directory_file_store_service.data_config["dir_path"],
         directory_file_store_service.tenant_service.tenant.slug,
-        directory_file_store_service.data_config["media"]["dir_path"]))
+        directory_file_store_service.data_config["data"]["media"]["dir_path"]))
     return base_path
 
 
