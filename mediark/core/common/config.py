@@ -2,7 +2,6 @@ import os
 from typing import Dict, Any
 from pathlib import Path
 
-mediark_domain = os.environ.get('MEDIARK_DOMAIN')
 
 Config = Dict[str, Any]
 
@@ -59,12 +58,17 @@ config: Config = {
     },
     "cloud": {
             "swift": {
-                "auth_url": "https://auth.cloud.ovh.net/v3/auth/tokens",
-                "object_store_url": os.environ.get('OBJECT_STORE_URL', "https://storage.bhs.cloud.ovh.net/v1/AUTH_e737167b6b424d92ae257f2d94bc1b83"),
-                "username": os.environ.get('USER_NAME', ""),
-                "password": os.environ.get('PASSWORD', ""),
-                "container_prefix": os.environ.get('CONTAINER_PREFIX', ""),
-                "container_suffix": os.environ.get('CONTAINER_SUFFIX', "main"),
+                "auth_url":  "https://auth.cloud.ovh.net/v3/auth/tokens",
+                "object_store_url": os.environ.get(
+                    'MEDIARK_CLOUD_SWIFT_OBJECT_STORE_URL',
+                    ("https://storage.bhs.cloud.ovh.net/v1/"
+                     "AUTH_e737167b6b424d92ae257f2d94bc1b83")),
+                "username": os.environ.get('MEDIARK_CLOUD_SWIFT_USER_NAME', ""),
+                "password": os.environ.get('MEDIARK_CLOUD_SWIFT_PASSWORD', ""),
+                "container_prefix": os.environ.get(
+                    'MEDIARK_CLOUD_SWIFT_CONTAINER_PREFIX', ""),
+                "container_suffix": os.environ.get(
+                    'MEDIARK_CLOUD_SWIFT_CONTAINER_SUFFIX', "main"),
             }
     },
     'environment': {
