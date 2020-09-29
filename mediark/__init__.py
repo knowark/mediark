@@ -1,3 +1,3 @@
-__author__ = """Nubark"""
-__email__ = 'info@nubark.com'
-__version__ = '1.6.1'
+__author__ = 'Knowark'
+__email__ = 'info@knowark.com'
+__version__ = '1.6.2'

@@ -3,7 +3,6 @@
 CONTAINER="mediark"
 PLAYBOOK="setup/deploy.yml"
 GIT_SERVER="https://github.com/knowark/mediark.git"
-PLAYBOOK="setup/local.yml"
 REPOSITORY="$GIT_SERVER/applications/servagro/proser/serproser.git"
 REPOSITORY_PATH=$PWD
 
