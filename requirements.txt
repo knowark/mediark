@@ -4,7 +4,7 @@ aiohttp-cors==0.7.0
 aiohttp-jinja2==1.2.0
 alabaster==0.7.12
 aniso8601==7.0.0
-ansible==2.8.4
+ansible==2.8.8
 apispec==3.3.2
 appdirs==1.4.3
 argh==0.26.2
