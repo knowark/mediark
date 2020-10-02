@@ -16,7 +16,7 @@ class SqlFactory(DirectoryFactory):
         super().__init__(config)
 
     def sql_query_parser(self) -> SqlParser:
-        return SqlParser(SafeEval())
+        return SqlParser(SafeEval(), jsonb_collection='data')
 
     def sql_connection_manager(self) -> DefaultConnectionManager:
         settings = []
