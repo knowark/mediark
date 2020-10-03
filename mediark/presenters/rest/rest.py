@@ -35,6 +35,10 @@ class RestApplication(web.Application):
         # API endpoints creation
         self._create_api()
 
+        self.router.add_route(
+            "get", r'/download/{uri:(.*)}',
+            getattr(DownloadResource(self.injector), "get", None))
+
         for route in list(self.router.routes()):
             cors.add(route)
 
@@ -63,4 +67,3 @@ class RestApplication(web.Application):
         # Resources
         self._bind('/', RootResource(spec))
         self._bind('/media', MediaResource(self.injector))
-        self._bind('/download', DownloadResource(self.injector))
