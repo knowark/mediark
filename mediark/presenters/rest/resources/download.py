@@ -1,18 +1,13 @@
-
-from functools import partial
+from typing import Any
+from aiohttp import web
 from injectark import Injectark
-from ..helpers.schemas import MediaSchema
-from ..helpers import missing
-from .resource import Resource
 
 
-class DownloadResource(Resource):
-    def __init__(self, injector: Injectark) -> None:
-        informer = injector['FileInformer']
+class DownloadResource:
+    def init(self, injector: Injectark) -> None:
+        self.file_informer = injector['FileInformer']
 
-        super().__init__(
-            MediaSchema,
-            missing,
-            partial(informer.load, 'media'),
-            missing,
-            missing)
+    async def get(self, request: web.Request) -> Any:
+        uri = request.match_info.get('uri')
+        response_dict = await self.file_informer.load(uri)
+        return web.Response(**response_dict)
