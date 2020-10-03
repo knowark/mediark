@@ -4,7 +4,7 @@ from injectark import Injectark
 
 
 class DownloadResource:
-    def init(self, injector: Injectark) -> None:
+    def __init__(self, injector: Injectark) -> None:
         self.file_informer = injector['FileInformer']
 
     async def get(self, request: web.Request) -> Any:
