@@ -8,7 +8,8 @@ from injectark import Injectark
 from ...core import Config
 from .middleware import middlewares
 from .doc import create_spec
-from .resources import RootResource, MediaResource, DownloadResource
+from .resources import (
+    RootResource, MediaResource, DownloadResource, UploadResource)
 
 
 class RestApplication(web.Application):
@@ -38,6 +39,10 @@ class RestApplication(web.Application):
         self.router.add_route(
             "get", r'/download/{uri:(.*)}',
             getattr(DownloadResource(self.injector), "get", None))
+
+        self.router.add_route(
+            "post", '/upload',
+            getattr(UploadResource(self.injector), "post", None))
 
         for route in list(self.router.routes()):
             cors.add(route)
