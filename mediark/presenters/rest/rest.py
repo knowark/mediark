@@ -1,4 +1,3 @@
-import aiohttp_cors
 import aiohttp_jinja2
 from typing import Any
 from pathlib import Path
@@ -27,10 +26,6 @@ class RestApplication(web.Application):
         aiohttp_jinja2.setup(self, loader=FileSystemLoader(templates))
 
         self.cleanup_ctx.append(self._http_client)
-        cors = aiohttp_cors.setup(self, defaults={
-            "*": aiohttp_cors.ResourceOptions(
-                allow_credentials=True, expose_headers="*",
-                allow_headers="*")})
 
         # API endpoints creation
         self._create_api()
@@ -38,9 +33,6 @@ class RestApplication(web.Application):
         self.router.add_route(
             "get", r'/download/{uri:(.*)}',
             getattr(DownloadResource(self.injector), "get", None))
-
-        for route in list(self.router.routes()):
-            cors.add(route)
 
     @staticmethod
     async def _http_client(app: web.Application):
