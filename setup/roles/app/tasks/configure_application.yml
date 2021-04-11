@@ -39,7 +39,7 @@
 
 - name: Change Repository Permissions
   file:
-    path: "/var/git/{{ app_user }}"
+    path: "/srv/{{ app_user }}"
     state: directory
     owner: "{{ app_user }}"
     group: "{{ app_user }}"
@@ -51,7 +51,7 @@
   become: yes
   become_user: "{{ app_user }}"
   file:
-    src: "/var/git/{{ app_user }}"
+    src: "/srv/{{ app_user }}"
     dest: "{{ app_repository }}"
     owner: "{{ app_user }}"
     group: "{{ app_user }}"

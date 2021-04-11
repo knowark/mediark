@@ -19,7 +19,6 @@ lxc exec $CONTAINER -- apt autoremove -y
 
 echo "Deploy with Ansible..."
 
-lxc exec $CONTAINER -- mkdir /var/git
-lxc exec $CONTAINER -- ln -s /mnt/$REPOSITORY_PATH /var/git/$CONTAINER
+lxc exec $CONTAINER -- ln -s /mnt/$REPOSITORY_PATH /srv/$CONTAINER
 lxc exec $CONTAINER -- bash -c "ansible-playbook -c local -i localhost, \
-    /var/git/$CONTAINER/$PLAYBOOK 2>&1 | tee deploy.log"
+    /srv/$CONTAINER/$PLAYBOOK 2>&1 | tee deploy.log"
