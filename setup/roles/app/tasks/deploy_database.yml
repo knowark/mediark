@@ -1,6 +1,8 @@
 - name: "Install PostgreSQL {{ postgresql_version }}"
   apt:
-    name: "postgresql-{{ postgresql_version }}"
+    pkg:
+    - "postgresql-{{ postgresql_version }}"
+    - "postgresql-contrib"
     state: present
 
 - name: "Install libpq-dev PostgreSQL Library"
@@ -13,10 +15,16 @@
     name: "postgresql-server-dev-{{ postgresql_version }}"
     state: present
 
+- name: "Enable and Restart PostgreSQL Service"
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: postgresql
+
 - name: Install Python Psycopg2
   apt:
     name: python3-psycopg2
-    
+
 - name: "Create {{ app_user }} Database User"
   become: yes
   become_user: postgres
