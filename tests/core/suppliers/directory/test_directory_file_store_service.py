@@ -34,6 +34,42 @@ async def test_directory_file_store_service_store(
     assert uri == "images/2020/03/11/abca8e11-0719-44ab-bd3f-ed5aa1bd2918.png"
 
 
+async def test_directory_file_store_service_submit(
+        directory_file_store_service, base_path, encoded_image):
+
+    class MockStream:
+        data = bytearray(b'AAABBBCCCDDD')
+        chunk_size = 3
+        offset = 0
+
+        async def read(self, size) -> bytes:
+            chunk = self.data[self.offset: self.offset + self.chunk_size]
+            self.offset += self.chunk_size
+            return chunk
+
+    mock_stream = MockStream()
+    id_ = "abca8e11-0719-44ab-bd3f-ed5aa1bd2918"
+    extension = "png"
+    data_type = 'images'
+
+    content = encoded_image
+    contexts = [{
+        'id': id_,
+        'created_at': 1583964551,
+        'type': data_type,
+        'extension': extension,
+        'stream': mock_stream
+    }]
+
+    uri, *_ = await directory_file_store_service.submit(contexts)
+
+    image_path = base_path / uri
+
+    assert image_path.is_file()
+    assert uri == "images/2020/03/11/abca8e11-0719-44ab-bd3f-ed5aa1bd2918.png"
+    assert image_path.read_bytes() == b'AAABBBCCCDDD'
+
+
 async def test_directory_file_store_service_store_many(
         directory_file_store_service, base_path, encoded_image):
     contexts = [

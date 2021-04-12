@@ -71,12 +71,7 @@ async def test_swift_file_store_service_generate_upload(
     async for chunk in generator:
         result.append(chunk)
 
-    assert result == [
-        b'AAA',
-        b'BBB',
-        b'CCC',
-        b'DDD'
-    ]
+    assert result == [b'AAA', b'BBB', b'CCC', b'DDD']
 
 
 async def test_swift_file_store_service_make_url(swift_file_store_service):

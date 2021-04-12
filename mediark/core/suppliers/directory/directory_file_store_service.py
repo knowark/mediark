@@ -1,10 +1,11 @@
 import time
+import aiofiles
 from pathlib import Path
 from typing import List, Dict, Any
 from base64 import b64decode
 from uuid import UUID
 from ....application.domain.common import TenantProvider
-from ....application.domain.services import FileStoreService
+from ....application.domain.services import FileStoreService, Reader
 
 
 class DirectoryFileStoreService(FileStoreService):
@@ -12,6 +13,7 @@ class DirectoryFileStoreService(FileStoreService):
                  data_config: dict) -> None:
         self.tenant_service = tenant_service
         self.data_config = data_config
+        self.chunk_size = 512 * 1024
 
     async def store(self, contexts: List[Dict[str, Any]]) -> List[str]:
         uris = []
@@ -33,19 +35,25 @@ class DirectoryFileStoreService(FileStoreService):
     async def submit(self, contexts: List[Dict[str, Any]]) -> List[str]:
         uris = []
         for context in contexts:
-            content: bytes = context.pop('content')
-            binary_data = b64decode(content)
+            stream: Reader = context.pop('stream')
             uri = self._make_object_name(context)
             file_path = self._make_file_path(uri)
-
             file_path.absolute().parent.mkdir(parents=True, exist_ok=True)
 
-            with file_path.open("wb") as f:
-                f.write(binary_data)
+            generator = self._generate_write_data(stream)
+            async with aiofiles.open(str(file_path), 'wb') as f:
+                async for chunk in generator:
+                    await f.write(chunk)
 
             uris.append(uri)
 
         return uris
+
+    async def _generate_write_data(self, stream: Reader) -> None:
+        chunk = await stream.read(self.chunk_size)
+        while chunk:
+            yield chunk
+            chunk = await stream.read(self.chunk_size)
 
     async def load(self, uri: str) -> Any:
         file_path = self._make_file_path(uri)
