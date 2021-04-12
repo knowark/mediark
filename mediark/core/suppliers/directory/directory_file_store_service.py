@@ -30,6 +30,23 @@ class DirectoryFileStoreService(FileStoreService):
 
         return uris
 
+    async def submit(self, contexts: List[Dict[str, Any]]) -> List[str]:
+        uris = []
+        for context in contexts:
+            content: bytes = context.pop('content')
+            binary_data = b64decode(content)
+            uri = self._make_object_name(context)
+            file_path = self._make_file_path(uri)
+
+            file_path.absolute().parent.mkdir(parents=True, exist_ok=True)
+
+            with file_path.open("wb") as f:
+                f.write(binary_data)
+
+            uris.append(uri)
+
+        return uris
+
     async def load(self, uri: str) -> Any:
         file_path = self._make_file_path(uri)
         with file_path.open('rb') as f:

@@ -9,5 +9,9 @@ class DownloadResource:
 
     async def get(self, request: web.Request) -> Any:
         uri = request.match_info.get('uri')
-        response_dict = await self.file_informer.load(uri)
-        return web.Response(**response_dict)
+        response = web.Response()
+
+        await response.prepare(request)
+        response_dict = await self.file_informer.load(uri, response)
+
+        return response

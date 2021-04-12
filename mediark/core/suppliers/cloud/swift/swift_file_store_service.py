@@ -35,6 +35,21 @@ class SwiftFileStoreService(FileStoreService):
 
         return [pair[0] for pair in uri_content_pairs]
 
+    async def submit(self, contexts: List[Dict[str, Any]]) -> List[str]:
+        uri_content_pairs: List[Tuple[str, bytes]] = []
+        for context in contexts:
+            content: bytes = context.pop('content')
+            uri = self._make_object_name(context)
+            uri_content_pairs.append((uri, content))
+
+        url = self._make_url()
+        archive_content = self._tar_contents(uri_content_pairs)
+
+        token = await self.auth_supplier.authenticate()
+        await self._upload_object(token, url, archive_content)
+
+        return [pair[0] for pair in uri_content_pairs]
+
     async def load(self, uri: str) -> Tuple[bytes, Dict[str, Any]]:
         token = await self.auth_supplier.authenticate()
         url = self._make_url(uri)
