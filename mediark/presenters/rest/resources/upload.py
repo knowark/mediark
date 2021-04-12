@@ -2,23 +2,25 @@ import multidict
 from typing import Any
 from aiohttp import web
 from injectark import Injectark
+from ..helpers import FileReader
 
 
 class UploadResource:
     def __init__(self, injector: Injectark) -> None:
-        pass
+        self.manager = injector['MediaStorageManager']
 
     async def post(self, request):
+        mulipart = await request.multipart()
 
-        data = await request.post()
+        field = await mulipart.next()
+        assert field.name == 'media'
+        media = await field.json()
 
-        color = data['color']
-        foto = data['foto']
+        field = await mulipart.next()
+        assert field.name == 'file'
+        stream = FileReader(field)
+        submission = {'media': media, 'stream': stream}
 
-        foto_file = data['foto'].file
+        await self.manager.submit([submission])
 
-        content = foto_file.read()
-
-        return web.Response(body=content,
-                            headers=multidict(
-                                {'CONTENT-DISPOSITION': foto_file}))
+        return web.Response()

@@ -58,7 +58,6 @@ async def test_media_get(app, headers) -> None:
 
 async def test_media_put(app, headers) -> None:
     custom_uuid = "932eff07-175a-44b5-871b-4bdaae6ad054"
-    #base64data = b'SU1BR0VfREFUQQ=='
     base64data = 'SU1BR0VfREFUQQ=='
     image = [{'data': base64data, 'type': 'images', 'reference': custom_uuid,
               'extension': 'jpg', 'namespace': 'https://example.org'}]

@@ -40,7 +40,7 @@ class Resource:
         await self.add_handler(records)
         return web.Response(status=200)
 
-    async def delete(self, request: web.Request) -> web.Response:  # pragma: no cover
+    async def delete(self, request: web.Request) -> web.Response:
         ids = await get_request_ids(request)
         await self.delete_handler(ids)
         return web.Response(status=204)
