@@ -4,7 +4,7 @@ import tarfile
 from typing import List, Tuple, Dict, Any
 from uuid import UUID
 from .....application.domain.common import TenantProvider
-from .....application.domain.services import FileStoreService
+from .....application.domain.services import FileStoreService, Reader
 from .....core.client import HttpClientSupplier
 from .swift_auth_supplier import SwiftAuthSupplier
 
@@ -19,6 +19,7 @@ class SwiftFileStoreService(FileStoreService):
         self.auth_supplier = auth_supplier
         self.client = client
         self.data_config = data_config
+        self.chunk_size = 512 * 1024
 
     async def store(self, contexts: List[Dict[str, Any]]) -> List[str]:
         uri_content_pairs: List[Tuple[str, bytes]] = []
@@ -36,19 +37,17 @@ class SwiftFileStoreService(FileStoreService):
         return [pair[0] for pair in uri_content_pairs]
 
     async def submit(self, contexts: List[Dict[str, Any]]) -> List[str]:
-        uri_content_pairs: List[Tuple[str, bytes]] = []
+        uri_stream_pairs: List[Tuple[str, bytes]] = []
         for context in contexts:
-            content: bytes = context.pop('content')
+            stream: Reader = context.pop('stream')
             uri = self._make_object_name(context)
-            uri_content_pairs.append((uri, content))
+            uri_stream_pairs.append((uri, stream))
 
-        url = self._make_url()
-        archive_content = self._tar_contents(uri_content_pairs)
-
+        url = self._make_url(uri)
         token = await self.auth_supplier.authenticate()
-        await self._upload_object(token, url, archive_content)
+        await self._stream_upload_object(token, url, uri_stream_pairs)
 
-        return [pair[0] for pair in uri_content_pairs]
+        return [pair[0] for pair in uri_stream_pairs]
 
     async def load(self, uri: str) -> Tuple[bytes, Dict[str, Any]]:
         token = await self.auth_supplier.authenticate()
@@ -103,6 +102,22 @@ class SwiftFileStoreService(FileStoreService):
         async with self.client.put(
                 url, headers=headers, data=content) as response:
             body = await response.read()
+
+    async def _stream_upload_object(
+            self, token: str, url: str,
+            uri_stream_pairs: List[Tuple[str, Reader]]) -> None:
+        headers = {'X-Auth-Token': token}
+        for uri, stream in uri_stream_pairs:
+            async with self.client.put(
+                    url, headers=headers,
+                    data=self._generate_upload_data(stream)) as response:
+                pass
+
+    async def _generate_upload_data(self, stream: Reader) -> None:
+        chunk = await stream.read(self.chunk_size)
+        while chunk:
+            yield chunk
+            chunk = await stream.read(self.chunk_size)
 
     async def _download_object(
             self, token: str, url: str) -> Tuple[bytes, Dict[str, Any]]:

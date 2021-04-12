@@ -17,13 +17,6 @@ class UploadResource:
 
         foto_file = data['foto'].file
 
-        print("-"*100)
-        print("data      ----> ", data)
-        print("color    ---->     ", color)
-        print("foto    ---->     ", foto)
-        print("foto    ---->     ", foto_file)
-        print("-"*100)
-
         content = foto_file.read()
 
         return web.Response(body=content,

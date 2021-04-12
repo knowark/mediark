@@ -45,13 +45,22 @@ def mock_http_client():
             pass
 
     class MockHttpClient:
+        def __init__(self) -> None:
+            self.arguments = {}
+
         def post(self, url, json):
+            self.arguments['post'] = (
+                {'url': url, 'json': json})
             return MockAuthContextManager()
 
         def put(self, url, headers, data):
+            self.arguments['put'] = (
+                {'url': url, 'headers': headers, 'data': data})
             return MockUploadContextManager()
 
         def get(self, url, headers):
+            self.arguments['get'] = (
+                {'url': url, 'headers': headers})
             return MockDownloadContextManager()
 
     return MockHttpClient()
