@@ -29,6 +29,20 @@ class MediaStorageManager:
 
         await self.media_repository.add(medias)
 
+    async def submit(self, submission_records: RecordList) -> None:
+        medias = await self.media_repository.add(
+            [Media(**record['media']) for record in submission_records])
+        streams = [record['stream'] for record in submission_records]
+
+        contexts = [{'stream': stream, **vars(media)}
+                    for media, stream in zip(medias, streams)]
+
+        uris = await self.file_store_service.submit(contexts)
+        for media, uri in zip(medias, uris):
+            media.uri = uri
+
+        await self.media_repository.add(medias)
+
     def _extract_contents(self, media_records: RecordList) -> List[bytes]:
         contents: List[bytes] = []
         for media_record in media_records:

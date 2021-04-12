@@ -126,3 +126,28 @@ async def test_storage_manager_store_data_many(media_storage_manager):
 
     assert len(
         media_storage_manager.media_repository.data['default']) == 2
+
+
+async def test_storage_manager_submit_file(media_storage_manager):
+    class MockReader:
+        data = b'FILE_STREAM_BINARY_DATA'
+
+        async def read(self, size: int) -> bytes:
+            return self.data
+
+    stream = MockReader()
+
+    submission_dict = [{
+        'media': {
+            'type': 'images',
+            'namespace': 'https://example.com',
+            'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
+            'extension': 'png'
+        },
+        'stream': stream
+    }]
+
+    await media_storage_manager.submit(submission_dict)
+
+    assert len(
+        media_storage_manager.media_repository.data) == 1

@@ -38,6 +38,17 @@ def test_file_informer_instantiation(file_informer):
 
 async def test_file_informer_load(file_informer):
     uri = 'images/abcd1234.jpg'
-    result = await file_informer.load(uri)
+
+    class MockWriter:
+        data = None
+
+        async def write(self, data) -> None:
+            self.data = data
+
+    stream = MockWriter()
+
+    file_informer.file_store_service.content = b'BINARY_DATA'
+    result = await file_informer.load(uri, stream)
+
+    assert stream.data == b'BINARY_DATA'
     assert isinstance(result, dict)
-    assert result == {'body': b''}
