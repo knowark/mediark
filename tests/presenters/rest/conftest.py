@@ -1,21 +1,17 @@
 
 from pytest import fixture
 from injectark import Injectark
-from mediark.factories import strategy_builder, factory_builder
+from mediark.factories import factory_builder
 from mediark.presenters.rest import RestApplication
 from mediark.core import config
 
 
 @fixture
 def app(loop, aiohttp_client):
-    """Create app testing client"""
     config['factory'] = 'CheckFactory'
-    config['strategies'] = ['base', 'http', 'check']
-
-    strategy = strategy_builder.build(config['strategies'])
     factory = factory_builder.build(config)
 
-    injector = Injectark(strategy, factory)
+    injector = Injectark(factory)
 
     app = RestApplication(config, injector)
 

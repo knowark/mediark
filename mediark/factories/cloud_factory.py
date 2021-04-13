@@ -1,11 +1,12 @@
 from pathlib import Path
+from ..application.domain.services import (
+    FileStoreService)
 from ..application.domain.common import (
     TenantProvider, StandardTenantProvider)
 from ..core.suppliers import (
     SwiftAuthSupplier, SwiftFileStoreService)
 from ..core import Config
 from ..core.client import HttpClientSupplier
-from .memory_factory import MemoryFactory
 from .directory_factory import DirectoryFactory
 from .sql_factory import SqlFactory
 
@@ -21,10 +22,10 @@ class CloudFactory(SqlFactory):
         password = self.config['cloud']['swift']['password']
         return SwiftAuthSupplier(client, auth_url, username, password)
 
-    def swift_file_store_service(
+    def file_store_service(
         self, tenant_provider: TenantProvider,
         auth_supplier: SwiftAuthSupplier,
         client: HttpClientSupplier
-    ) -> SwiftFileStoreService:
+    ) -> FileStoreService:
         return SwiftFileStoreService(
             tenant_provider, auth_supplier, client, self.config)

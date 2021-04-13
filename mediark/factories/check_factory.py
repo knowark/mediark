@@ -1,9 +1,11 @@
 from ..application.domain.models import Media
-from ..application.domain.repositories import MemoryMediaRepository
+from ..application.domain.repositories import (
+    MediaRepository, MemoryMediaRepository)
 from ..application.domain.common import (
     QueryParser, TenantProvider, AuthProvider)
 from ..core import Config
-from ..core.suppliers.common.tenancy import MemoryTenantSupplier
+from ..core.suppliers.common.tenancy import (
+    TenantSupplier, MemoryTenantSupplier)
 from .http_factory import HttpFactory
 
 
@@ -11,7 +13,7 @@ class CheckFactory(HttpFactory):
     def __init__(self, config: Config) -> None:
         self.config = config
 
-    def check_tenant_supplier(self) -> MemoryTenantSupplier:
+    def tenant_supplier(self) -> TenantSupplier:
         tenant_supplier = MemoryTenantSupplier()
         tenant_supplier.ensure_tenant({
             'id': '001',
@@ -19,9 +21,9 @@ class CheckFactory(HttpFactory):
         })
         return tenant_supplier
 
-    def check_media_repository(
+    def media_repository(
             self, query_parser: QueryParser, tenant_provider: TenantProvider,
-            auth_provider: AuthProvider) -> MemoryMediaRepository:
+            auth_provider: AuthProvider) -> MediaRepository:
         media_repository = MemoryMediaRepository(
             query_parser, tenant_provider, auth_provider)
         media_repository.load({

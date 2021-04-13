@@ -6,14 +6,13 @@ import asyncio
 import uvloop
 from injectark import Injectark
 from .presenters.shell import Shell
-from .factories import factory_builder, strategy_builder
+from .factories import factory_builder
 from .core import config
 
 
 async def main(args=None):  # pragma: no cover
-    strategy = strategy_builder.build(config['strategies'])
     factory = factory_builder.build(config)
-    injector = Injectark(strategy=strategy, factory=factory)
+    injector = Injectark(factory)
     if config.get('auto'):
         injector['MigrationSupplier'].migrate()
 
