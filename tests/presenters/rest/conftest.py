@@ -1,4 +1,3 @@
-
 from pytest import fixture
 from injectark import Injectark
 from mediark.factories import factory_builder

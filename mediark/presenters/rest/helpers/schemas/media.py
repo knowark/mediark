@@ -8,6 +8,6 @@ class MediaSchema(EntitySchema):
     namespace = fields.Str(example="https://example.com")
     extension = fields.Str(example="png")
     reference = fields.Str(example="00648c29-eca2-4112-8a1a-4deedb443188")
-    url = fields.Str(xample=("https://mediark.knowark/media/images/"
-                                 "00648c29-eca2-4112-8a1a-4deedb443188.jpg"))
+    url = fields.Str(example=("https://mediark.knowark/media/images/"
+                              "00648c29-eca2-4112-8a1a-4deedb443188.jpg"))
     data = fields.Str(example="aGVsbG8=")

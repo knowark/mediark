@@ -49,15 +49,13 @@ class DirectoryFileStoreService(FileStoreService):
 
         return uris
 
-    async def load(self, uri: str, stream: Writer) -> Any:
+    async def load(self, uri: str, stream: Writer) -> None:
         file_path = self._make_file_path(uri)
 
         async with aiofiles.open(str(file_path), 'rb') as f:
             generator = self._generate_chunked_data(f)
             async for chunk in generator:
                 await stream.write(chunk)
-
-        return None, {}
 
     async def _generate_chunked_data(self, stream: Reader) -> None:
         chunk = await stream.read(self.chunk_size)
