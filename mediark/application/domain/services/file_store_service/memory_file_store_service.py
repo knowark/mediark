@@ -20,10 +20,8 @@ class MemoryFileStoreService(FileStoreService):
             file_ids.append(file_id)
         return file_ids
 
-    async def load(self, uri: str, stream: Writer) -> Dict[str, Any]:
-        context: Dict[str, Any] = {}
+    async def load(self, uri: str, stream: Writer) -> None:
         await stream.write(self.content)
-        return context
 
     async def submit(self, contexts: List[Dict[str, Any]]) -> List[str]:
         file_ids = []

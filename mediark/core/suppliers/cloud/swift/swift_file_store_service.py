@@ -4,7 +4,8 @@ import tarfile
 from typing import List, Tuple, Dict, Any
 from uuid import UUID
 from .....application.domain.common import TenantProvider
-from .....application.domain.services import FileStoreService, Reader
+from .....application.domain.services import (
+    FileStoreService, Reader, Writer)
 from .....core.http import HttpClientSupplier
 from .swift_auth_supplier import SwiftAuthSupplier
 
@@ -49,10 +50,11 @@ class SwiftFileStoreService(FileStoreService):
 
         return [pair[0] for pair in uri_stream_pairs]
 
-    async def load(self, uri: str) -> Tuple[bytes, Dict[str, Any]]:
+    async def load(self, uri: str, stream: Writer) -> None:
         token = await self.auth_supplier.authenticate()
         url = self._make_url(uri)
-        return await self._download_object(token, url)
+
+        return await self._download_object(token, url, stream)
 
     def _make_object_name(self, context: Dict[str, str]) -> str:
         object_type = context.get('type', 'general')
@@ -110,20 +112,19 @@ class SwiftFileStoreService(FileStoreService):
         for uri, stream in uri_stream_pairs:
             async with self.client.put(
                     url, headers=headers,
-                    data=self._generate_upload_data(stream)) as response:
+                    data=self._generate_chunked_data(stream)) as response:
                 pass
 
-    async def _generate_upload_data(self, stream: Reader) -> None:
+    async def _generate_chunked_data(self, stream: Reader) -> None:
         chunk = await stream.read(self.chunk_size)
         while chunk:
             yield chunk
             chunk = await stream.read(self.chunk_size)
 
     async def _download_object(
-            self, token: str, url: str) -> Tuple[bytes, Dict[str, Any]]:
+            self, token: str, url: str, stream: Writer) -> None:
         headers = {'X-Auth-Token': token}
         async with self.client.get(url, headers=headers) as response:
-            return (await response.read(), {
-                'status': response.status,
-                'headers': response.headers,
-            })
+            generator = self._generate_chunked_data(response.content)
+            async for chunk in generator:
+                await stream.write(chunk)

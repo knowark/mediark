@@ -65,7 +65,7 @@ async def test_swift_file_store_service_generate_upload(
 
     mock_stream = MockStream()
 
-    generator = swift_file_store_service._generate_upload_data(mock_stream)
+    generator = swift_file_store_service._generate_chunked_data(mock_stream)
 
     result = []
     async for chunk in generator:
@@ -104,13 +104,17 @@ async def test_swift_file_store_service_load(swift_file_store_service):
         'created_at': 1583933912
     }
     uri = 'images/2020/02/15/5db7ec47-8bb1-4707-89c1-ad5aa76355e9.jpg'
-    content, context = await swift_file_store_service.load(uri)
 
-    assert content == b'BINARY_DATA'
-    assert context == {
-        'status': 200,
-        'headers': {}
-    }
+    class MockWriter:
+        async def write(self, data: bytes) -> None:
+            self.data = data
+
+    stream = MockWriter()
+
+    result = await swift_file_store_service.load(uri, stream)
+
+    assert stream.data == b'BINARY_DATA'
+    assert result is None
 
 
 async def test_swift_file_store_service_make_url_no_suffix(

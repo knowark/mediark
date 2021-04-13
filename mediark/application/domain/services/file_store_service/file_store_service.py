@@ -13,7 +13,7 @@ class FileStoreService(ABC):
         "Submit method to be implemented."
 
     @abstractmethod
-    async def load(self, uri: str, stream: 'Writer') -> Dict[str, Any]:
+    async def load(self, uri: str, stream: 'Writer') -> None:
         "Load method to be implemented."
 
 

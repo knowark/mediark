@@ -108,3 +108,6 @@ venv.bak/
 
 # config
 config.json
+
+# commit message
+.gitmessage

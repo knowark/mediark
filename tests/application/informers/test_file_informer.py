@@ -51,4 +51,4 @@ async def test_file_informer_load(file_informer):
     result = await file_informer.load(uri, stream)
 
     assert stream.data == b'BINARY_DATA'
-    assert isinstance(result, dict)
+    assert result is None

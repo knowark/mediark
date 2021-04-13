@@ -15,6 +15,20 @@ def mock_http_client():
             self._json = json
             self._content = content
 
+        @property
+        def content(self):
+            content = self._content
+
+            class MockReader:
+                offset = 0
+
+                async def read(self, size: int) -> bytes:
+                    chunk = content[self.offset: self.offset + size]
+                    self.offset += size
+                    return chunk
+
+            return MockReader()
+
         async def read(self):
             return self._content
 
