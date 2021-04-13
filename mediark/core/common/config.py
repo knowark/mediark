@@ -23,7 +23,7 @@ config: Config = {
     },
     'domain': os.environ.get(
         'MEDIARK_DOMAIN', "https://mediark.dev.nubark.cloud"),
-    "dir_path": "data",
+    "dir_path": str(Path.home() / "data"),
     "media": {
             "dir_path": "media",
             "audios": {

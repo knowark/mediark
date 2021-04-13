@@ -4,7 +4,7 @@ from ..application.domain.repositories import MediaRepository
 from ..application.informers import MediarkInformer
 from ..application.domain.common import TransactionManager, TenantProvider
 from ..core import Config
-from ..core.client import HttpClientSupplier
+from ..core.http import HttpClientSupplier
 from ..presenters.rest.helpers import HttpMediarkInformer
 from .base_factory import BaseFactory
 

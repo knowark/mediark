@@ -5,7 +5,7 @@ from typing import List, Tuple, Dict, Any
 from uuid import UUID
 from .....application.domain.common import TenantProvider
 from .....application.domain.services import FileStoreService, Reader
-from .....core.client import HttpClientSupplier
+from .....core.http import HttpClientSupplier
 from .swift_auth_supplier import SwiftAuthSupplier
 
 

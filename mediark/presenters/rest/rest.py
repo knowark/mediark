@@ -37,7 +37,11 @@ class RestApplication(web.Application):
 
         self.router.add_route(
             "post", '/upload',
-            getattr(UploadResource(self.injector), "post", None))
+            getattr(UploadResource(self.injector), "put", None))
+
+        self.router.add_route(
+            "put", '/upload',
+            getattr(UploadResource(self.injector), "put", None))
 
     @staticmethod
     async def _http_client(app: web.Application):

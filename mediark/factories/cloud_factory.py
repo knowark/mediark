@@ -6,7 +6,7 @@ from ..application.domain.common import (
 from ..core.suppliers import (
     SwiftAuthSupplier, SwiftFileStoreService)
 from ..core import Config
-from ..core.client import HttpClientSupplier
+from ..core.http import HttpClientSupplier
 from .directory_factory import DirectoryFactory
 from .sql_factory import SqlFactory
 

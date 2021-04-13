@@ -5,7 +5,7 @@ from typing import List, Dict, Any
 from base64 import b64decode
 from uuid import UUID
 from ....application.domain.common import TenantProvider
-from ....application.domain.services import FileStoreService, Reader
+from ....application.domain.services import FileStoreService, Reader, Writer
 
 
 class DirectoryFileStoreService(FileStoreService):
@@ -40,7 +40,7 @@ class DirectoryFileStoreService(FileStoreService):
             file_path = self._make_file_path(uri)
             file_path.absolute().parent.mkdir(parents=True, exist_ok=True)
 
-            generator = self._generate_write_data(stream)
+            generator = self._generate_chunked_data(stream)
             async with aiofiles.open(str(file_path), 'wb') as f:
                 async for chunk in generator:
                     await f.write(chunk)
@@ -49,19 +49,21 @@ class DirectoryFileStoreService(FileStoreService):
 
         return uris
 
-    async def _generate_write_data(self, stream: Reader) -> None:
+    async def load(self, uri: str, stream: Writer) -> Any:
+        file_path = self._make_file_path(uri)
+
+        async with aiofiles.open(str(file_path), 'rb') as f:
+            generator = self._generate_chunked_data(f)
+            async for chunk in generator:
+                await stream.write(chunk)
+
+        return None, {}
+
+    async def _generate_chunked_data(self, stream: Reader) -> None:
         chunk = await stream.read(self.chunk_size)
         while chunk:
             yield chunk
             chunk = await stream.read(self.chunk_size)
-
-    async def load(self, uri: str) -> Any:
-        file_path = self._make_file_path(uri)
-        with file_path.open('rb') as f:
-            return f.read(), {
-                'status': 200,
-                'headers': {}
-            }
 
     def _make_file_path(self, uri: str) -> Path:
         base_path = Path("{0}/{1}/{2}".format(

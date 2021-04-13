@@ -1,4 +1,6 @@
+import io
 from json import loads, dumps
+from aiohttp import FormData
 from mediark.presenters.rest import RestApplication
 from mediark.presenters.rest import rest as rest_module
 
@@ -66,11 +68,6 @@ async def test_media_put(app, headers) -> None:
     assert response.status == 200
 
 
-async def test_media_not_implemented_delete(app, headers) -> None:
-    response = await app.delete('/media/1', headers=headers)
-    content = await response.text()
-    assert response.status == 500
-
 # Downloads
 
 
@@ -78,6 +75,23 @@ async def test_api_download_get(app, headers) -> None:
     uri = "2020/03/11/7439edb5-c38f-4dc6-9d8f-89b6d67a6c6d.jpg"
     response = await app.get('/download/{uri}', headers=headers)
     assert response.status == 200
+
+
+# Uploads
+
+
+async def test_api_upload_put(app, headers) -> None:
+    file = io.StringIO('Mock In-Memory File')
+
+    data = FormData()
+    data.add_field(
+        'media', '{"id": "ABC123"}', content_type='application/json')
+    data.add_field(
+        'file', file, content_type='text/plain')
+
+    response = await app.put('/upload', headers=headers, data=data)
+    assert response.status == 200
+
 
 # Filters
 

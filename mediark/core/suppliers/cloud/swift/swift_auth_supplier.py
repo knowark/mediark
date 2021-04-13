@@ -1,6 +1,6 @@
 import time
 from typing import Dict, Optional, Any
-from .....core.client import HttpClientSupplier
+from .....core.http import HttpClientSupplier
 
 
 class SwiftAuthSupplier:

@@ -115,12 +115,14 @@ async def test_directory_file_store_service_load(
         'content': content
     }]
 
+    class MockWriter:
+        async def write(self, data: bytes) -> None:
+            self.data = data
+
+    stream = MockWriter()
+
     uri, *_ = await directory_file_store_service.store(contexts)
 
-    content, context = await directory_file_store_service.load(uri)
+    await directory_file_store_service.load(uri, stream)
 
-    assert content == b64decode(encoded_image)
-    assert context == {
-        'status': 200,
-        'headers': {}
-    }
+    assert stream.data == b64decode(encoded_image)
