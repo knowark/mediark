@@ -20,11 +20,8 @@ def test_memory_file_store_service_implementation() -> None:
 def file_store_service():
     tenant_provider = StandardTenantProvider()
     tenant_provider.setup(Tenant(name="Default"))
-    auth_provider = StandardAuthProvider()
-    auth_provider.setup(User(id='001', name='johndoe'))
 
-    file_store_service = MemoryFileStoreService(
-        tenant_provider, auth_provider)
+    file_store_service = MemoryFileStoreService(tenant_provider)
 
     return file_store_service
 

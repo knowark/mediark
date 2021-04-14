@@ -54,8 +54,8 @@ def standard_id_service():
 
 
 @fixture
-def file_store_service(tenant_provider, auth_provider):
-    return MemoryFileStoreService(tenant_provider, auth_provider)
+def file_store_service(tenant_provider):
+    return MemoryFileStoreService(tenant_provider)
 
 
 def test_storage_manager_instantiation(media_storage_manager):

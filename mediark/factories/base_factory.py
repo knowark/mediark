@@ -7,6 +7,7 @@ from ..application.domain.common import (
     MemoryTransactionManager)
 from ..application.domain.services import (
     IdService, StandardIdService,
+    CacheService, StandardCacheService,
     FileStoreService, MemoryFileStoreService)
 from ..application.managers import (
     SessionManager, MediaStorageManager)
@@ -73,6 +74,21 @@ class BaseFactory(Factory):
             media_repository, id_service,
             file_store_service)
 
+    # Services
+
+    def id_service(self) -> IdService:
+        return StandardIdService()
+
+    def cache_service(
+        self, tenant_provider: TenantProvider
+    ) -> CacheService:
+        return StandardCacheService(tenant_provider)
+
+    def file_store_service(
+            self, tenant_provider: TenantProvider
+    ) -> FileStoreService:
+        return MemoryFileStoreService(tenant_provider)
+
     # Informers
 
     def mediark_informer(self,
@@ -83,17 +99,8 @@ class BaseFactory(Factory):
             StandardMediarkInformer)(media_repository)
 
     def file_informer(self, file_store_service: FileStoreService,
+                      cache_service: CacheService,
                       media_repository: MediaRepository
                       ) -> FileInformer:
-        return StandardFileInformer(file_store_service, media_repository)
-
-    # Services
-
-    def id_service(self) -> IdService:
-        return StandardIdService()
-
-    def file_store_service(
-            self, tenant_provider: TenantProvider,
-            auth_provider: AuthProvider
-    ) -> FileStoreService:
-        return MemoryFileStoreService(tenant_provider, auth_provider)
+        return StandardFileInformer(
+            file_store_service, cache_service, media_repository)

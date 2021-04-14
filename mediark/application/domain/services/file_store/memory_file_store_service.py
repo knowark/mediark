@@ -1,12 +1,11 @@
 from collections import defaultdict
 from typing import Dict, List, Tuple, Any
-from ...common import TenantProvider, AuthProvider
+from ...common import TenantProvider
 from .file_store_service import FileStoreService, Reader, Writer
 
 
 class MemoryFileStoreService(FileStoreService):
-    def __init__(self, tenant_service: TenantProvider,
-                 auth_provider: AuthProvider) -> None:
+    def __init__(self, tenant_service: TenantProvider) -> None:
         self.files: Dict[str, Dict[str, bytes]] = defaultdict(dict)
         self.tenant_service = tenant_service
         self.content = b''

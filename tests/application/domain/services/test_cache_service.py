@@ -1,5 +1,7 @@
 import time
 from pytest import fixture, raises
+from mediark.application.domain.common import (
+    StandardTenantProvider, Tenant)
 from mediark.application.domain.services import (
     CacheService, StandardCacheService)
 
@@ -10,9 +12,15 @@ def test_cache_service() -> None:
     assert 'set' in methods
 
 
-def test_cache_service_set_get() -> None:
-    cache = StandardCacheService()
+@fixture
+def cache():
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(name="Default"))
 
+    return StandardCacheService(tenant_provider)
+
+
+def test_cache_service_set_get(cache) -> None:
     cache.set('co', 'Colombia')
 
     value = cache.get('co')
@@ -21,8 +29,8 @@ def test_cache_service_set_get() -> None:
     assert cache.get('en', 'England') == 'England'
 
 
-def test_cache_service_least_recently_used() -> None:
-    cache = StandardCacheService(size=3)
+def test_cache_service_least_recently_used(cache) -> None:
+    cache.size = 3
 
     cache.set('ar', 'Argentina')
     cache.set('br', 'Brazil')
@@ -35,15 +43,16 @@ def test_cache_service_least_recently_used() -> None:
     assert cache.get('ar', '') == ''
 
 
-def test_cache_service_raises_on_not_found() -> None:
-    cache = StandardCacheService(size=3)
+def test_cache_service_raises_on_not_found(cache) -> None:
+    cache.size = 3
 
     with raises(KeyError):
         assert cache.get('co')
 
 
-def test_cache_service_expiration() -> None:
-    cache = StandardCacheService(size=3, lifetime=0.01)
+def test_cache_service_expiration(cache) -> None:
+    cache.size = 3
+    cache.lifetime = 0.01
 
     cache.set('ar', 'Argentina')
 

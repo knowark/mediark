@@ -4,7 +4,8 @@ from mediark.application.domain.common import (
     AuthProvider, StandardAuthProvider, User, QueryDomain,
     MediaNotFoundError)
 from mediark.application.domain.models import Media
-from mediark.application.domain.services import MemoryFileStoreService
+from mediark.application.domain.services import (
+    MemoryFileStoreService, StandardCacheService)
 from mediark.application.domain.repositories import MemoryMediaRepository
 from mediark.application.informers import FileInformer, StandardFileInformer
 
@@ -30,9 +31,11 @@ def media_repository():
 
 @fixture
 def file_informer(media_repository):
-    file_store_service = MemoryFileStoreService(
-        StandardTenantProvider(), StandardAuthProvider())
-    return StandardFileInformer(file_store_service, media_repository)
+    tenant_provider = StandardTenantProvider()
+    file_store_service = MemoryFileStoreService(tenant_provider)
+    cache_service = StandardCacheService(tenant_provider)
+    return StandardFileInformer(
+        file_store_service, cache_service, media_repository)
 
 
 def test_file_informer_instantiation(file_informer):
