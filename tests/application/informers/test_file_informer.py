@@ -1,7 +1,8 @@
-from pytest import fixture
+from pytest import fixture, raises
 from mediark.application.domain.common import (
     QueryParser, Tenant, StandardTenantProvider, Tenant,
-    AuthProvider, StandardAuthProvider, User, QueryDomain)
+    AuthProvider, StandardAuthProvider, User, QueryDomain,
+    MediaNotFoundError)
 from mediark.application.domain.models import Media
 from mediark.application.domain.services import MemoryFileStoreService
 from mediark.application.domain.repositories import MemoryMediaRepository
@@ -17,7 +18,10 @@ def media_repository():
         parser, tenant_service, auth_provider)
     media_repository.load({
         'default': {
-            '001': Media(id='001', reference='ABC'),
+            '001': Media(
+                id='001', reference='ABC',
+                path='images/abcd1234.jpg',
+                uri='data/abcd1234.jpg'),
             '002': Media(id='002', reference='XYZ')
         }
     })
@@ -25,11 +29,10 @@ def media_repository():
 
 
 @fixture
-def file_informer():
+def file_informer(media_repository):
     file_store_service = MemoryFileStoreService(
-        StandardTenantProvider(),
-        StandardAuthProvider())
-    return StandardFileInformer(file_store_service)
+        StandardTenantProvider(), StandardAuthProvider())
+    return StandardFileInformer(file_store_service, media_repository)
 
 
 def test_file_informer_instantiation(file_informer):
@@ -37,7 +40,7 @@ def test_file_informer_instantiation(file_informer):
 
 
 async def test_file_informer_load(file_informer):
-    uri = 'images/abcd1234.jpg'
+    path = 'images/abcd1234.jpg'
 
     class MockWriter:
         data = None
@@ -48,7 +51,20 @@ async def test_file_informer_load(file_informer):
     stream = MockWriter()
 
     file_informer.file_store_service.content = b'BINARY_DATA'
-    result = await file_informer.load(uri, stream)
+    result = await file_informer.load(path, stream)
 
     assert stream.data == b'BINARY_DATA'
     assert result is None
+
+
+async def test_file_informer_load_not_found(file_informer):
+    uri = 'nonexistent/xyz000.jpg'
+
+    class MockWriter:
+        async def write(self, data) -> None:
+            pass
+
+    stream = MockWriter()
+
+    with raises(MediaNotFoundError):
+        result = await file_informer.load(uri, stream)

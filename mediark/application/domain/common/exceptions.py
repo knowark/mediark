@@ -57,6 +57,10 @@ class ManagerError(ApplicationError):
 class DataValidationError(ManagerError):
     """Data Validation"""
 
+
+class MediaNotFoundError(ManagerError):
+    """Media Not Found"""
+
 # Infrastructure
 
 

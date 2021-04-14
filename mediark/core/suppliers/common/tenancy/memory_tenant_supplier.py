@@ -13,5 +13,8 @@ class MemoryTenantSupplier(TenantSupplier):
     def search_tenants(self, domain: List) -> List[Dict[str, Any]]:
         return self.provider.search_tenants(domain)
 
+    def resolve_tenant(self, name: str) -> Dict[str, Any]:
+        return self.provider.resolve_tenant(name)
+
     def ensure_tenant(self, tenant_dict: Dict[str, Any]) -> Dict[str, Any]:
         return self.arranger.ensure_tenant(tenant_dict)

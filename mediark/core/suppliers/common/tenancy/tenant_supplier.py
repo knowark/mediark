@@ -12,5 +12,9 @@ class TenantSupplier(ABC):
         """Search tenants method to be implemented."""
 
     @abstractmethod
+    def resolve_tenant(self, name: str) -> Dict[str, Any]:
+        """Resolve tenant method to be implemented."""
+
+    @abstractmethod
     def ensure_tenant(self, tenant_dict: Dict[str, Any]) -> Dict[str, Any]:
         """Ensure tenant method to be implemented."""

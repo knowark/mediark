@@ -44,9 +44,8 @@ class SwiftFileStoreService(FileStoreService):
             uri = self._make_object_name(context)
             uri_stream_pairs.append((uri, stream))
 
-        url = self._make_url(uri)
         token = await self.auth_supplier.authenticate()
-        await self._stream_upload_object(token, url, uri_stream_pairs)
+        await self._stream_upload_object(token, uri_stream_pairs)
 
         return [pair[0] for pair in uri_stream_pairs]
 
@@ -106,10 +105,17 @@ class SwiftFileStoreService(FileStoreService):
             body = await response.read()
 
     async def _stream_upload_object(
-            self, token: str, url: str,
+            self, token: str,
             uri_stream_pairs: List[Tuple[str, Reader]]) -> None:
+
         headers = {'X-Auth-Token': token}
+        container_url = self._make_url()
+        async with self.client.put(
+                container_url, headers=headers) as response:
+            pass
+
         for uri, stream in uri_stream_pairs:
+            url = self._make_url(uri)
             async with self.client.put(
                     url, headers=headers,
                     data=self._generate_chunked_data(stream)) as response:

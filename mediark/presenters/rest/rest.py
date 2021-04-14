@@ -32,11 +32,11 @@ class RestApplication(web.Application):
         self._create_api()
 
         self.router.add_route(
-            "get", r'/download/{uri:(.*)}',
+            "get", r'/download/{tenant}/{path:(.*)}',
             getattr(DownloadResource(self.injector), "get", None))
 
         self.router.add_route(
-            "post", '/upload',
+            "post", '/upload/',
             getattr(UploadResource(self.injector), "put", None))
 
         self.router.add_route(
