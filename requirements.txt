@@ -46,7 +46,7 @@ MarkupSafe==1.1.1
 marshmallow==3.7.1
 migrark==0.6.0
 mock==3.0.5
-modelark==0.2.7
+modelark==0.3.2
 more-itertools==8.5.0
 msgpack==1.0.0
 multidict==4.7.6
