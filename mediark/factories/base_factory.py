@@ -79,11 +79,6 @@ class BaseFactory(Factory):
     def id_service(self) -> IdService:
         return StandardIdService()
 
-    def cache_service(
-        self, tenant_provider: TenantProvider
-    ) -> CacheService:
-        return StandardCacheService(tenant_provider)
-
     def file_store_service(
             self, tenant_provider: TenantProvider
     ) -> FileStoreService:
@@ -99,8 +94,7 @@ class BaseFactory(Factory):
             StandardMediarkInformer)(media_repository)
 
     def file_informer(self, file_store_service: FileStoreService,
-                      cache_service: CacheService,
                       media_repository: MediaRepository
                       ) -> FileInformer:
         return StandardFileInformer(
-            file_store_service, cache_service, media_repository)
+            file_store_service, media_repository)

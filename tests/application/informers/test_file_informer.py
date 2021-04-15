@@ -33,9 +33,8 @@ def media_repository():
 def file_informer(media_repository):
     tenant_provider = StandardTenantProvider()
     file_store_service = MemoryFileStoreService(tenant_provider)
-    cache_service = StandardCacheService(tenant_provider)
     return StandardFileInformer(
-        file_store_service, cache_service, media_repository)
+        file_store_service, media_repository)
 
 
 def test_file_informer_instantiation(file_informer):
