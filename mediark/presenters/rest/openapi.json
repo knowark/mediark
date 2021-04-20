@@ -1,0 +1,135 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Mediark",
+    "version": "1.0.0",
+    "description": "Media Management Server",
+    "license": {
+      "name": "GNU GPLv3",
+      "url": "https://github.com/knowark/mediark/blob/master/LICENSE"
+    },
+    "contact": {
+      "name": "Knowark",
+      "url": "https://www.knowark.com",
+      "email": "it@knowark.com"
+    }
+  },
+  "paths": {
+    "/media": {
+      "get": {
+        "description": "Show all media metadata records",
+        "tags": ["Media"],
+        "responses": {
+          "200": {
+            "description": "Media metadata records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Media"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Insert or update new media record",
+        "tags": ["Media"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Media"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      }
+    },
+
+    "/download": {
+      "get": {
+        "description": "Download media files.",
+        "tags": ["Download"],
+        "responses": {
+          "200": {
+            "description": "File to be downloaded."
+          }
+        }
+      }
+    },
+    "/upload": {
+      "put": {
+        "description": "Upload Media Data",
+        "tags": ["Upload"],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "media": {
+                    "type": "object" ,
+                    "$ref": "#/components/schemas/Media"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful upload"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Media": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "extension": {
+            "type": "string"
+          },
+          "reference": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

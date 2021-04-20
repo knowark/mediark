@@ -10,7 +10,7 @@ class RootResource:
 
     async def get(self, request):
         if 'api' in request.query:
-            return web.json_response(self.spec.to_dict())
+            return web.json_response(self.spec)
 
         context = {'url': '/?api', 'version': __version__}
         response = render_template('index.html', request, context)
