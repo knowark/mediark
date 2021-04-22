@@ -27,9 +27,3 @@ class Resource:
             domain, limit=limit, offset=offset)
         result = self.schema().dump(records, many=True)
         return web.json_response(result)
-
-    async def put(self, request: web.Request) -> web.Response:
-        records = self.schema(
-            many=True).loads(await request.text())
-        await self.add_handler(records)
-        return web.Response(status=200)
