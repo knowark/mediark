@@ -1,2 +1,2 @@
 from .http_client import HttpClientSupplier
-from .http_reader import HttpFileReader, Base64FileReader
+from .http_reader import HttpFileReader, HttpBase64Reader

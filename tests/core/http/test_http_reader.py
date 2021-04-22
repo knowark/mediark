@@ -1,6 +1,6 @@
 from os import name
 from pytest import fixture, raises
-from mediark.core.http import HttpFileReader
+from mediark.core.http import HttpFileReader, HttpBase64Reader
 
 
 async def test_http_file_reader():
@@ -16,3 +16,15 @@ async def test_http_file_reader():
     reader = HttpFileReader(mock_body_part_reader)
 
     assert await reader.read(4) == b'ABCD'
+
+
+async def test_http_base64_reader():
+    base64data = 'SU1BR0VfREFUQQ=='
+    reader = HttpBase64Reader(base64data)
+
+    assert len(await reader.read(4)) == 4
+
+    base64data = 'SU1BR0VfREFUQQ=='
+    reader = HttpBase64Reader(base64data)
+
+    assert len(await reader.read(-1)) == 10

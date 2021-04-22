@@ -10,15 +10,14 @@ class HttpFileReader:
         return await self.part.read_chunk(size)
 
 
-class Base64FileReader:
+class HttpBase64Reader:
     def __init__(self, data: str) -> None:
         self.stream = b64decode(data)
-        self.chunk_size = 512 * 1024
         self.offset = 0
 
     async def read(self, size: int) -> bytes:
         if size == -1:
             return self.stream
-        chunk = self.stream[self.offset: self.offset + self.chunk_size]
-        self.offset += self.chunk_size
+        chunk = self.stream[self.offset: self.offset + size]
+        self.offset += size
         return chunk

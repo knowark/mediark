@@ -3,7 +3,7 @@ from injectark import Injectark
 from aiohttp import web
 from ..helpers.schemas import MediaSchema
 from .resource import Resource
-from ....core.http import Base64FileReader
+from ....core.http import HttpBase64Reader
 
 
 class MediaResource(Resource):
@@ -23,7 +23,7 @@ class MediaResource(Resource):
         streams = [record.pop('data', None) for record in records]
 
         submission_records = [
-            {'media': media, 'stream': stream and Base64FileReader(stream)}
+            {'media': media, 'stream': stream and HttpBase64Reader(stream)}
             for media, stream in zip(records, streams)]
 
         await self.manager.submit(submission_records)
