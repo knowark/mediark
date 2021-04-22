@@ -27,6 +27,8 @@ class MemoryFileStoreService(FileStoreService):
         for context in contexts:
             file_id = context['id']
             stream = context['stream']
+            if not stream:
+                continue
             content = await stream.read(-1)
             self.files[self._location][file_id] = content
             file_ids.append(file_id)

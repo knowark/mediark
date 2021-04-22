@@ -1,17 +1,31 @@
 from functools import partial
 from injectark import Injectark
+from aiohttp import web
 from ..helpers.schemas import MediaSchema
 from .resource import Resource
+from ....core.http import Base64FileReader
 
 
 class MediaResource(Resource):
     def __init__(self, injector: Injectark) -> None:
-        informer = injector['MediarkInformer']
-        manager = injector['MediaStorageManager']
+        self.informer = injector['MediarkInformer']
+        self.manager = injector['MediaStorageManager']
 
         super().__init__(
             MediaSchema,
-            partial(informer.count, 'media'),
-            partial(informer.search_media, 'media'),
-            manager.store,
+            partial(self.informer.count, 'media'),
+            partial(self.informer.search_media, 'media'),
+            None,
             None)
+
+    async def put(self, request: web.Request) -> web.Response:
+        records = await request.json()
+        streams = [record.pop('data', None) for record in records]
+
+        submission_records = [
+            {'media': media, 'stream': stream and Base64FileReader(stream)}
+            for media, stream in zip(records, streams)]
+
+        await self.manager.submit(submission_records)
+
+        return web.Response(status=200)
