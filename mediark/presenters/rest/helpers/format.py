@@ -1,6 +1,7 @@
 import re
 from json import loads, JSONDecodeError
 from typing import Tuple, List, Dict, Any
+from validark import camel_to_snake
 
 
 def parse_domain(filter: str) -> List[Any]:
@@ -16,10 +17,3 @@ def parse_domain(filter: str) -> List[Any]:
             item[0] = word
 
     return domain
-
-
-def camel_to_snake(value: str) -> str:
-    value = re.sub(r"[\-\.\s]", '_', str(value))
-    return (value[0].lower() +
-            re.sub(r"[A-Z]", lambda matched: '_' +
-                   matched.group(0).lower(), value[1:]))

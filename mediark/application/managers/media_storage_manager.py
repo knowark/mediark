@@ -1,9 +1,11 @@
-from ..domain.models import Media
 from typing import List
 from base64 import b64decode
+from validark import validate
+from ..domain.models import Media
 from ..domain.repositories import MediaRepository
 from ..domain.services import IdService, FileStoreService
 from ..domain.common import RecordList
+from .common import submission
 
 
 class MediaStorageManager:
@@ -16,15 +18,17 @@ class MediaStorageManager:
         self.file_store_service = file_store_service
 
     async def submit(self, submission_records: RecordList) -> None:
+        records = validate(submission, submission_records)
         medias = await self.media_repository.add(
-            [Media(**record['media']) for record in submission_records])
-        streams = [record.get('stream') for record in submission_records]
+            [Media(**record['media']) for record in records])
+        streams = [record.get('stream') for record in records]
 
         contexts = [{'stream': stream, **vars(media)}
                     for media, stream in zip(medias, streams)]
 
         uris = await self.file_store_service.submit(contexts)
         for media, uri in zip(medias, uris):
-            media.uri = uri
+            if uri:
+                media.uri = uri
 
         await self.media_repository.add(medias)
