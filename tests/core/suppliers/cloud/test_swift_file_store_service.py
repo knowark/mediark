@@ -40,6 +40,35 @@ async def test_swift_file_store_service_submit(swift_file_store_service):
     assert isinstance(client.arguments['put']['data'], AsyncGeneratorType)
 
 
+async def test_swift_file_store_service_submit_no_stream(
+        swift_file_store_service):
+    class MockStream:
+        data = bytearray(b'AAABBBCCCDDD')
+        chunk_size = 3
+        offset = 0
+
+        async def read(self, size) -> bytes:
+            offset += self.chunk_size
+            return self.data[i: i + self.chunk_size]
+
+    mock_stream = MockStream()
+    contexts = [{
+        'id': 'f91bde0b-d094-45fd-bcf5-8cf24de853c0',
+        'created_at': 1583933912,
+        'stream': mock_stream
+    }, {
+        'id': '1199f7d3-ecf3-4f09-963a-d65b72e415f5',
+        'created_at': 1583933912
+    }]
+    uri_1, uri_2 = await swift_file_store_service.submit(contexts)
+
+    client = swift_file_store_service.client
+
+    assert uri_1 == (
+        'general/2020/03/11/f91bde0b-d094-45fd-bcf5-8cf24de853c0.txt')
+    assert uri_2 == ''
+
+
 async def test_swift_file_store_service_make_url(swift_file_store_service):
     data_config = {
         'cloud': {

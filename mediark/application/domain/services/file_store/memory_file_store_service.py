@@ -10,16 +10,17 @@ class MemoryFileStoreService(FileStoreService):
         self.tenant_service = tenant_service
 
     async def submit(self, contexts: List[Dict[str, Any]]) -> List[str]:
-        file_ids = []
+        uris = []
         for context in contexts:
-            file_id = context['id']
+            uri = context['id']
             stream = context['stream']
             if not stream:
+                uris.append('')
                 continue
             content = await stream.read(-1)
-            self.files[self._location][file_id] = content
-            file_ids.append(file_id)
-        return file_ids
+            self.files[self._location][uri] = content
+            uris.append(uri)
+        return uris
 
     async def load(self, uri: str, stream: Writer) -> None:
         content = self.files[self._location][uri]

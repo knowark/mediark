@@ -23,16 +23,19 @@ class SwiftFileStoreService(FileStoreService):
         self.chunk_size = 512 * 1024
 
     async def submit(self, contexts: List[Dict[str, Any]]) -> List[str]:
-        uri_stream_pairs: List[Tuple[str, bytes]] = []
+        uris: List[str] = []
         for context in contexts:
-            stream: Reader = context.pop('stream')
+            stream: Reader = context.pop('stream', None)
+            if not stream:
+                uris.append('')
+                continue
+
             uri = self._make_object_name(context)
-            uri_stream_pairs.append((uri, stream))
+            token = await self.auth_supplier.authenticate()
+            await self._upload_object(token, uri, stream)
+            uris.append(uri)
 
-        token = await self.auth_supplier.authenticate()
-        await self._stream_upload_object(token, uri_stream_pairs)
-
-        return [pair[0] for pair in uri_stream_pairs]
+        return uris
 
     async def load(self, uri: str, stream: Writer) -> None:
         token = await self.auth_supplier.authenticate()
@@ -69,9 +72,8 @@ class SwiftFileStoreService(FileStoreService):
 
         return url
 
-    async def _stream_upload_object(
-            self, token: str,
-            uri_stream_pairs: List[Tuple[str, Reader]]) -> None:
+    async def _upload_object(
+            self, token: str, uri: str, stream: Reader) -> None:
 
         headers = {'X-Auth-Token': token}
         container_url = self._make_url()
@@ -79,12 +81,11 @@ class SwiftFileStoreService(FileStoreService):
                 container_url, headers=headers) as response:
             pass
 
-        for uri, stream in uri_stream_pairs:
-            url = self._make_url(uri)
-            async with self.client.put(
-                    url, headers=headers,
-                    data=self._generate_chunked_data(stream)) as response:
-                pass
+        url = self._make_url(uri)
+        async with self.client.put(
+                url, headers=headers,
+                data=self._generate_chunked_data(stream)) as response:
+            pass
 
     async def _download_object(
             self, token: str, url: str, stream: Writer) -> None:
