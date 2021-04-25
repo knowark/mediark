@@ -52,7 +52,12 @@ async def test_file_informer_load(file_informer):
 
     stream = MockWriter()
 
-    file_informer.file_store_service.content = b'BINARY_DATA'
+    file_informer.file_store_service.files = {
+        'default': {
+            'data/abcd1234.jpg': b'BINARY_DATA'
+        }
+    }
+
     result = await file_informer.load(path, stream)
 
     assert stream.data == b'BINARY_DATA'

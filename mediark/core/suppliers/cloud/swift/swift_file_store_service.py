@@ -22,21 +22,6 @@ class SwiftFileStoreService(FileStoreService):
         self.data_config = data_config
         self.chunk_size = 512 * 1024
 
-    async def store(self, contexts: List[Dict[str, Any]]) -> List[str]:
-        uri_content_pairs: List[Tuple[str, bytes]] = []
-        for context in contexts:
-            content: bytes = context.pop('content')
-            uri = self._make_object_name(context)
-            uri_content_pairs.append((uri, content))
-
-        url = self._make_url()
-        archive_content = self._tar_contents(uri_content_pairs)
-
-        token = await self.auth_supplier.authenticate()
-        await self._upload_object(token, url, archive_content)
-
-        return [pair[0] for pair in uri_content_pairs]
-
     async def submit(self, contexts: List[Dict[str, Any]]) -> List[str]:
         uri_stream_pairs: List[Tuple[str, bytes]] = []
         for context in contexts:
@@ -84,26 +69,6 @@ class SwiftFileStoreService(FileStoreService):
 
         return url
 
-    def _tar_contents(
-            self, uri_content_pairs: List[Tuple[str, bytes]]) -> bytes:
-        archive = io.BytesIO()
-        with tarfile.open(fileobj=archive, mode='w:gz') as tar:
-            for uri, content in uri_content_pairs:
-                tarinfo = tarfile.TarInfo(uri)
-                tarinfo.size = len(content)
-                fileobj = io.BytesIO(content)
-                tar.addfile(tarinfo, fileobj)
-
-        return archive.getvalue()
-
-    async def _upload_object(
-            self, token: str, url: str, content: bytes) -> None:
-        headers = {'X-Auth-Token': token}
-        url = f'{url}?extract-archive=tar.gz'
-        async with self.client.put(
-                url, headers=headers, data=content) as response:
-            body = await response.read()
-
     async def _stream_upload_object(
             self, token: str,
             uri_stream_pairs: List[Tuple[str, Reader]]) -> None:
@@ -121,12 +86,6 @@ class SwiftFileStoreService(FileStoreService):
                     data=self._generate_chunked_data(stream)) as response:
                 pass
 
-    async def _generate_chunked_data(self, stream: Reader) -> None:
-        chunk = await stream.read(self.chunk_size)
-        while chunk:
-            yield chunk
-            chunk = await stream.read(self.chunk_size)
-
     async def _download_object(
             self, token: str, url: str, stream: Writer) -> None:
         headers = {'X-Auth-Token': token}
@@ -134,3 +93,9 @@ class SwiftFileStoreService(FileStoreService):
             generator = self._generate_chunked_data(response.content)
             async for chunk in generator:
                 await stream.write(chunk)
+
+    async def _generate_chunked_data(self, stream: Reader) -> None:
+        chunk = await stream.read(self.chunk_size)
+        while chunk:
+            yield chunk
+            chunk = await stream.read(self.chunk_size)

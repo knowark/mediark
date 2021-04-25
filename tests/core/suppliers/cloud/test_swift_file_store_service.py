@@ -8,17 +8,6 @@ def test_swift_file_store_service_instantiation(swift_file_store_service):
     assert isinstance(swift_file_store_service, SwiftFileStoreService)
 
 
-async def test_swift_file_store_service_store(swift_file_store_service):
-    contexts = [{
-        'id': 'f91bde0b-d094-45fd-bcf5-8cf24de853c0',
-        'created_at': 1583933912,
-        'content': b'BINARY_MEDIA_DATA'
-    }]
-    uri, *_ = await swift_file_store_service.store(contexts)
-
-    assert uri == 'general/2020/03/11/f91bde0b-d094-45fd-bcf5-8cf24de853c0.txt'
-
-
 async def test_swift_file_store_service_submit(swift_file_store_service):
     class MockStream:
         data = bytearray(b'AAABBBCCCDDD')
@@ -49,29 +38,6 @@ async def test_swift_file_store_service_submit(swift_file_store_service):
     assert client.arguments['put']['headers'] == {
         'X-Auth-Token': 'AUTH_TOKEN_123'}
     assert isinstance(client.arguments['put']['data'], AsyncGeneratorType)
-
-
-async def test_swift_file_store_service_generate_upload(
-        swift_file_store_service):
-    class MockStream:
-        data = bytearray(b'AAABBBCCCDDD')
-        chunk_size = 3
-        offset = 0
-
-        async def read(self, size) -> bytes:
-            chunk = self.data[self.offset: self.offset + self.chunk_size]
-            self.offset += self.chunk_size
-            return chunk
-
-    mock_stream = MockStream()
-
-    generator = swift_file_store_service._generate_chunked_data(mock_stream)
-
-    result = []
-    async for chunk in generator:
-        result.append(chunk)
-
-    assert result == [b'AAA', b'BBB', b'CCC', b'DDD']
 
 
 async def test_swift_file_store_service_make_url(swift_file_store_service):

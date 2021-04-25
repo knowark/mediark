@@ -8,19 +8,6 @@ class MemoryFileStoreService(FileStoreService):
     def __init__(self, tenant_service: TenantProvider) -> None:
         self.files: Dict[str, Dict[str, bytes]] = defaultdict(dict)
         self.tenant_service = tenant_service
-        self.content = b''
-
-    async def store(self, contexts: List[Dict[str, Any]]) -> List[str]:
-        file_ids = []
-        for context in contexts:
-            file_id = context['id']
-            content: bytes = context.pop('content')
-            self.files[self._location][file_id] = content
-            file_ids.append(file_id)
-        return file_ids
-
-    async def load(self, uri: str, stream: Writer) -> None:
-        await stream.write(self.content)
 
     async def submit(self, contexts: List[Dict[str, Any]]) -> List[str]:
         file_ids = []
@@ -33,6 +20,10 @@ class MemoryFileStoreService(FileStoreService):
             self.files[self._location][file_id] = content
             file_ids.append(file_id)
         return file_ids
+
+    async def load(self, uri: str, stream: Writer) -> None:
+        content = self.files[self._location][uri]
+        await stream.write(content)
 
     @property
     def _location(self) -> str:

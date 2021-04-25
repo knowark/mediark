@@ -7,7 +7,6 @@ from mediark.application.domain.common import (
 
 def test_file_store_service() -> None:
     methods = FileStoreService.__abstractmethods__  # type: ignore
-    assert 'store' in methods
     assert 'load' in methods
     assert 'submit' in methods
 
@@ -26,43 +25,15 @@ def file_store_service():
     return file_store_service
 
 
-async def test_memory_file_store_service_store(file_store_service) -> None:
-    file_id = 'ec892a1e-a05b-4152-b0e4-1be9b276005c'
-    content = b'BASE64_ENCODED_CONTENT'
-    contexts = [{
-        'id': file_id,
-        'content': content
-    }]
-
-    uri, *_ = await file_store_service.store(contexts)
-
-    assert isinstance(uri, str)
-    assert uri == file_id
-
-
-async def test_memory_file_store_service_store_many(
-        file_store_service) -> None:
-    contexts = [
-        {
-            'id': 'ec892a1e-a05b-4152-b0e4-1be9b276005c',
-            'content': b'BASE64_ENCODED_CONTENT'
-        },
-        {
-            'id': '3054a584-2f8e-4a62-b480-0405b311a5aa',
-            'content': b'BASE64_ENCODED_CONTENT'
-        }
-    ]
-
-    uris = await file_store_service.store(contexts)
-
-    assert len(uris) == len(contexts)
-    assert uris[0] == contexts[0]['id']
-    assert uris[1] == contexts[1]['id']
-
-
 async def test_memory_file_store_service_load(file_store_service) -> None:
     uri = 'ec892a1e-a05b-4152-b0e4-1be9b276005c'
-    file_store_service.content = b'IMAGE_BINARY_DATA'
+    file_store_service.files = {
+        'default': {
+            uri: b'IMAGE_BINARY_DATA'
+        }
+    }
+
+    # content = b'IMAGE_BINARY_DATA'
 
     class MockWriter:
         data = None

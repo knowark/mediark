@@ -5,10 +5,6 @@ from typing import Protocol, runtime_checkable
 
 class FileStoreService(ABC):
     @abstractmethod
-    async def store(self, contexts: List[Dict[str, Any]]) -> List[str]:
-        "Store method to be implemented."
-
-    @abstractmethod
     async def submit(self, contexts: List[Dict[str, Any]]) -> List[str]:
         "Submit method to be implemented."
 
