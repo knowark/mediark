@@ -1,17 +1,15 @@
 from aiohttp import web
 from typing import Callable, Type
-from marshmallow import Schema
 from validark import normalize
 from ..helpers import get_request_filter
 
 
 class Resource:
-    def __init__(self, schema: Type[Schema],
+    def __init__(self,
                  count_handler: Callable,
                  search_handler: Callable,
                  add_handler: Callable,
                  delete_handler: Callable) -> None:
-        self.schema = schema
         self.count_handler = count_handler
         self.search_handler = search_handler
         self.add_handler = add_handler

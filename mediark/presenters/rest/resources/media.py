@@ -1,7 +1,6 @@
 from functools import partial
 from injectark import Injectark
 from aiohttp import web
-from ..helpers.schemas import MediaSchema
 from .resource import Resource
 from ....core.http import HttpBase64Reader
 
@@ -12,7 +11,6 @@ class MediaResource(Resource):
         self.manager = injector['MediaStorageManager']
 
         super().__init__(
-            MediaSchema,
             partial(self.informer.count, 'media'),
             partial(self.informer.search_media, 'media'),
             None,

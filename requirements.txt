@@ -43,7 +43,6 @@ Jinja2==2.11.2
 lazy-object-proxy==1.4.2
 lockfile==0.12.2
 MarkupSafe==1.1.1
-marshmallow==3.7.1
 migrark==0.6.0
 mock==3.0.5
 modelark==0.3.2
