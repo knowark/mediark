@@ -14,7 +14,9 @@
       "email": "it@knowark.com"
     }
   },
+
   "paths": {
+
     "/media": {
       "get": {
         "description": "Show all media metadata records",
@@ -69,8 +71,36 @@
         }
       }
     },
+
     "/upload": {
       "put": {
+        "description": "Upload Media Data",
+        "tags": ["Upload"],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "media": {
+                    "type": "object" ,
+                    "$ref": "#/components/schemas/Media"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful upload"
+          }
+        }
+      },
+      "post": {
         "description": "Upload Media Data",
         "tags": ["Upload"],
         "requestBody": {
@@ -99,6 +129,7 @@
       }
     }
   },
+
   "components": {
     "schemas": {
       "Media": {
