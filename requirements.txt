@@ -4,7 +4,7 @@ aiohttp==3.6.2
 aiohttp-jinja2==1.2.0
 alabaster==0.7.12
 aniso8601==7.0.0
-ansible==2.8.4
+ansible==2.9.20
 appdirs==1.4.3
 argh==0.26.2
 asn1crypto==0.24.0
