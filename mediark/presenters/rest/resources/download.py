@@ -18,4 +18,6 @@ class DownloadResource:
         self.session_manager.set_tenant(tenant_dict)
 
         await response.prepare(request)
+        print('Hasta aqui bien!!!>>>>>>', request)
+
         await self.file_informer.load(path, response)

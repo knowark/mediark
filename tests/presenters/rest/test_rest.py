@@ -73,7 +73,7 @@ async def test_media_put(app, headers) -> None:
 
 async def test_api_download_get(app, headers) -> None:
     tenant = 'default'
-    path = "2020/03/11/7439edb5-c38f-4dc6-9d8f-89b6d67a6c6d.jpg"
+    path = "path_1"
     response = await app.get(f'/download/{tenant}/{path}', headers=headers)
     assert response.status == 200
 
