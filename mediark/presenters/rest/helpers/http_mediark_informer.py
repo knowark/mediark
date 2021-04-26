@@ -17,7 +17,7 @@ class HttpMediarkInformer(StandardMediarkInformer):
     def _prepend_download(download_url: str, items: List[Any]) -> List[Any]:
         for item in items:
             uri = item.pop('uri')
-            path = item.pop('path') or uri
+            path = item.get('path') or uri
             item['url'] = f"{download_url}/{path}"
         return items
 

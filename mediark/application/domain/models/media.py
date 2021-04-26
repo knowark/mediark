@@ -11,5 +11,5 @@ class Media(Entity):
         self.reference = attributes.get('reference', '')
         self.extension = attributes.get('extension', 'jpg')
         self.uri = attributes.get('uri', '')
-        self.path = attributes.get('path') or self.uri
         self.timestamp = attributes.get('timestamp', int(time.time()))
+        self.path = attributes.get('path') or self.uri
