@@ -39,7 +39,7 @@ iniconfig==1.0.1
 injectark==0.6.0
 ipaddr==2.2.0
 jedi==0.18.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 lazy-object-proxy==1.4.2
 lockfile==0.12.2
 MarkupSafe==1.1.1
