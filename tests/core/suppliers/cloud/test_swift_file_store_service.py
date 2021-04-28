@@ -15,8 +15,8 @@ async def test_swift_file_store_service_submit(swift_file_store_service):
         offset = 0
 
         async def read(self, size) -> bytes:
-            offset += self.chunk_size
-            return self.data[i: i + self.chunk_size]
+            self.offset += self.chunk_size
+            return self.data[self.offset: self.offset + self.chunk_size]
 
     mock_stream = MockStream()
     contexts = [{
