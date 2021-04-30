@@ -94,7 +94,8 @@ class BaseFactory(Factory):
             StandardMediarkInformer)(media_repository)
 
     def file_informer(self, file_store_service: FileStoreService,
-                      media_repository: MediaRepository
+                      media_repository: MediaRepository,
+                      transaction_manager: TransactionManager
                       ) -> FileInformer:
-        return StandardFileInformer(
+        return transaction_manager(StandardFileInformer)(
             file_store_service, media_repository)
