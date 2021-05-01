@@ -12,6 +12,10 @@ class FileStoreService(ABC):
     async def load(self, uri: str, stream: 'Writer') -> None:
         "Load method to be implemented."
 
+    @abstractmethod
+    async def delete(self, uri: str) -> None:
+        "Delete method to be implemented."
+
 
 @runtime_checkable
 class Writer(Protocol):

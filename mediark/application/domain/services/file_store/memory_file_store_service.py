@@ -26,6 +26,9 @@ class MemoryFileStoreService(FileStoreService):
         content = self.files[self._location][uri]
         await stream.write(content)
 
+    async def delete(self, uri: str) -> None:
+        del self.files[self._location][uri]
+
     @property
     def _location(self) -> str:
         return self.tenant_service.tenant.zone or 'default'

@@ -77,6 +77,11 @@ def mock_http_client():
                 {'url': url, 'headers': headers})
             return MockDownloadContextManager()
 
+        def delete(self, url, headers):
+            self.arguments['delete'] = (
+                {'url': url, 'headers': headers})
+            return MockDownloadContextManager()
+
     return MockHttpClient()
 
 

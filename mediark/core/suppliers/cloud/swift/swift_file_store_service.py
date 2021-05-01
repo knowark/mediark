@@ -43,6 +43,12 @@ class SwiftFileStoreService(FileStoreService):
 
         return await self._download_object(token, url, stream)
 
+    async def delete(self, uri: str) -> None:
+        token = await self.auth_supplier.authenticate()
+        url = self._make_url(uri)
+
+        return await self._delete_object(token, url)
+
     def _make_object_name(self, context: Dict[str, str]) -> str:
         object_type = context.get('type', 'general')
         timestamp = int(context.get('timestamp', context['created_at']))
@@ -94,6 +100,11 @@ class SwiftFileStoreService(FileStoreService):
             generator = self._generate_chunked_data(response.content)
             async for chunk in generator:
                 await stream.write(chunk)
+
+    async def _delete_object(self, token: str, url: str) -> None:
+        headers = {'X-Auth-Token': token}
+        async with self.client.delete(url, headers=headers) as response:
+            pass
 
     async def _generate_chunked_data(self, stream: Reader) -> None:
         chunk = await stream.read(self.chunk_size)

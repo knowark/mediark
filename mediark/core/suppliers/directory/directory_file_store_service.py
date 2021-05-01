@@ -1,5 +1,6 @@
 import time
 import aiofiles
+import aiofiles.os
 from pathlib import Path
 from typing import List, Dict, Any
 from base64 import b64decode
@@ -14,23 +15,6 @@ class DirectoryFileStoreService(FileStoreService):
         self.tenant_service = tenant_service
         self.data_config = data_config
         self.chunk_size = 512 * 1024
-
-    async def store(self, contexts: List[Dict[str, Any]]) -> List[str]:
-        uris = []
-        for context in contexts:
-            content: bytes = context.pop('content')
-            binary_data = b64decode(content)
-            uri = self._make_object_name(context)
-            file_path = self._make_file_path(uri)
-
-            file_path.absolute().parent.mkdir(parents=True, exist_ok=True)
-
-            with file_path.open("wb") as f:
-                f.write(binary_data)
-
-            uris.append(uri)
-
-        return uris
 
     async def submit(self, contexts: List[Dict[str, Any]]) -> List[str]:
         uris = []
@@ -51,11 +35,14 @@ class DirectoryFileStoreService(FileStoreService):
 
     async def load(self, uri: str, stream: Writer) -> None:
         file_path = self._make_file_path(uri)
-
         async with aiofiles.open(str(file_path), 'rb') as f:
             generator = self._generate_chunked_data(f)
             async for chunk in generator:
                 await stream.write(chunk)
+
+    async def delete(self, uri: str) -> None:
+        file_path = self._make_file_path(uri)
+        await aiofiles.os.remove(str(file_path))
 
     async def _generate_chunked_data(self, stream: Reader) -> None:
         chunk = await stream.read(self.chunk_size)

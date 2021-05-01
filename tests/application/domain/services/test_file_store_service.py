@@ -33,8 +33,6 @@ async def test_memory_file_store_service_load(file_store_service) -> None:
         }
     }
 
-    # content = b'IMAGE_BINARY_DATA'
-
     class MockWriter:
         data = None
 
@@ -78,3 +76,18 @@ async def test_memory_file_store_service_submit(file_store_service) -> None:
         b'SECOND_BINARY_CHUNK\n'
         b'THIRD_BINARY_CHUNK'
     )
+
+
+async def test_memory_file_store_service_delete(file_store_service) -> None:
+    uri = 'ec892a1e-a05b-4152-b0e4-1be9b276005c'
+    file_store_service.files = {
+        'default': {
+            uri: b'IMAGE_BINARY_DATA'
+        }
+    }
+
+    assert len(file_store_service.files['default']) == 1
+
+    await file_store_service.delete(uri)
+
+    assert len(file_store_service.files['default']) == 0

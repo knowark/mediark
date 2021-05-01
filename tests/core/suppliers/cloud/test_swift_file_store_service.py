@@ -134,3 +134,19 @@ async def test_swift_file_store_service_make_url_no_suffix(
     assert url == (
         'https://storage.cloud/north-custom-tenant/'
         'images/2020/02/15/5db7ec47-8bb1-4707-89c1-ad5aa76355e9.jpg')
+
+
+async def test_swift_file_store_service_delete(swift_file_store_service):
+    uri = 'images/2020/02/15/5db7ec47-8bb1-4707-89c1-ad5aa76355e9.jpg'
+
+    await swift_file_store_service.delete(uri)
+
+    assert swift_file_store_service.client.arguments['delete'] == {
+        'headers': {
+            'X-Auth-Token': 'AUTH_TOKEN_123'
+        },
+        'url': ('https://storage.bhs.cloud.ovh.net/v1/'
+                'AUTH_e737167b6b424d92ae257f2d94bc1b83/'
+                'custom-tenant-main/images/2020/02/15/'
+                '5db7ec47-8bb1-4707-89c1-ad5aa76355e9.jpg')
+    }
