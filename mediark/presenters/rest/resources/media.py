@@ -2,6 +2,7 @@ from functools import partial
 from injectark import Injectark
 from aiohttp import web
 from .resource import Resource
+from ..helpers import get_request_ids
 from ....core.http import HttpBase64Reader
 
 
@@ -25,5 +26,12 @@ class MediaResource(Resource):
             for media, stream in zip(records, streams)]
 
         await self.manager.submit(submission_records)
+
+        return web.Response(status=200)
+
+    async def delete(self, request: web.Request) -> web.Response:
+        ids = await get_request_ids(request)
+        deletion_records = [{'id': id_} for id_ in ids]
+        await self.manager.delete(deletion_records)
 
         return web.Response(status=200)

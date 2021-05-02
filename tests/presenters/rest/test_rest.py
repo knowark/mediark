@@ -68,6 +68,18 @@ async def test_media_put(app, headers) -> None:
     assert response.status == 200
 
 
+async def test_media_delete(app, headers) -> None:
+    data = ["932eff07-175a-44b5-871b-4bdaae6ad054"]
+    response = await app.delete('/media', data=dumps(data), headers=headers)
+    assert response.status == 200
+
+
+async def test_media_delete_url(app, headers) -> None:
+    id_ = "932eff07-175a-44b5-871b-4bdaae6ad054"
+    response = await app.delete(f'/media/{id_}', headers=headers)
+    assert response.status == 200
+
+
 # Downloads
 
 
