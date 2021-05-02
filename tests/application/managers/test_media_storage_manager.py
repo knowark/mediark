@@ -1,4 +1,3 @@
-
 from pytest import raises, fixture
 from mediark.application.managers import MediaStorageManager
 from mediark.application.domain.repositories import MemoryMediaRepository
@@ -62,50 +61,6 @@ def test_storage_manager_instantiation(media_storage_manager):
     assert media_storage_manager is not None
 
 
-async def xtest_storage_manager_store_no_data(media_storage_manager):
-    media_dict = [{'media': {
-        'type': 'images',
-        'namespace': 'https://example.com',
-        'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
-        'extension': 'jpg'
-    }}]
-    await media_storage_manager.submit(media_dict)
-
-    assert len(
-        media_storage_manager.media_repository.data['default']) == 1
-
-
-async def xtest_storage_manager_store_data(media_storage_manager):
-    media_dict = [{
-        'type': 'images',
-        'namespace': 'https://example.com',
-        'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
-        'data': 'QkFTRTY0X0RBVEE=',  # BASE64_DATA
-        'extension': 'jpg'
-    }]
-
-    await media_storage_manager.store(media_dict)
-
-    assert len(
-        media_storage_manager.media_repository.data['default']) == 1
-
-
-async def xtest_storage_manager_store_file(media_storage_manager):
-    media_dict = [{
-        'type': 'images',
-        'namespace': 'https://example.com',
-        'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
-        'data': ('"iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42'
-                 'mNk+H+1noEIwDiqkL4KAUP4F0koL9m+AAAAAElFTkSuQmCC",'),
-        'extension': 'png'
-    }]
-
-    await media_storage_manager.store(media_dict)
-
-    assert len(
-        media_storage_manager.media_repository.data) == 1
-
-
 async def test_storage_manager_submit_many(media_storage_manager):
     media_records = [
         {'media': {
@@ -151,3 +106,29 @@ async def test_storage_manager_submit_file(media_storage_manager):
 
     assert len(
         media_storage_manager.media_repository.data) == 1
+
+
+async def test_storage_manager_submit_many(media_storage_manager):
+    media_records = [
+        {'media': {
+            'id': 'ef4581b6-2136-4fb8-9be2-3a4fc1c83a02',
+            'type': 'images',
+            'namespace': 'https://example.com',
+            'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
+            'extension': 'jpg'
+        }}
+    ]
+
+    await media_storage_manager.submit(media_records)
+
+    assert len(
+        media_storage_manager.media_repository.data['default']) == 1
+
+    deletion_records = [{
+        'id': 'ef4581b6-2136-4fb8-9be2-3a4fc1c83a02'
+    }]
+
+    await media_storage_manager.delete(deletion_records)
+
+    assert len(
+        media_storage_manager.media_repository.data['default']) == 0
