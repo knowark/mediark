@@ -32,8 +32,8 @@ def auth_provider() -> StandardAuthProvider:
 
 
 @fixture
-def media_repository(tenant_provider, auth_provider):
-    return MemoryMediaRepository(QueryParser, tenant_provider, auth_provider)
+def media_repository(parser, tenant_provider, auth_provider):
+    return MemoryMediaRepository(parser, tenant_provider, auth_provider)
 
 # Managers
 
@@ -108,27 +108,37 @@ async def test_storage_manager_submit_file(media_storage_manager):
         media_storage_manager.media_repository.data) == 1
 
 
-async def test_storage_manager_submit_many(media_storage_manager):
-    media_records = [
-        {'media': {
+async def test_storage_manager_delete(media_storage_manager):
+    class MockReader:
+        data = b'FILE_STREAM_BINARY_DATA'
+
+        async def read(self, size: int) -> bytes:
+            return self.data
+
+    stream = MockReader()
+
+    media_records = [{
+        'media': {
             'id': 'ef4581b6-2136-4fb8-9be2-3a4fc1c83a02',
             'type': 'images',
             'namespace': 'https://example.com',
             'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
             'extension': 'jpg'
-        }}
-    ]
+        },
+        'stream': stream
+    }]
 
     await media_storage_manager.submit(media_records)
 
     assert len(
         media_storage_manager.media_repository.data['default']) == 1
+    assert len(
+        media_storage_manager.file_store_service.files['default']) == 1
 
-    deletion_records = [{
-        'id': 'ef4581b6-2136-4fb8-9be2-3a4fc1c83a02'
-    }]
-
+    deletion_records = [{'id': 'ef4581b6-2136-4fb8-9be2-3a4fc1c83a02'}]
     await media_storage_manager.delete(deletion_records)
 
     assert len(
         media_storage_manager.media_repository.data['default']) == 0
+    assert len(
+        media_storage_manager.file_store_service.files['default']) == 0

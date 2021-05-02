@@ -61,15 +61,6 @@
       "delete": {
         "description": "Delete media record",
         "tags": ["Media"],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Successful DELETE response"
