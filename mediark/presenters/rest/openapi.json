@@ -150,11 +150,8 @@
           "type": {
             "type": "string"
           },
-          "namespace": {
-            "type": "string"
-          },
-          "extension": {
-            "type": "string"
+          "size": {
+            "type": "integer"
           },
           "reference": {
             "type": "string"

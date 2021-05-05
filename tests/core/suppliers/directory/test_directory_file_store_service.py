@@ -27,14 +27,13 @@ async def test_directory_file_store_service_submit(
 
     mock_stream = MockStream()
     id_ = "abca8e11-0719-44ab-bd3f-ed5aa1bd2918"
-    extension = "png"
-    data_type = 'images'
+    data_type = 'image/png'
 
     contexts = [{
         'id': id_,
+        'name': 'sample.png',
         'created_at': 1583964551,
         'type': data_type,
-        'extension': extension,
         'stream': mock_stream
     }]
 
@@ -43,7 +42,8 @@ async def test_directory_file_store_service_submit(
     image_path = base_path / uri
 
     assert image_path.is_file()
-    assert uri == "images/2020/03/11/abca8e11-0719-44ab-bd3f-ed5aa1bd2918.png"
+    assert uri == (
+        "image/png/2020/03/11/abca8e11-0719-44ab-bd3f-ed5aa1bd2918.png")
     assert image_path.read_bytes() == b'AAABBBCCCDDD'
 
 
@@ -62,14 +62,14 @@ async def test_directory_file_store_service_load(
 
     mock_read_stream = MockStream()
     id_ = "abca8e11-0719-44ab-bd3f-ed5aa1bd2918"
-    extension = "png"
-    data_type = 'images'
+    name = "sample.png"
+    data_type = 'image/png'
 
     contexts = [{
         'id': id_,
+        'name': name,
         'created_at': 1583964551,
         'type': data_type,
-        'extension': extension,
         'stream': mock_read_stream
     }]
 
@@ -101,14 +101,14 @@ async def test_directory_file_store_service_delete(
 
     mock_read_stream = MockStream()
     id_ = "abca8e11-0719-44ab-bd3f-ed5aa1bd2918"
-    extension = "png"
-    data_type = 'images'
+    name = "example.jpg"
+    data_type = 'image/jpeg'
 
     contexts = [{
         'id': id_,
+        'name': name,
         'created_at': 1583964551,
         'type': data_type,
-        'extension': extension,
         'stream': mock_read_stream
     }]
 

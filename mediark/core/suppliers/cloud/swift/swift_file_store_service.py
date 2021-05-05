@@ -2,6 +2,7 @@ import time
 import io
 import tarfile
 from typing import List, Tuple, Dict, Any
+from pathlib import Path
 from uuid import UUID
 from .....application.domain.common import TenantProvider
 from .....application.domain.services import (
@@ -50,13 +51,12 @@ class SwiftFileStoreService(FileStoreService):
         return await self._delete_object(token, url)
 
     def _make_object_name(self, context: Dict[str, str]) -> str:
-        object_type = context.get('type', 'general')
+        object_type = context.get('type', '')
         timestamp = int(context.get('timestamp', context['created_at']))
         year_month_day = time.strftime('%Y/%m/%d', time.gmtime(timestamp))
-        extension = context.get("extension", "txt")
         object_id = context["id"]
-
-        return f'{object_type}/{year_month_day}/{object_id}.{extension}'
+        extension = Path(context['name']).suffix
+        return f'{object_type}/{year_month_day}/{object_id}{extension}'
 
     def _make_url(self, object_name: str = "") -> str:
         config = self.data_config['cloud']['swift']

@@ -5,7 +5,7 @@ from ..domain.models import Media
 from ..domain.repositories import MediaRepository
 from ..domain.services import IdService, FileStoreService
 from ..domain.common import RecordList
-from .common import submission
+from .common import submission_schema
 
 
 class MediaStorageManager:
@@ -18,7 +18,7 @@ class MediaStorageManager:
         self.file_store_service = file_store_service
 
     async def submit(self, submission_records: RecordList) -> None:
-        records = validate(submission, submission_records)
+        records = validate(submission_schema, submission_records)
         medias = await self.media_repository.add(
             [Media(**record['media']) for record in records])
         streams = [record.get('stream') for record in records]

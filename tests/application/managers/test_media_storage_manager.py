@@ -64,16 +64,14 @@ def test_storage_manager_instantiation(media_storage_manager):
 async def test_storage_manager_submit_many(media_storage_manager):
     media_records = [
         {'media': {
-            'type': 'images',
-            'namespace': 'https://example.com',
+            'name': 'example.png',
+            'type': 'image/png',
             'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
-            'extension': 'jpg'
         }},
         {'media': {
-            'type': 'images',
-            'namespace': 'https://example.com',
+            'name': 'photo.png',
+            'type': 'image/png',
             'reference': '546bc220-dec1-415d-9f25-53be060bfc7e',
-            'extension': 'jpg'
         }}
     ]
 
@@ -94,10 +92,9 @@ async def test_storage_manager_submit_file(media_storage_manager):
 
     submission_dict = [{
         'media': {
-            'type': 'images',
-            'namespace': 'https://example.com',
+            'name': 'photo.png',
+            'type': 'image/png',
             'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
-            'extension': 'png'
         },
         'stream': stream
     }]
@@ -120,10 +117,9 @@ async def test_storage_manager_delete(media_storage_manager):
     media_records = [{
         'media': {
             'id': 'ef4581b6-2136-4fb8-9be2-3a4fc1c83a02',
-            'type': 'images',
-            'namespace': 'https://example.com',
+            'name': 'sample.jpg',
+            'type': 'image/jpeg',
             'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
-            'extension': 'jpg'
         },
         'stream': stream
     }]

@@ -22,19 +22,20 @@ async def test_swift_file_store_service_submit(swift_file_store_service):
     contexts = [{
         'id': 'f91bde0b-d094-45fd-bcf5-8cf24de853c0',
         'created_at': 1583933912,
+        'name': 'song.mp3',
         'stream': mock_stream
     }]
     uri, *_ = await swift_file_store_service.submit(contexts)
 
     client = swift_file_store_service.client
 
-    assert uri == 'general/2020/03/11/f91bde0b-d094-45fd-bcf5-8cf24de853c0.txt'
+    assert uri == '/2020/03/11/f91bde0b-d094-45fd-bcf5-8cf24de853c0.mp3'
     assert list(client.arguments['put'].keys()) == ['url', 'headers', 'data']
     assert client.arguments['put']['url'] == (
         'https://storage.bhs.cloud.ovh.net/v1/'
         'AUTH_e737167b6b424d92ae257f2d94bc1b83/'
-        'custom-tenant-main/general/2020/03/11/'
-        'f91bde0b-d094-45fd-bcf5-8cf24de853c0.txt')
+        'custom-tenant-main//2020/03/11/'
+        'f91bde0b-d094-45fd-bcf5-8cf24de853c0.mp3')
     assert client.arguments['put']['headers'] == {
         'X-Auth-Token': 'AUTH_TOKEN_123'}
     assert isinstance(client.arguments['put']['data'], AsyncGeneratorType)
@@ -54,10 +55,12 @@ async def test_swift_file_store_service_submit_no_stream(
     mock_stream = MockStream()
     contexts = [{
         'id': 'f91bde0b-d094-45fd-bcf5-8cf24de853c0',
+        'name': 'sample.png',
         'created_at': 1583933912,
         'stream': mock_stream
     }, {
         'id': '1199f7d3-ecf3-4f09-963a-d65b72e415f5',
+        'name': 'sample.mp3',
         'created_at': 1583933912
     }]
     uri_1, uri_2 = await swift_file_store_service.submit(contexts)
@@ -65,7 +68,7 @@ async def test_swift_file_store_service_submit_no_stream(
     client = swift_file_store_service.client
 
     assert uri_1 == (
-        'general/2020/03/11/f91bde0b-d094-45fd-bcf5-8cf24de853c0.txt')
+        '/2020/03/11/f91bde0b-d094-45fd-bcf5-8cf24de853c0.png')
     assert uri_2 == ''
 
 

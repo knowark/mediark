@@ -1,5 +1,5 @@
 
-entity = {
+entity_schema = {
     'id': str,
     'created_at:=createdAt': int,
     'created_by:=createdBy': str,
@@ -7,19 +7,17 @@ entity = {
     'updated_by:=updatedBy': str
 }
 
-media = {**entity, **{
+media_schema = {**entity_schema, **{
     'name': str,
     'type': str,
-    'namespace': str,
-    'extension': str,
+    'size': int,
+    'sequence': int,
     'reference': str,
-    'path': str,
-    'url': str,
-    'data': str
+    'path': str
 }}
 
-submission = {
-    'media': media,
+submission_schema = {
+    'media': media_schema,
     'stream': (lambda v: (v is None or hasattr(v, 'read'))
                and v or ValueError(f'Invalid stream: {v}'))
 }

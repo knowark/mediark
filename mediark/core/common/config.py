@@ -28,11 +28,9 @@ config: Config = {
             "dir_path": "media",
             "audios": {
                 "dir_path": "audios",
-                "extension": "webm"
             },
             "images": {
-                "dir_path": "./images",
-                "extension": "jpg"
+                "dir_path": "images",
             }
     },
     "shelve": {

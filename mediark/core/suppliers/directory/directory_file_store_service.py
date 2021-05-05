@@ -59,10 +59,9 @@ class DirectoryFileStoreService(FileStoreService):
         return Path(base_path).joinpath(uri)
 
     def _make_object_name(self, context: Dict[str, str]) -> str:
-        object_type = context.get('type', 'general')
+        object_type = context.get('type', '')
         timestamp = int(context.get('timestamp', context['created_at']))
         year_month_day = time.strftime('%Y/%m/%d', time.gmtime(timestamp))
-        extension = context.get("extension", "txt")
         object_id = context["id"]
-
-        return f'{object_type}/{year_month_day}/{object_id}.{extension}'
+        extension = Path(context['name']).suffix
+        return f'{object_type}/{year_month_day}/{object_id}{extension}'
