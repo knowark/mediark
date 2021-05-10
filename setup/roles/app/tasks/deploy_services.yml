@@ -6,8 +6,8 @@
 
 - name: "Deploy Environment Variables Empty File"
   template:
-    src: mediark.sh.j2
-    dest: "/etc/profile.d/{{ app_user }}.sh"
+    src: mediark.j2
+    dest: "/etc/opt/{{ app_user }}/{{ app_user }}.env"
     mode: 0644
 
 - name: "Restart {{ app_user }} Service"
