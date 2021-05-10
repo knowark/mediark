@@ -12,7 +12,8 @@ def authenticate_middleware_factory(injector: Injectark) -> Callable:
 
     @web.middleware
     async def middleware(request: web.Request, handler: Callable):
-        if request.path == '/':
+        public = ('/favicon', '/download')
+        if request.path == '/' or request.path.startswith(public):
             return await handler(request)
 
         try:

@@ -15,6 +15,20 @@ def mock_http_client():
             self._json = json
             self._content = content
 
+        @property
+        def content(self):
+            content = self._content
+
+            class MockReader:
+                offset = 0
+
+                async def read(self, size: int) -> bytes:
+                    chunk = content[self.offset: self.offset + size]
+                    self.offset += size
+                    return chunk
+
+            return MockReader()
+
         async def read(self):
             return self._content
 
@@ -45,13 +59,27 @@ def mock_http_client():
             pass
 
     class MockHttpClient:
+        def __init__(self) -> None:
+            self.arguments = {}
+
         def post(self, url, json):
+            self.arguments['post'] = (
+                {'url': url, 'json': json})
             return MockAuthContextManager()
 
-        def put(self, url, headers, data):
+        def put(self, url, headers, data=None):
+            self.arguments['put'] = (
+                {'url': url, 'headers': headers, 'data': data})
             return MockUploadContextManager()
 
         def get(self, url, headers):
+            self.arguments['get'] = (
+                {'url': url, 'headers': headers})
+            return MockDownloadContextManager()
+
+        def delete(self, url, headers):
+            self.arguments['delete'] = (
+                {'url': url, 'headers': headers})
             return MockDownloadContextManager()
 
     return MockHttpClient()

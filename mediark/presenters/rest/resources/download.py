@@ -6,8 +6,16 @@ from injectark import Injectark
 class DownloadResource:
     def __init__(self, injector: Injectark) -> None:
         self.file_informer = injector['FileInformer']
+        self.tenant_supplier = injector['TenantSupplier']
+        self.session_manager = injector['SessionManager']
 
     async def get(self, request: web.Request) -> Any:
-        uri = request.match_info.get('uri')
-        response_dict = await self.file_informer.load(uri)
-        return web.Response(**response_dict)
+        tenant = request.match_info['tenant']
+        path = request.match_info['path']
+        response = web.StreamResponse()
+
+        tenant_dict = self.tenant_supplier.resolve_tenant(tenant)
+        self.session_manager.set_tenant(tenant_dict)
+
+        await response.prepare(request)
+        await self.file_informer.load(path, response)

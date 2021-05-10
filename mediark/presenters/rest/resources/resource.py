@@ -1,16 +1,15 @@
 from aiohttp import web
 from typing import Callable, Type
-from marshmallow import Schema
-from ..helpers import get_request_filter, get_request_ids
+from validark import normalize
+from ..helpers import get_request_filter
 
 
 class Resource:
-    def __init__(self, schema: Type[Schema],
+    def __init__(self,
                  count_handler: Callable,
                  search_handler: Callable,
                  add_handler: Callable,
                  delete_handler: Callable) -> None:
-        self.schema = schema
         self.count_handler = count_handler
         self.search_handler = search_handler
         self.add_handler = add_handler
@@ -25,16 +24,4 @@ class Resource:
         domain, limit, offset = await get_request_filter(request)
         records = await self.search_handler(
             domain, limit=limit, offset=offset)
-        result = self.schema().dump(records, many=True)
-        return web.json_response(result)
-
-    async def put(self, request: web.Request) -> web.Response:
-        records = self.schema(
-            many=True).loads(await request.text())
-        await self.add_handler(records)
-        return web.Response(status=200)
-
-    async def delete(self, request: web.Request) -> web.Response:  # pragma: no cover
-        ids = await get_request_ids(request)
-        await self.delete_handler(ids)
-        return web.Response(status=204)
+        return web.json_response(normalize(records))

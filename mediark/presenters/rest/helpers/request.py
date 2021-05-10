@@ -20,7 +20,7 @@ async def get_request_filter(request: web.Request) -> Tuple:
     return domain, query.get('limit', limit), query.get('offset', offset)
 
 
-async def get_request_ids(request: web.Request) -> List[str]:  # pragma: no cover
+async def get_request_ids(request: web.Request) -> List[str]:
     ids = []
     uri_id = request.match_info.get('id')
     if uri_id:
@@ -31,7 +31,3 @@ async def get_request_ids(request: web.Request) -> List[str]:  # pragma: no cove
         ids.extend(loads(await request.text()))
 
     return ids
-
-
-async def missing(value: Any) -> None:
-    raise ValueError('Not implemented endpoint.')

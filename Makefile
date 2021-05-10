@@ -31,6 +31,9 @@ serve-dev:
 deploy:
 	ansible-playbook -c local -i localhost, setup/deploy.yml
 
+push:
+	git push && git push --tags
+
 local:
 	./setup/local.sh
 
@@ -44,3 +47,8 @@ update:
 	git reset --hard
 	git checkout master
 	git pull --all
+
+gitmessage:
+	touch .gitmessage
+	echo "\n# commit message\n.gitmessage" >> .gitignore
+	git config commit.template .gitmessage

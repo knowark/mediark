@@ -2,10 +2,12 @@ import time
 import io
 import tarfile
 from typing import List, Tuple, Dict, Any
+from pathlib import Path
 from uuid import UUID
 from .....application.domain.common import TenantProvider
-from .....application.domain.services import FileStoreService
-from .....core.client import HttpClientSupplier
+from .....application.domain.services import (
+    FileStoreService, Reader, Writer)
+from .....core.http import HttpClientSupplier
 from .swift_auth_supplier import SwiftAuthSupplier
 
 
@@ -19,35 +21,42 @@ class SwiftFileStoreService(FileStoreService):
         self.auth_supplier = auth_supplier
         self.client = client
         self.data_config = data_config
+        self.chunk_size = 512 * 1024
 
-    async def store(self, contexts: List[Dict[str, Any]]) -> List[str]:
-        uri_content_pairs: List[Tuple[str, bytes]] = []
+    async def submit(self, contexts: List[Dict[str, Any]]) -> List[str]:
+        uris: List[str] = []
         for context in contexts:
-            content: bytes = context.pop('content')
+            stream: Reader = context.pop('stream', None)
+            if not stream:
+                uris.append('')
+                continue
+
             uri = self._make_object_name(context)
-            uri_content_pairs.append((uri, content))
+            token = await self.auth_supplier.authenticate()
+            await self._upload_object(token, uri, stream)
+            uris.append(uri)
 
-        url = self._make_url()
-        archive_content = self._tar_contents(uri_content_pairs)
+        return uris
 
-        token = await self.auth_supplier.authenticate()
-        await self._upload_object(token, url, archive_content)
-
-        return [pair[0] for pair in uri_content_pairs]
-
-    async def load(self, uri: str) -> Tuple[bytes, Dict[str, Any]]:
+    async def load(self, uri: str, stream: Writer) -> None:
         token = await self.auth_supplier.authenticate()
         url = self._make_url(uri)
-        return await self._download_object(token, url)
+
+        return await self._download_object(token, url, stream)
+
+    async def delete(self, uri: str) -> None:
+        token = await self.auth_supplier.authenticate()
+        url = self._make_url(uri)
+
+        return await self._delete_object(token, url)
 
     def _make_object_name(self, context: Dict[str, str]) -> str:
-        object_type = context.get('type', 'general')
+        object_type = context.get('type', '')
         timestamp = int(context.get('timestamp', context['created_at']))
         year_month_day = time.strftime('%Y/%m/%d', time.gmtime(timestamp))
-        extension = context.get("extension", "txt")
         object_id = context["id"]
-
-        return f'{object_type}/{year_month_day}/{object_id}.{extension}'
+        extension = Path(context['name']).suffix
+        return f'{object_type}/{year_month_day}/{object_id}{extension}'
 
     def _make_url(self, object_name: str = "") -> str:
         config = self.data_config['cloud']['swift']
@@ -69,31 +78,36 @@ class SwiftFileStoreService(FileStoreService):
 
         return url
 
-    def _tar_contents(
-            self, uri_content_pairs: List[Tuple[str, bytes]]) -> bytes:
-        archive = io.BytesIO()
-        with tarfile.open(fileobj=archive, mode='w:gz') as tar:
-            for uri, content in uri_content_pairs:
-                tarinfo = tarfile.TarInfo(uri)
-                tarinfo.size = len(content)
-                fileobj = io.BytesIO(content)
-                tar.addfile(tarinfo, fileobj)
-
-        return archive.getvalue()
-
     async def _upload_object(
-            self, token: str, url: str, content: bytes) -> None:
+            self, token: str, uri: str, stream: Reader) -> None:
+
         headers = {'X-Auth-Token': token}
-        url = f'{url}?extract-archive=tar.gz'
+        container_url = self._make_url()
         async with self.client.put(
-                url, headers=headers, data=content) as response:
-            body = await response.read()
+                container_url, headers=headers) as response:
+            pass
+
+        url = self._make_url(uri)
+        async with self.client.put(
+                url, headers=headers,
+                data=self._generate_chunked_data(stream)) as response:
+            pass
 
     async def _download_object(
-            self, token: str, url: str) -> Tuple[bytes, Dict[str, Any]]:
+            self, token: str, url: str, stream: Writer) -> None:
         headers = {'X-Auth-Token': token}
         async with self.client.get(url, headers=headers) as response:
-            return (await response.read(), {
-                'status': response.status,
-                'headers': response.headers,
-            })
+            generator = self._generate_chunked_data(response.content)
+            async for chunk in generator:
+                await stream.write(chunk)
+
+    async def _delete_object(self, token: str, url: str) -> None:
+        headers = {'X-Auth-Token': token}
+        async with self.client.delete(url, headers=headers) as response:
+            pass
+
+    async def _generate_chunked_data(self, stream: Reader) -> None:
+        chunk = await stream.read(self.chunk_size)
+        while chunk:
+            yield chunk
+            chunk = await stream.read(self.chunk_size)

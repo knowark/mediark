@@ -1,3 +1,4 @@
+import json
 import aiohttp_jinja2
 from typing import Any
 from pathlib import Path
@@ -6,8 +7,8 @@ from aiohttp import web, ClientSession
 from injectark import Injectark
 from ...core import Config
 from .middleware import middlewares
-from .doc import create_spec
-from .resources import RootResource, MediaResource, DownloadResource
+from .resources import (
+    RootResource, MediaResource, DownloadResource, UploadResource)
 
 
 class RestApplication(web.Application):
@@ -31,8 +32,16 @@ class RestApplication(web.Application):
         self._create_api()
 
         self.router.add_route(
-            "get", r'/download/{uri:(.*)}',
+            "get", r'/download/{tenant}/{path:(.*)}',
             getattr(DownloadResource(self.injector), "get", None))
+
+        self.router.add_route(
+            "post", '/upload',
+            getattr(UploadResource(self.injector), "put", None))
+
+        self.router.add_route(
+            "put", '/upload',
+            getattr(UploadResource(self.injector), "put", None))
 
     @staticmethod
     async def _http_client(app: web.Application):
@@ -54,7 +63,8 @@ class RestApplication(web.Application):
 
     def _create_api(self) -> None:
         # Restful API
-        spec = create_spec()
+        spec = json.loads(
+            (Path(__file__).parent / 'openapi.json').read_text())
 
         # Resources
         self._bind('/', RootResource(spec))

@@ -1,7 +1,7 @@
 from os import name
-from mediark.core.client import HttpClientSupplier
+from mediark.core.http import HttpClientSupplier
 from pytest import fixture, raises
-from mediark.core.client import http_client
+from mediark.core.http import http_client
 
 
 @fixture

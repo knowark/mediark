@@ -1,9 +1,11 @@
-from ..domain.models import Media
 from typing import List
 from base64 import b64decode
+from validark import validate
+from ..domain.models import Media
 from ..domain.repositories import MediaRepository
 from ..domain.services import IdService, FileStoreService
 from ..domain.common import RecordList
+from .common import submission_schema
 
 
 class MediaStorageManager:
@@ -15,25 +17,27 @@ class MediaStorageManager:
         self.id_service = id_service
         self.file_store_service = file_store_service
 
-    async def store(self, media_records: RecordList) -> None:
-        contents = self._extract_contents(media_records)
+    async def submit(self, submission_records: RecordList) -> None:
+        records = validate(submission_schema, submission_records)
         medias = await self.media_repository.add(
-            [Media(**media_record) for media_record in media_records])
+            [Media(**record['media']) for record in records])
+        streams = [record.get('stream') for record in records]
 
-        contexts = [{'content': content, **vars(media)}
-                    for media, content in zip(medias, contents)]
+        contexts = [{'stream': stream, **vars(media)}
+                    for media, stream in zip(medias, streams)]
 
-        uris = await self.file_store_service.store(contexts)
+        uris = await self.file_store_service.submit(contexts)
         for media, uri in zip(medias, uris):
-            media.uri = uri
+            if uri:
+                media.uri = uri
 
         await self.media_repository.add(medias)
 
-    def _extract_contents(self, media_records: RecordList) -> List[bytes]:
-        contents: List[bytes] = []
-        for media_record in media_records:
-            content = media_record.pop('data', None)
-            if not content:
-                raise ValueError("All the medias must have content.")
-            contents.append(b64decode(content))
-        return contents
+    async def delete(self, deletion_records: RecordList) -> None:
+        records = validate({'*id': str}, deletion_records)
+        medias = await self.media_repository.search([('id', 'in', [
+            record['id'] for record in records])])
+
+        for media in medias:
+            await self.file_store_service.delete(media.uri)
+        await self.media_repository.remove(medias)

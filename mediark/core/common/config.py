@@ -21,17 +21,16 @@ config: Config = {
                 "postgresql://mediark:mediark@localhost/mediark"))
         }
     },
-    'domain': os.environ.get('MEDIARK_DOMAIN', "https://mediark.dev.nubark.cloud"),
-    "dir_path": "data",
+    'domain': os.environ.get(
+        'MEDIARK_DOMAIN', "https://mediark.dev.nubark.cloud"),
+    "dir_path": str(Path.home() / "data"),
     "media": {
             "dir_path": "media",
             "audios": {
                 "dir_path": "audios",
-                "extension": "webm"
             },
             "images": {
-                "dir_path": "./images",
-                "extension": "jpg"
+                "dir_path": "images",
             }
     },
     "shelve": {
@@ -63,8 +62,10 @@ config: Config = {
                     'MEDIARK_CLOUD_SWIFT_OBJECT_STORE_URL',
                     ("https://storage.bhs.cloud.ovh.net/v1/"
                      "AUTH_e737167b6b424d92ae257f2d94bc1b83")),
-                "username": os.environ.get('MEDIARK_CLOUD_SWIFT_USER_NAME', ""),
-                "password": os.environ.get('MEDIARK_CLOUD_SWIFT_PASSWORD', ""),
+                "username": os.environ.get(
+                    'MEDIARK_CLOUD_SWIFT_USER_NAME', ""),
+                "password": os.environ.get(
+                    'MEDIARK_CLOUD_SWIFT_PASSWORD', ""),
                 "container_prefix": os.environ.get(
                     'MEDIARK_CLOUD_SWIFT_CONTAINER_PREFIX', ""),
                 "container_suffix": os.environ.get(

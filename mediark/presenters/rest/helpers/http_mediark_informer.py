@@ -17,7 +17,8 @@ class HttpMediarkInformer(StandardMediarkInformer):
     def _prepend_download(download_url: str, items: List[Any]) -> List[Any]:
         for item in items:
             uri = item.pop('uri')
-            item['url'] = download_url + '/' + uri
+            path = item.get('path') or uri
+            item['url'] = f"{download_url}/{path}"
         return items
 
     async def search_media(self,
@@ -26,6 +27,6 @@ class HttpMediarkInformer(StandardMediarkInformer):
                            limit: int = 1000,
                            offset: int = 0) -> RecordList:
         result = await super().search('media', domain)
-        media_download = f"{self.domain}/download"
+        tenant = self.tenant_provider.tenant
+        media_download = f"{self.domain}/download/{tenant.slug}"
         return self._prepend_download(media_download, result)
-

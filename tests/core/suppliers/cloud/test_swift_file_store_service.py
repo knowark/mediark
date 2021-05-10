@@ -1,3 +1,4 @@
+from types import AsyncGeneratorType
 from mediark.application.domain.services import FileStoreService
 from mediark.core.suppliers import SwiftFileStoreService
 
@@ -7,15 +8,68 @@ def test_swift_file_store_service_instantiation(swift_file_store_service):
     assert isinstance(swift_file_store_service, SwiftFileStoreService)
 
 
-async def test_swift_file_store_service_store(swift_file_store_service):
+async def test_swift_file_store_service_submit(swift_file_store_service):
+    class MockStream:
+        data = bytearray(b'AAABBBCCCDDD')
+        chunk_size = 3
+        offset = 0
+
+        async def read(self, size) -> bytes:
+            self.offset += self.chunk_size
+            return self.data[self.offset: self.offset + self.chunk_size]
+
+    mock_stream = MockStream()
     contexts = [{
         'id': 'f91bde0b-d094-45fd-bcf5-8cf24de853c0',
         'created_at': 1583933912,
-        'content': b'BINARY_MEDIA_DATA'
+        'name': 'song.mp3',
+        'stream': mock_stream
     }]
-    uri, *_ = await swift_file_store_service.store(contexts)
+    uri, *_ = await swift_file_store_service.submit(contexts)
 
-    assert uri == 'general/2020/03/11/f91bde0b-d094-45fd-bcf5-8cf24de853c0.txt'
+    client = swift_file_store_service.client
+
+    assert uri == '/2020/03/11/f91bde0b-d094-45fd-bcf5-8cf24de853c0.mp3'
+    assert list(client.arguments['put'].keys()) == ['url', 'headers', 'data']
+    assert client.arguments['put']['url'] == (
+        'https://storage.bhs.cloud.ovh.net/v1/'
+        'AUTH_e737167b6b424d92ae257f2d94bc1b83/'
+        'custom-tenant-main//2020/03/11/'
+        'f91bde0b-d094-45fd-bcf5-8cf24de853c0.mp3')
+    assert client.arguments['put']['headers'] == {
+        'X-Auth-Token': 'AUTH_TOKEN_123'}
+    assert isinstance(client.arguments['put']['data'], AsyncGeneratorType)
+
+
+async def test_swift_file_store_service_submit_no_stream(
+        swift_file_store_service):
+    class MockStream:
+        data = bytearray(b'AAABBBCCCDDD')
+        chunk_size = 3
+        offset = 0
+
+        async def read(self, size) -> bytes:
+            offset += self.chunk_size
+            return self.data[i: i + self.chunk_size]
+
+    mock_stream = MockStream()
+    contexts = [{
+        'id': 'f91bde0b-d094-45fd-bcf5-8cf24de853c0',
+        'name': 'sample.png',
+        'created_at': 1583933912,
+        'stream': mock_stream
+    }, {
+        'id': '1199f7d3-ecf3-4f09-963a-d65b72e415f5',
+        'name': 'sample.mp3',
+        'created_at': 1583933912
+    }]
+    uri_1, uri_2 = await swift_file_store_service.submit(contexts)
+
+    client = swift_file_store_service.client
+
+    assert uri_1 == (
+        '/2020/03/11/f91bde0b-d094-45fd-bcf5-8cf24de853c0.png')
+    assert uri_2 == ''
 
 
 async def test_swift_file_store_service_make_url(swift_file_store_service):
@@ -48,13 +102,17 @@ async def test_swift_file_store_service_load(swift_file_store_service):
         'created_at': 1583933912
     }
     uri = 'images/2020/02/15/5db7ec47-8bb1-4707-89c1-ad5aa76355e9.jpg'
-    content, context = await swift_file_store_service.load(uri)
 
-    assert content == b'BINARY_DATA'
-    assert context == {
-        'status': 200,
-        'headers': {}
-    }
+    class MockWriter:
+        async def write(self, data: bytes) -> None:
+            self.data = data
+
+    stream = MockWriter()
+
+    result = await swift_file_store_service.load(uri, stream)
+
+    assert stream.data == b'BINARY_DATA'
+    assert result is None
 
 
 async def test_swift_file_store_service_make_url_no_suffix(
@@ -79,3 +137,19 @@ async def test_swift_file_store_service_make_url_no_suffix(
     assert url == (
         'https://storage.cloud/north-custom-tenant/'
         'images/2020/02/15/5db7ec47-8bb1-4707-89c1-ad5aa76355e9.jpg')
+
+
+async def test_swift_file_store_service_delete(swift_file_store_service):
+    uri = 'images/2020/02/15/5db7ec47-8bb1-4707-89c1-ad5aa76355e9.jpg'
+
+    await swift_file_store_service.delete(uri)
+
+    assert swift_file_store_service.client.arguments['delete'] == {
+        'headers': {
+            'X-Auth-Token': 'AUTH_TOKEN_123'
+        },
+        'url': ('https://storage.bhs.cloud.ovh.net/v1/'
+                'AUTH_e737167b6b424d92ae257f2d94bc1b83/'
+                'custom-tenant-main/images/2020/02/15/'
+                '5db7ec47-8bb1-4707-89c1-ad5aa76355e9.jpg')
+    }

@@ -1,4 +1,6 @@
+import io
 from json import loads, dumps
+from aiohttp import FormData
 from mediark.presenters.rest import RestApplication
 from mediark.presenters.rest import rest as rest_module
 
@@ -58,27 +60,50 @@ async def test_media_get(app, headers) -> None:
 
 async def test_media_put(app, headers) -> None:
     custom_uuid = "932eff07-175a-44b5-871b-4bdaae6ad054"
-    #base64data = b'SU1BR0VfREFUQQ=='
     base64data = 'SU1BR0VfREFUQQ=='
-    image = [{'data': base64data, 'type': 'images', 'reference': custom_uuid,
-              'extension': 'jpg', 'namespace': 'https://example.org'}]
+    image = [{'data': base64data, 'type': 'images', 'reference': custom_uuid}]
 
     response = await app.put('/media', data=dumps(image), headers=headers)
     assert response.status == 200
 
 
-async def test_media_not_implemented_delete(app, headers) -> None:
-    response = await app.delete('/media/1', headers=headers)
-    content = await response.text()
-    assert response.status == 500
+async def test_media_delete(app, headers) -> None:
+    data = ["932eff07-175a-44b5-871b-4bdaae6ad054"]
+    response = await app.delete('/media', data=dumps(data), headers=headers)
+    assert response.status == 200
+
+
+async def test_media_delete_url(app, headers) -> None:
+    id_ = "932eff07-175a-44b5-871b-4bdaae6ad054"
+    response = await app.delete(f'/media/{id_}', headers=headers)
+    assert response.status == 200
+
 
 # Downloads
 
 
 async def test_api_download_get(app, headers) -> None:
-    uri = "2020/03/11/7439edb5-c38f-4dc6-9d8f-89b6d67a6c6d.jpg"
-    response = await app.get('/download/{uri}', headers=headers)
+    tenant = 'default'
+    path = "path_1"
+    response = await app.get(f'/download/{tenant}/{path}', headers=headers)
     assert response.status == 200
+
+
+# Uploads
+
+
+async def test_api_upload_put(app, headers) -> None:
+    file = io.StringIO('Mock In-Memory File')
+
+    data = FormData()
+    data.add_field(
+        'media', '{"id": "ABC123"}', content_type='application/json')
+    data.add_field(
+        'file', file, content_type='text/plain')
+
+    response = await app.put('/upload', headers=headers, data=data)
+    assert response.status == 200
+
 
 # Filters
 
