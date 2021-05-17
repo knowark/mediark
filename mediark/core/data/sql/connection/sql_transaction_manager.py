@@ -33,17 +33,16 @@ class SqlTransactionManager(TransactionManager):
 
         async def transaction_method(*args, **kwargs):
             tenant = self.tenant_provider.tenant
-            connection = await connection_manager.get(tenant.zone)
-            transaction = connection.transaction()
-            await transaction.start()
             try:
+                connection = await connection_manager.get(tenant.zone)
+                transaction = connection.transaction()
+                await transaction.start()
                 result = await method(*args, **kwargs)
-            except Exception:
-                await transaction.rollback()
-                await connection_manager.put(connection, tenant.zone)
-                raise
-            else:
                 await transaction.commit()
+            except Exception as error:
+                await transaction.rollback()
+                raise
+            finally:
                 await connection_manager.put(connection, tenant.zone)
 
             return result

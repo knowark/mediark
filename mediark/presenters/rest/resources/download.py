@@ -1,6 +1,7 @@
 from typing import Any
 from aiohttp import web
 from injectark import Injectark
+from ....core.http import HttpResponseWriter
 
 
 class DownloadResource:
@@ -12,10 +13,12 @@ class DownloadResource:
     async def get(self, request: web.Request) -> Any:
         tenant = request.match_info['tenant']
         path = request.match_info['path']
-        response = web.StreamResponse()
 
         tenant_dict = self.tenant_supplier.resolve_tenant(tenant)
         self.session_manager.set_tenant(tenant_dict)
 
-        await response.prepare(request)
-        await self.file_informer.load(path, response)
+        response = web.StreamResponse()
+        response['request'] = request
+        stream = HttpResponseWriter(response)
+
+        await self.file_informer.load(path, stream)

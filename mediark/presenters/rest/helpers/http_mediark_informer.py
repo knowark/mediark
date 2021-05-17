@@ -21,11 +21,11 @@ class HttpMediarkInformer(StandardMediarkInformer):
             item['url'] = f"{download_url}/{path}"
         return items
 
-    async def search_media(self,
-                           model: str,
-                           domain: QueryDomain = None,
-                           limit: int = 1000,
-                           offset: int = 0) -> RecordList:
+    async def search(self,
+                     model: str,
+                     domain: QueryDomain = None,
+                     limit: int = 1000,
+                     offset: int = 0) -> RecordList:
         result = await super().search('media', domain)
         tenant = self.tenant_provider.tenant
         media_download = f"{self.domain}/download/{tenant.slug}"

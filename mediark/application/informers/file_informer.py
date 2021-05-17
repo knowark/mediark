@@ -25,4 +25,5 @@ class StandardFileInformer(FileInformer):
             raise MediaNotFoundError(
                 f'No media records where found with path: {path}')
 
+        await stream.setup(vars(media))
         await self.file_store_service.load(media.uri, stream)
