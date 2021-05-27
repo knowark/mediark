@@ -80,3 +80,22 @@
     minute: "0"
     job: "cd /opt/{{ app_user }}/{{ app_user }} && git pull"
     cron_file: "{{ app_user }}_update"
+
+- name: "Deploy {{ app_user }} Autoenv File"
+  template:
+    src: env.j2
+    dest: "{{ app_home }}/.env"
+    mode: 0755
+
+- name: Add Line To Activate Environment In .Bash File
+  lineinfile: 
+    dest: "/opt/{{ app_user }}/.bashrc"
+    insertafter: EOF
+    line: "source /usr/local/bin/activate.sh"
+
+- name: Execute Activate.sh
+  become: yes
+  become_user: "{{ app_user }}"
+  shell: "source /usr/local/bin/activate.sh"
+  args:
+    executable: /bin/bash
