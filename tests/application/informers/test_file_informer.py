@@ -46,6 +46,10 @@ async def test_file_informer_load(file_informer):
 
     class MockWriter:
         data = None
+        config = None
+
+        async def setup(self, config) -> None:
+            self.config = config
 
         async def write(self, data) -> None:
             self.data = data
@@ -61,6 +65,7 @@ async def test_file_informer_load(file_informer):
     result = await file_informer.load(path, stream)
 
     assert stream.data == b'BINARY_DATA'
+    assert stream.config is not None
     assert result is None
 
 
@@ -68,6 +73,9 @@ async def test_file_informer_load_not_found(file_informer):
     uri = 'nonexistent/xyz000.jpg'
 
     class MockWriter:
+        async def setup(self, config) -> None:
+            pass
+
         async def write(self, data) -> None:
             pass
 

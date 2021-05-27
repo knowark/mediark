@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, List, Tuple, Any
-from typing import Protocol, runtime_checkable
+from typing import Dict, List, Tuple, Any, Protocol
 
 
 class FileStoreService(ABC):
@@ -17,13 +16,17 @@ class FileStoreService(ABC):
         "Delete method to be implemented."
 
 
-@runtime_checkable
 class Writer(Protocol):
+    async def setup(self, config: Dict[str, Any]) -> None:
+        "Setup write method"
+
     async def write(self, data: bytes) -> None:
         "Write protocol method"
 
 
-@runtime_checkable
 class Reader(Protocol):
+    async def setup(self, config: Dict[str, Any]) -> None:
+        "Setup read method"
+
     async def read(self, size: int) -> bytes:
         "Read protocol method"

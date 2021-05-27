@@ -13,7 +13,7 @@ class MediaResource(Resource):
 
         super().__init__(
             partial(self.informer.count, 'media'),
-            partial(self.informer.search_media, 'media'),
+            partial(self.informer.search, 'media'),
             None,
             None)
 
