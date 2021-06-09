@@ -31,7 +31,8 @@ class MediaStorageManager:
             if uri:
                 media.uri = uri
 
-        await self.media_repository.add(medias)
+        medias = await self.media_repository.add(medias)
+        return [vars(media) for media in medias]
 
     async def delete(self, deletion_records: RecordList) -> None:
         records = validate({'*id': str}, deletion_records)

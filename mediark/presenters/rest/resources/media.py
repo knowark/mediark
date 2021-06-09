@@ -25,9 +25,9 @@ class MediaResource(Resource):
             {'media': media, 'stream': stream and HttpBase64Reader(stream)}
             for media, stream in zip(records, streams)]
 
-        await self.manager.submit(submission_records)
+        medias = await self.manager.submit(submission_records)
 
-        return web.Response(status=200)
+        return web.json_response(medias)
 
     async def delete(self, request: web.Request) -> web.Response:
         ids = await get_request_ids(request)
