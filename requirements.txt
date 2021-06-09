@@ -48,7 +48,7 @@ six==1.14.0
 tenark==0.8.4
 toml==0.10.2
 typing-extensions==3.7.4.3
-urllib3==1.25.8
+urllib3==1.26.5
 uvloop==0.15.2
 validark==0.2.0
 webencodings==0.5.1
