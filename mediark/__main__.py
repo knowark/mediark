@@ -5,9 +5,9 @@ import sys
 import asyncio
 import uvloop
 from injectark import Injectark
-from .presenters.shell import Shell
-from .factories import factory_builder
-from .core import config
+from .presentation.shell import Shell
+from .integration.factories import factory_builder
+from .integration.core import config
 
 
 async def main(args=None):  # pragma: no cover
