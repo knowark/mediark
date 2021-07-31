@@ -32,6 +32,12 @@ app_database_path: "{{ app_data_directory }}/data.json"
 
 app_port: 8080
 
+app_port1: 6291
+
+app_port2: 6292
+
+app_port3: 6293
+
 # Database
 
 postgresql_version: 12
