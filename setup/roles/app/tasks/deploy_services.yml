@@ -1,18 +1,66 @@
-- name: "Deploy {{ app_user }} Systemd Service File"
+- name: "Deploy {{ app_user }}-1 Systemd Service"
   template:
+    src: service-1.j2
+    dest: "{{ service_path }}/{{ app_user }}-1@{{ app_port1 }}.service"
+    mode: 0755
+
+- name: "Deploy {{ app_user }}-2 Systemd Service"
+  template:
+    src: service-2.j2
+    dest: "{{ service_path }}/{{ app_user }}-2@{{ app_port2 }}.service"
+    mode: 0755
+
+- name: "Deploy {{ app_user }}-3 Systemd Service"
+  template:
+    src: service-3.j2
+    dest: "{{ service_path }}/{{ app_user }}-3@{{ app_port3 }}.service"
+    mode: 0755
+                                 
+- name: "Deploy {{ app_user }} Systemd Service File"
+  template:               
     src: service.j2
     dest: "{{ service_path }}/{{ app_user }}.service"
-    mode: 0755
+    mode: 0775
+
+- name: "Deploy {{ app_user }} Target Systemd Service"
+  template:               
+    src: service.target.j2
+    dest: "{{ service_path }}/{{ app_user }}.target"
+    mode: 0775               
+
+- name: "Restart {{ app_user }} Service"
+  systemd:
+    name: "{{ app_user }}.target"
+    enabled: true
+    state: restarted
+    daemon_reload: true
+                                 
+- name: "Restart {{ app_user }} Service"
+  systemd:
+    name: "{{ app_user }}.service"
+    enabled: true
+    state: restarted
+    daemon_reload: true
+
+- name: "Daemon Reload"
+  systemd:
+    daemon_reload: yes
+
+# Enable Services
+
+- name: "Enable {{ app_user }} Service Workers"
+  systemd:
+    name: "{{ item }}"
+    enabled: true
+  with_items:
+    - "{{ app_user }}-1@{{ app_port1 }}.service"
+    - "{{ app_user }}-2@{{ app_port2 }}.service"
+    - "{{ app_user }}-3@{{ app_port3 }}.service"
+
+# Environments File
 
 - name: "Deploy Environment Variables Empty File"
   template:
     src: mediark.j2
     dest: "/etc/opt/{{ app_user }}/{{ app_user }}.env"
     mode: 0644
-
-- name: "Restart {{ app_user }} Service"
-  systemd:
-    name: "{{ app_user }}"
-    enabled: true
-    state: restarted
-    daemon_reload: true
