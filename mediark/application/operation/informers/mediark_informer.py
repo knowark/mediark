@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from ..domain.repositories import MediaRepository
-from ..domain.common import RecordList, QueryDomain
+from ...domain.services.repositories import MediaRepository
+from ...domain.common import RecordList, QueryDomain
 
 
 class MediarkInformer(ABC):

@@ -6,8 +6,8 @@ from mediark.application.domain.common import (
 from mediark.application.domain.models import Media
 from mediark.application.domain.services import (
     MemoryFileStoreService, StandardCacheService)
-from mediark.application.domain.repositories import MemoryMediaRepository
-from mediark.application.informers import FileInformer, StandardFileInformer
+from mediark.application.domain.services.repositories import MemoryMediaRepository
+from mediark.application.operation.informers import FileInformer, StandardFileInformer
 
 
 @fixture

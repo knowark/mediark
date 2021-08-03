@@ -2,7 +2,7 @@ import json
 from typing import Callable, Dict, Any
 from aiohttp import web
 from injectark import Injectark
-from ....application.managers import SessionManager
+from ....application.operation.managers import SessionManager
 from ....integration.core.suppliers.common.tenancy import TenantSupplier
 
 

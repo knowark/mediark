@@ -1,5 +1,5 @@
 from pathlib import Path
-from ...application.domain.repositories import (
+from ...application.domain.services.repositories import (
     MediaRepository, MemoryMediaRepository)
 from ...application.domain.common import (
     User, QueryParser, TenantProvider, StandardTenantProvider,
@@ -9,9 +9,9 @@ from ...application.domain.services import (
     IdService, StandardIdService,
     CacheService, StandardCacheService,
     FileStoreService, MemoryFileStoreService)
-from ...application.managers import (
+from ...application.operation.managers import (
     SessionManager, MediaStorageManager)
-from ...application.informers import (
+from ...application.operation.informers import (
     FileInformer, MediarkInformer,
     StandardMediarkInformer, StandardFileInformer)
 from ..core import Config

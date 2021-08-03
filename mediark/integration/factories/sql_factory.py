@@ -4,7 +4,7 @@ from ...application.domain.common import (
     TransactionManager)
 from ..core.suppliers.common.tenancy import (
     TenantSupplier, SchemaTenantSupplier)
-from ...application.domain.repositories import MediaRepository
+from ...application.domain.services.repositories import MediaRepository
 from ..core import Config
 from ..core.suppliers.migration import (
     MigrationSupplier, SchemaMigrationSupplier)

@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from ..domain.common import TenantProvider, Tenant, AuthProvider, User
+from ...domain.common import TenantProvider, Tenant, AuthProvider, User
 
 
 class SessionManager:

@@ -1,7 +1,7 @@
 from filtrark.sql_parser import SqlParser
 from modelark import SqlRepository
 from .....application.domain.models import Media
-from .....application.domain.repositories import MediaRepository
+from .....application.domain.services.repositories import MediaRepository
 from .....application.domain.common import TenantProvider, AuthProvider
 from .connection import ConnectionManager
 

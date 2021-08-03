@@ -1,9 +1,9 @@
-from mediark.application.informers.mediark_informer import (
+from mediark.application.operation.informers.mediark_informer import (
     StandardMediarkInformer)
 from pytest import fixture
 from mediark.application.domain.models import Media
-from mediark.application.informers import MediarkInformer
-from mediark.application.domain.repositories import (
+from mediark.application.operation.informers import MediarkInformer
+from mediark.application.domain.services.repositories import (
     MediaRepository, MemoryMediaRepository)
 from mediark.application.domain.common import (
     QueryParser, StandardTenantProvider, Tenant,

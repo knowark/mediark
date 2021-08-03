@@ -1,6 +1,6 @@
 from pytest import raises, fixture
-from mediark.application.managers import MediaStorageManager
-from mediark.application.domain.repositories import MemoryMediaRepository
+from mediark.application.operation.managers import MediaStorageManager
+from mediark.application.domain.services.repositories import MemoryMediaRepository
 from mediark.application.domain.common import (
     QueryParser, Tenant, StandardTenantProvider,
     User,  StandardAuthProvider)

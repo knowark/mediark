@@ -1,7 +1,7 @@
 from ...application.domain.models import Media
 from ...application.domain.services import (
     FileStoreService)
-from ...application.domain.repositories import (
+from ...application.domain.services.repositories import (
     MediaRepository, MemoryMediaRepository)
 from ...application.domain.common import (
     QueryParser, TenantProvider, AuthProvider)

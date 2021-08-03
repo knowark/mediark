@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
-from ...application.domain.repositories import MediaRepository
-from ...application.informers import MediarkInformer
+from ...application.domain.services.repositories import MediaRepository
+from ...application.operation.informers import MediarkInformer
 from ...application.domain.common import TransactionManager, TenantProvider
 from ..core import Config
 from ..core.http import HttpClientSupplier

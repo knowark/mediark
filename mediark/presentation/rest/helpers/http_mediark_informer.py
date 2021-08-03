@@ -1,6 +1,6 @@
 from typing import List, Any
 from ....application.domain.common import TenantProvider
-from ....application.informers import StandardMediarkInformer
+from ....application.operation.informers import StandardMediarkInformer
 from ....application.domain.common import QueryDomain, RecordList
 from ....application.domain.models import Media
 

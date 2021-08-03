@@ -1,10 +1,10 @@
 from typing import List
 from base64 import b64decode
 from validark import validate
-from ..domain.models import Media
-from ..domain.repositories import MediaRepository
-from ..domain.services import IdService, FileStoreService
-from ..domain.common import RecordList
+from ...domain.models import Media
+from ...domain.services.repositories import MediaRepository
+from ...domain.services import IdService, FileStoreService
+from ...domain.common import RecordList
 from .common import submission_schema
 
 

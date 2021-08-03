@@ -2,7 +2,7 @@ from pytest import fixture
 from mediark.application.domain.common import (
     TenantProvider, StandardTenantProvider,
     AuthProvider, StandardAuthProvider)
-from mediark.application.managers import SessionManager
+from mediark.application.operation.managers import SessionManager
 
 
 @fixture

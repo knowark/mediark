@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any
-from ..domain.common import MediaNotFoundError
-from ..domain.repositories import MediaRepository
-from ..domain.services import FileStoreService, CacheService, Writer
+from ...domain.common import MediaNotFoundError
+from ...domain.services.repositories import MediaRepository
+from ...domain.services import FileStoreService, CacheService, Writer
 from mediark.application.domain.common import QueryDomain
 
 
