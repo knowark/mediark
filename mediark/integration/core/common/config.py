@@ -21,6 +21,9 @@ config: Config = {
                 "postgresql://mediark:mediark@localhost/mediark"))
         }
     },
+   'secrets': {
+        'tokens': os.environ.get('MEDIARK_TOKENS_SECRET', '')
+    },
     'domain': os.environ.get(
         'MEDIARK_DOMAIN', "https://mediark.dev.nubark.cloud"),
     "dir_path": str(Path.home() / "data"),
@@ -79,3 +82,4 @@ config: Config = {
         'client_max_size': 10 * 1024**2
     },
 }
+print(config)

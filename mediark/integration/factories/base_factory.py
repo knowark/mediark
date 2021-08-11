@@ -1,10 +1,13 @@
+from injectark import Factory
 from pathlib import Path
-from ...application.domain.services.repositories import (
-    MediaRepository, MemoryMediaRepository)
 from ...application.domain.common import (
-    User, QueryParser, TenantProvider, StandardTenantProvider,
-    AuthProvider, StandardAuthProvider, TransactionManager,
-    MemoryTransactionManager)
+    TenantProvider, StandardTenantProvider,
+    AuthProvider, StandardAuthProvider)
+from ...application.domain.services.repositories import (
+    RepositoryService,
+    MediaRepository, MemoryMediaRepository)
+from ...application.general.connector import (
+    Connector, MemoryConnector, Transactor, MemoryTransactor)
 from ...application.domain.services import (
     IdService, StandardIdService,
     CacheService, StandardCacheService,
@@ -12,30 +15,36 @@ from ...application.domain.services import (
 from ...application.operation.managers import (
     SessionManager, MediaStorageManager)
 from ...application.operation.informers import (
-    FileInformer, MediarkInformer,
-    StandardMediarkInformer, StandardFileInformer)
-from ..core import Config
-from ..core.suppliers.common.tenancy import (
-    TenantSupplier, MemoryTenantSupplier)
-from ..core.suppliers.migration import (
+    FileInformer,
+    StandardInformer, StandardFileInformer)
+from ...application.general.suppliers import (
+    TenantSupplier, MemoryTenantSupplier,
     MigrationSupplier, MemoryMigrationSupplier)
-from injectark import Factory
+from ..core.common import Config
 
 
 class BaseFactory(Factory):
     def __init__(self, config: Config) -> None:
         self.config = config
-
-    def query_parser(self) -> QueryParser:
-        return QueryParser()
+        self.public = [
+            'FileInformer', 'StandardInformer',
+            'MediaStorageManager', 'SessionManager'
+        ]
 
     # Providers
 
-    def tenant_provider(self) -> TenantProvider:
-        return StandardTenantProvider()
-
-    def auth_provider(self) -> AuthProvider:
+    def auth_provider(self) -> StandardAuthProvider:
         return StandardAuthProvider()
+
+    def tenant_provider(self) -> StandardTenantProvider:
+        return StandardTenantProvider()
+    # General
+
+    def connector(self) -> Connector:
+        return MemoryConnector()
+
+    def transactor(self) -> Transactor:
+        return MemoryTransactor()
 
     # Suppliers
 
@@ -48,29 +57,27 @@ class BaseFactory(Factory):
     # Repositories
 
     def media_repository(
-            self, query_parser: QueryParser, tenant_provider: TenantProvider,
+            self, tenant_provider: TenantProvider,
             auth_provider: AuthProvider) -> MediaRepository:
         return MemoryMediaRepository(
-            query_parser, tenant_provider, auth_provider)
+            locator=tenant_provider, editor=auth_provider)
 
     # Managers
 
-    def transaction_manager(self) -> TransactionManager:
-        return MemoryTransactionManager()
-
-    def session_manager(self, tenant_provider: TenantProvider,
-                        auth_provider: AuthProvider,
-                        transaction_manager: TransactionManager
-                        ) -> SessionManager:
-        return transaction_manager(SessionManager)(
-            tenant_provider, auth_provider)
+    def session_manager(
+            self, tenant_provider: TenantProvider,
+            auth_provider: AuthProvider,
+            tenant_supplier: TenantSupplier
+    ) -> SessionManager:
+        return SessionManager(
+            tenant_provider, auth_provider, tenant_supplier)
 
     def media_storage_manager(self, media_repository: MediaRepository,
                               id_service: IdService,
                               file_store_service: FileStoreService,
-                              transaction_manager: TransactionManager
+                              transactor: Transactor
                               ) -> MediaStorageManager:
-        return transaction_manager(MediaStorageManager)(
+        return transactor(MediaStorageManager)(
             media_repository, id_service,
             file_store_service)
 
@@ -82,20 +89,27 @@ class BaseFactory(Factory):
     def file_store_service(
             self, tenant_provider: TenantProvider
     ) -> FileStoreService:
+        print("BASE FACTORY>>>>>"*50)
+
         return MemoryFileStoreService(tenant_provider)
 
     # Informers
 
-    def mediark_informer(self,
-                         media_repository: MediaRepository,
-                         transaction_manager: TransactionManager
-                         ) -> MediarkInformer:
-        return transaction_manager(
-            StandardMediarkInformer)(media_repository)
+    def standard_informer(
+            self, transactor: Transactor, repository_service: RepositoryService
+    ) -> StandardInformer:
+        return transactor(StandardInformer)(repository_service)
 
     def file_informer(self, file_store_service: FileStoreService,
                       media_repository: MediaRepository,
-                      transaction_manager: TransactionManager
+                      transactor: Transactor
                       ) -> FileInformer:
-        return transaction_manager(StandardFileInformer)(
+        return transactor(StandardFileInformer)(
             file_store_service, media_repository)
+
+    def repository_service(
+        self, media_repository: MediaRepository) -> RepositoryService:
+
+        repositories = locals()
+        repositories.pop('self')
+        return RepositoryService(repositories.values())

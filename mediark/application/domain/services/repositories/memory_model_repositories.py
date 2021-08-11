@@ -1,8 +1,14 @@
-from modelark import Repository, MemoryRepository
+from modelark import (
+    Repository, RepositoryResolver, MemoryRepository)
+from ...models import Media
+
+
+class RepositoryService(RepositoryResolver):
+    """Repository Resolver Service"""
 
 
 class MediaRepository(Repository):
-    """Media Repository"""
+    model = Media
 
 
 class MemoryMediaRepository(MemoryRepository, MediaRepository):

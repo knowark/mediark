@@ -3,7 +3,7 @@ from modelark import SqlRepository
 from .....application.domain.models import Media
 from .....application.domain.services.repositories import MediaRepository
 from .....application.domain.common import TenantProvider, AuthProvider
-from .connection import ConnectionManager
+from .....application.general.connector import Connector
 
 
 class SqlMediaRepository(SqlRepository, MediaRepository):
@@ -11,7 +11,7 @@ class SqlMediaRepository(SqlRepository, MediaRepository):
 
     def __init__(self, tenant_provider: TenantProvider,
                  auth_provider: AuthProvider,
-                 connection_manager: ConnectionManager,
+                 connection_manager: Connector,
                  parser: SqlParser) -> None:
         super().__init__('media', Media, connection_manager,
                          parser, tenant_provider, auth_provider)

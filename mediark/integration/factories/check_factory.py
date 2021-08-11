@@ -1,12 +1,13 @@
+from injectark import Config
+from ...application.domain.common import (
+    User, Tenant, TenantProvider, StandardTenantProvider,
+    AuthProvider, StandardAuthProvider)
 from ...application.domain.models import Media
 from ...application.domain.services import (
     FileStoreService)
 from ...application.domain.services.repositories import (
     MediaRepository, MemoryMediaRepository)
-from ...application.domain.common import (
-    QueryParser, TenantProvider, AuthProvider)
-from ..core import Config
-from ..core.suppliers.common.tenancy import (
+from ...application.general.suppliers import (
     TenantSupplier, MemoryTenantSupplier)
 from .http_factory import HttpFactory
 
@@ -24,10 +25,10 @@ class CheckFactory(HttpFactory):
         return tenant_supplier
 
     def media_repository(
-            self, query_parser: QueryParser, tenant_provider: TenantProvider,
+            self, tenant_provider: TenantProvider,
             auth_provider: AuthProvider) -> MediaRepository:
         media_repository = MemoryMediaRepository(
-            query_parser, tenant_provider, auth_provider)
+            locator=tenant_provider, editor=auth_provider)
         media_repository.load({
             "default": {
                 '1': Media(

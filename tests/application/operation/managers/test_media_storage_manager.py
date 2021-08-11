@@ -62,7 +62,9 @@ def test_storage_manager_instantiation(media_storage_manager):
 
 
 async def test_storage_manager_submit_many(media_storage_manager):
-    media_records = [
+    media_records = {
+        "meta":{},
+        "data": [
         {'media': {
             'name': 'example.png',
             'type': 'image/png',
@@ -73,7 +75,7 @@ async def test_storage_manager_submit_many(media_storage_manager):
             'type': 'image/png',
             'reference': '546bc220-dec1-415d-9f25-53be060bfc7e',
         }}
-    ]
+    ]}
 
     await media_storage_manager.submit(media_records)
 
@@ -90,14 +92,17 @@ async def test_storage_manager_submit_file(media_storage_manager):
 
     stream = MockReader()
 
-    submission_dict = [{
-        'media': {
-            'name': 'photo.png',
-            'type': 'image/png',
-            'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
-        },
-        'stream': stream
-    }]
+    submission_dict = {
+        "meta":{},
+        "data":[{
+            'media': {
+                'name': 'photo.png',
+                'type': 'image/png',
+                'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
+            },
+            'stream': stream
+        }]
+    }
 
     await media_storage_manager.submit(submission_dict)
 
@@ -114,15 +119,18 @@ async def test_storage_manager_delete(media_storage_manager):
 
     stream = MockReader()
 
-    media_records = [{
-        'media': {
-            'id': 'ef4581b6-2136-4fb8-9be2-3a4fc1c83a02',
-            'name': 'sample.jpg',
-            'type': 'image/jpeg',
-            'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
-        },
-        'stream': stream
-    }]
+    media_records = {
+        "meta":{},
+        "data": [{
+            'media': {
+                'id': 'ef4581b6-2136-4fb8-9be2-3a4fc1c83a02',
+                'name': 'sample.jpg',
+                'type': 'image/jpeg',
+                'reference': '00648c29-eca2-4112-8a1a-4deedb443188',
+            },
+            'stream': stream
+        }]
+    }
 
     await media_storage_manager.submit(media_records)
 
@@ -131,7 +139,11 @@ async def test_storage_manager_delete(media_storage_manager):
     assert len(
         media_storage_manager.file_store_service.files['default']) == 1
 
-    deletion_records = [{'id': 'ef4581b6-2136-4fb8-9be2-3a4fc1c83a02'}]
+    deletion_records = {
+        "meta":{},
+        "data": [{'id': 'ef4581b6-2136-4fb8-9be2-3a4fc1c83a02'
+                  }]
+        }
     await media_storage_manager.delete(deletion_records)
 
     assert len(

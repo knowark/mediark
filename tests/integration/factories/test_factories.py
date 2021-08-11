@@ -6,19 +6,25 @@ from mediark.integration.factories import factory_builder
 
 test_tuples = [
     ('BaseFactory', [
-        ('QueryParser', 'QueryParser'),
         ('AuthProvider', 'StandardAuthProvider'),
         ('TenantProvider', 'StandardTenantProvider'),
-        ('MediaRepository', 'MemoryMediaRepository'),
-        ('IdService', 'StandardIdService'),
-        ('FileStoreService', 'MemoryFileStoreService'),
-        ('TransactionManager', 'MemoryTransactionManager'),
-        ('SessionManager', 'SessionManager'),
-        ('MediaStorageManager', 'MediaStorageManager'),
-        ('FileInformer', 'StandardFileInformer'),
-        ('MediarkInformer', 'StandardMediarkInformer'),
+        # general
+        ('Connector', 'MemoryConnector'),
+        ('Transactor', 'MemoryTransactor'),
+        #suppliers
         ('TenantSupplier', 'MemoryTenantSupplier'),
         ('MigrationSupplier', 'MemoryMigrationSupplier'),
+        #repositories
+        ('MediaRepository', 'MemoryMediaRepository'),
+        #service
+        ('IdService', 'StandardIdService'),
+        ('FileStoreService', 'MemoryFileStoreService'),
+        #managers
+        ('SessionManager', 'SessionManager'),
+        ('MediaStorageManager', 'MediaStorageManager'),
+        #informers
+        ('FileInformer', 'StandardFileInformer'),
+        ('StandardInformer', 'StandardInformer'),
     ]),
     ('CheckFactory', [
         ('TenantSupplier', 'MemoryTenantSupplier'),
@@ -32,13 +38,13 @@ test_tuples = [
         ('FileStoreService', 'DirectoryFileStoreService'),
     ]),
     ('HttpFactory', [
-        ('MediarkInformer', 'HttpMediarkInformer'),
+        ('StandardInformer', 'HttpMediarkInformer'),
         ('HttpClientSupplier', 'HttpClientSupplier'),
     ]),
     ('SqlFactory', [
-        ('QueryParser', 'SqlParser'),
-        ('ConnectionManager', 'DefaultConnectionManager'),
-        ('TransactionManager', 'SqlTransactionManager'),
+        ('SqlParser', 'SqlParser'),
+        ('Connector', 'SqlConnector'),
+        ('Transactor', 'SqlTransactor'),
         ('MediaRepository', 'SqlMediaRepository'),
         ('TenantSupplier', 'SchemaTenantSupplier'),
         ('MigrationSupplier', 'SchemaMigrationSupplier'),

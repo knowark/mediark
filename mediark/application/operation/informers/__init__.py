@@ -1,2 +1,2 @@
-from .mediark_informer import MediarkInformer, StandardMediarkInformer
+from .standard_informer import StandardInformer
 from .file_informer import FileInformer, StandardFileInformer

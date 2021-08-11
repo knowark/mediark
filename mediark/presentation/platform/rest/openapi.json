@@ -1,0 +1,220 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Mediark",
+    "x-logo": {
+      "url": "https://avatars.githubusercontent.com/u/44503575"    },
+    "version": "latest",
+    "description": "Mediark Server",
+    "license": {
+      "name": "GNU GPLv3",
+      "url": "https://github.com/knowark/mediark/blob/master/LICENSE"
+    },
+    "contact": {
+      "name": "Knowark",
+      "url": "https://www.knowark.com",
+      "email": "it@knowark.com"
+    }
+  },
+
+
+  "paths": {
+    "/media": {
+      "head": {
+        "operationId": "mediaHeadId",
+        "summary": "Inspect media",
+        "description": "Return media headers",
+        "tags": ["Media"],
+        "responses": {
+          "200": {
+            "description": "Media metadata records"
+          }
+        }
+      },
+      "get": {
+        "operationId": "mediaGetId",
+        "summary": "Get media",
+        "description": "Show all media metadata records",
+        "tags": ["Media"],
+        "responses": {
+          "200": {
+            "description": "Get Media records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {"$ref": "#/components/schemas/Message"},
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Media"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "mediaPatchId",
+        "summary": "Set media",
+        "description": "Create or update Media records",
+        "tags": ["Media"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {"$ref": "#/components/schemas/Message"},
+                  {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Media"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [{
+          "name": "Action",
+          "description": "Specialized application actions",
+          "in": "header",
+          "schema": {
+            "type": "string",
+            "enum": ["default"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "mediaDeleteId",
+        "summary": "Delete media",
+        "description": "Delete media record",
+        "tags": ["Media"],
+        "responses": {
+          "200": {
+            "description": "Successful DELETE response"
+          }
+        }
+      }
+    },
+
+
+    "/download": {
+      "get": {
+        "description": "Get Download records",
+        "tags": ["Download"],
+        "responses": {
+          "200": {
+            "description": "Download  metadata records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Download"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+
+    "/upload": {
+      "put": {
+        "description": "Upload Media records",
+        "tags": ["Upload"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Upload"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful POST response"
+          }
+        }
+      },
+      "post": {
+        "description": "Upload Media records",
+        "tags": ["Upload"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Upload"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "Media": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "reference": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

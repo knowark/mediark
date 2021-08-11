@@ -17,8 +17,9 @@ class MediaStorageManager:
         self.id_service = id_service
         self.file_store_service = file_store_service
 
-    async def submit(self, submission_records: RecordList) -> None:
-        records = validate(submission_schema, submission_records)
+    async def submit(self, entry: dict) -> dict:
+        meta, data = entry['meta'], entry['data']
+        records = validate(submission_schema, data)
         medias = await self.media_repository.add(
             [Media(**record['media']) for record in records])
         streams = [record.get('stream') for record in records]
@@ -32,13 +33,20 @@ class MediaStorageManager:
                 media.uri = uri
 
         medias = await self.media_repository.add(medias)
-        return [vars(media) for media in medias]
+        return {"data": [vars(media) for media in medias]}
 
-    async def delete(self, deletion_records: RecordList) -> None:
-        records = validate({'*id': str}, deletion_records)
+    async def delete(self, entry: dict) -> dict:
+        meta, data = entry['meta'], entry['data']
+        print("MANAGER DELETE>>>>"*50)
+        print(data)
+        records = validate({'*id': str}, data)
+        print(records)
         medias = await self.media_repository.search([('id', 'in', [
             record['id'] for record in records])])
-
+        print(medias)
         for media in medias:
             await self.file_store_service.delete(media.uri)
-        await self.media_repository.remove(medias)
+        print(medias)
+        result = await self.media_repository.remove(medias)
+        print(result)
+        return {"data": result}

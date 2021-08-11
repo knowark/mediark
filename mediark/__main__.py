@@ -1,22 +1,19 @@
-"""
-Mediark entrypoint
-"""
 import sys
 import asyncio
 import uvloop
 from injectark import Injectark
-from .presentation.shell import Shell
-from .integration.factories import factory_builder
 from .integration.core import config
+from .integration.factories import factory_builder
+from .presentation.system import Shell
 
 
 async def main(args=None):  # pragma: no cover
+    print("factory>>>>"*50)
+    print(config)
     factory = factory_builder.build(config)
-    injector = Injectark(factory)
-    if config.get('auto'):
-        injector['MigrationSupplier'].migrate()
-
-    await Shell(config, injector).run(args or [])
+    print(factory)
+    injector = Injectark(factory=factory)
+    await Shell(injector).run(args or [])
 
 
 if __name__ == '__main__':  # pragma: no cover

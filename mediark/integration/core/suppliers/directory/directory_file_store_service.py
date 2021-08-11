@@ -15,6 +15,9 @@ class DirectoryFileStoreService(FileStoreService):
         self.tenant_service = tenant_service
         self.data_config = data_config
         self.chunk_size = 512 * 1024
+        print("data config>>>>"*50)
+        print(self.data_config)
+
 
     async def submit(self, contexts: List[Dict[str, Any]]) -> List[str]:
         uris = []
@@ -22,6 +25,9 @@ class DirectoryFileStoreService(FileStoreService):
             stream: Reader = context.pop('stream')
             uri = self._make_object_name(context)
             file_path = self._make_file_path(uri)
+            print("DIRECTORY FILE SERVICE SUPPLIER>>>>>>"*50)
+            print(self.data_config)
+
             file_path.absolute().parent.mkdir(parents=True, exist_ok=True)
 
             generator = self._generate_chunked_data(stream)
