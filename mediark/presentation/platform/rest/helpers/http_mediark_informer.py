@@ -19,13 +19,9 @@ class HttpMediarkInformer(StandardInformer):
             uri = item.pop('uri')
             path = item.get('path') or uri
             item['url'] = f"{download_url}/{path}"
-        print("RESUL  _PREPEND >>>"*50)
-        print(items)
         return items
 
     async def search(self, entry: dict) -> RecordList:
-        print("ENTRA A BUSCAR HTTP INFORMER>>>"*50)
-        print(entry['meta'])
         meta = entry['meta']
         domain = meta['domain']
         result = await super().search({
@@ -34,6 +30,7 @@ class HttpMediarkInformer(StandardInformer):
                 'domain': domain
             }
         })
+        print("domain>>>", self.domain)
         tenant = self.tenant_provider.tenant
         media_download = f"{self.domain}/download/{tenant.slug}"
         result = self._prepend_download(media_download, result['data'])

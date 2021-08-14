@@ -47,8 +47,6 @@ async def test_root_api(app) -> None:
 async def test_media_head(app, headers) -> None:
     response = await app.head('/media', headers=headers)
     count = response.headers.get('Count')
-    print("TEST REST>>>"*50)
-    print(count)
     assert int(count) == 3
 
 
@@ -113,8 +111,6 @@ async def test_api_upload_put(app, headers) -> None:
 
     response = await app.put('/upload', headers=headers, data=data)
     assert response.status == 200
-
-
 # Filters
 
 
@@ -132,8 +128,6 @@ async def test_filter_get_route_filter(app, headers) -> None:
         '/media?filter=[["reference", "=", "ref_1"]]',
         headers=headers)
     content = await response.text()
-    print("TEST FILTER>>>>"*50)
-    print(content)
     data_dict = loads(content)
     assert len(data_dict) == 1
 

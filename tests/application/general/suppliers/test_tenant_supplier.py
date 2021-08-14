@@ -35,7 +35,5 @@ def test_memory_tenant_supplier_resolve_tenant() -> None:
     })
     tenant_dict = tenant_supplier.resolve_tenant('Knowark')
 
-    print("TEST RESOLVE TENANT>>>"*50)
-    print(tenant_dict)
     assert tenant_dict['id'] == '001'
     assert tenant_dict['name'] == 'Knowark'

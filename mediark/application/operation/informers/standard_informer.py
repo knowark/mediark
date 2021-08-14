@@ -18,11 +18,6 @@ class StandardInformer:
 
     async def count(self, entry: dict) -> dict:
         meta = entry['meta']
-        print("INFORMER COUNT>>>>"*50)
-        print(meta)
-        print(self.repository_service)
         repository = self.repository_service.resolve(meta.pop('model'))
-        print(repository)
         result = await repository.count(meta['domain'])
-        print(result)
         return {'data': result}

@@ -23,10 +23,8 @@ class MediaStorageManager:
         medias = await self.media_repository.add(
             [Media(**record['media']) for record in records])
         streams = [record.get('stream') for record in records]
-
         contexts = [{'stream': stream, **vars(media)}
                     for media, stream in zip(medias, streams)]
-
         uris = await self.file_store_service.submit(contexts)
         for media, uri in zip(medias, uris):
             if uri:
@@ -37,16 +35,10 @@ class MediaStorageManager:
 
     async def delete(self, entry: dict) -> dict:
         meta, data = entry['meta'], entry['data']
-        print("MANAGER DELETE>>>>"*50)
-        print(data)
         records = validate({'*id': str}, data)
-        print(records)
         medias = await self.media_repository.search([('id', 'in', [
             record['id'] for record in records])])
-        print(medias)
         for media in medias:
             await self.file_store_service.delete(media.uri)
-        print(medias)
         result = await self.media_repository.remove(medias)
-        print(result)
         return {"data": result}

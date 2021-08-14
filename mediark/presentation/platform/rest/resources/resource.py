@@ -15,8 +15,6 @@ class Resource:
 
     async def head(self, request) -> web.Response:
         domain, _, _ = await get_request_filter(request)
-        print("RESOURCE HEAD>>>"*50)
-        print(request.match_info['resource'])
         resource = request.match_info['resource']
         path = self.paths[f'/{resource}']['head']
         action = 'default'
@@ -45,8 +43,6 @@ class Resource:
         meta = {'domain': domain, 'limit': limit, 'offset': offset}
         meta.update(fixed_meta)
         result = await handler({'meta': meta})
-        print("GET RESULT>>>>>"*50)
-        print(result)
         return web.json_response(normalize(result))
 
 

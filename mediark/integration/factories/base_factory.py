@@ -89,7 +89,6 @@ class BaseFactory(Factory):
     def file_store_service(
             self, tenant_provider: TenantProvider
     ) -> FileStoreService:
-        print("BASE FACTORY>>>>>"*50)
 
         return MemoryFileStoreService(tenant_provider)
 

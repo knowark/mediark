@@ -17,15 +17,13 @@ class MediaResource(Resource):
 
 
     async def patch(self, request: web.Request) -> web.Response:
-        #records = await request.json()
         records = loads(await request.text())
         meta, data = records['meta'], records['data']
-        streams = [record.pop('data', None) for record in data]
 
+        streams = [record.pop('data', None) for record in data]
         submission_records = [
             {'media': media, 'stream': stream and HttpBase64Reader(stream)}
             for media, stream in zip(data, streams)]
-
         medias = await self.manager.submit({
             "meta": meta,
             "data": submission_records

@@ -14,7 +14,5 @@ class DirectoryFactory(HttpFactory):
     def file_store_service(
         self, tenant_provider: TenantProvider
     ) -> FileStoreService:
-        print("FACTORY>>>>"*50)
-        print(self.config)
         return DirectoryFileStoreService(
             tenant_provider, self.config)

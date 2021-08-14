@@ -59,8 +59,6 @@ def test_standard_informer_instantiation(standard_informer):
 async def test_standard_informer_search_medias(
         standard_informer: StandardInformer) -> None:
     domain: QueryDomain = []
-    print("TEST SEARCH>>>>"*50)
-    print(standard_informer.repository_service.registry)
     medias = await standard_informer.search({
         'meta':{
             'model': 'Media',
@@ -72,8 +70,6 @@ async def test_standard_informer_search_medias(
 
 async def test_standard_informer_count_medias(
         standard_informer: StandardInformer) -> None:
-    print("TEST COUNT >>>"*50)
-    print(standard_informer.repository_service.registry)
     medias_count = await standard_informer.count({
         'meta':{
             'model':'Media',

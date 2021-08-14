@@ -6,26 +6,26 @@ from pathlib import Path
 Config = Dict[str, Any]
 
 config: Config = {
-    'port': int(os.environ.get('MEDIARK_PORT', 8080)),
-    'auto': bool(os.environ.get('MEDIARK_AUTO', True)),
-    'factory': os.environ.get('MEDIARK_FACTORY', 'CloudFactory'),
+    'port': int(os.environ.get('MEDIARK_PORT') or 8080),
+    'auto': bool(os.environ.get('MEDIARK_AUTO') or True),
+    'factory': os.environ.get('MEDIARK_FACTORY') or 'CloudFactory',
     'strategies': os.environ.get(
-        'MEDIARK_STRATEGIES', 'base,http,directory,sql,swift').split(','),
+        'MEDIARK_STRATEGIES') or 'base,http,directory,sql,swift'.split(','),
     'tenancy': {
-        "dsn": os.environ.get('MEDIARK_TENANCY_DSN', (
-            "postgresql://mediark:mediark@localhost/mediark"))
+        "dsn": os.environ.get('MEDIARK_TENANCY_DSN') or (
+            "postgresql://mediark:mediark@localhost/mediark")
     },
     'zones': {
         "default": {
-            "dsn": os.environ.get('MEDIARK_ZONES_DEFAULT_DSN', (
-                "postgresql://mediark:mediark@localhost/mediark"))
+            "dsn": os.environ.get('MEDIARK_ZONES_DEFAULT_DSN') or (
+                "postgresql://mediark:mediark@localhost/mediark")
         }
     },
    'secrets': {
-        'tokens': os.environ.get('MEDIARK_TOKENS_SECRET', '')
+        'tokens': os.environ.get('MEDIARK_TOKENS_SECRET') or ''
     },
     'domain': os.environ.get(
-        'MEDIARK_DOMAIN', "https://mediark.dev.nubark.cloud"),
+        'MEDIARK_DOMAIN') or "https://mediark.dev.nubark.cloud",
     "dir_path": str(Path.home() / "data"),
     "media": {
             "dir_path": "media",
@@ -62,17 +62,17 @@ config: Config = {
             "swift": {
                 "auth_url":  "https://auth.cloud.ovh.net/v3/auth/tokens",
                 "object_store_url": os.environ.get(
-                    'MEDIARK_CLOUD_SWIFT_OBJECT_STORE_URL',
+                    'MEDIARK_CLOUD_SWIFT_OBJECT_STORE_URL') or
                     ("https://storage.bhs.cloud.ovh.net/v1/"
-                     "AUTH_e737167b6b424d92ae257f2d94bc1b83")),
+                     "AUTH_e737167b6b424d92ae257f2d94bc1b83"),
                 "username": os.environ.get(
-                    'MEDIARK_CLOUD_SWIFT_USER_NAME', ""),
+                    'MEDIARK_CLOUD_SWIFT_USER_NAME') or "",
                 "password": os.environ.get(
-                    'MEDIARK_CLOUD_SWIFT_PASSWORD', ""),
+                    'MEDIARK_CLOUD_SWIFT_PASSWORD') or "",
                 "container_prefix": os.environ.get(
-                    'MEDIARK_CLOUD_SWIFT_CONTAINER_PREFIX', ""),
+                    'MEDIARK_CLOUD_SWIFT_CONTAINER_PREFIX') or "",
                 "container_suffix": os.environ.get(
-                    'MEDIARK_CLOUD_SWIFT_CONTAINER_SUFFIX', "main"),
+                    'MEDIARK_CLOUD_SWIFT_CONTAINER_SUFFIX') or "main",
             }
     },
     'environment': {
@@ -82,4 +82,10 @@ config: Config = {
         'client_max_size': 10 * 1024**2
     },
 }
+
+def sanitize(config):
+    if type(config) is dict:
+        return {key: sanitize(value) for key, value in
+                config.items() if value and sanitize(value)}
+    return config
 print(config)

@@ -13,8 +13,8 @@ class DownloadResource:
     async def get(self, request: web.Request) -> Any:
         tenant = request.match_info['tenant']
         path = request.match_info['path']
-        print("DOWNLOAD RESOURCE TENANT>>>>"*50)
-
+        print("DOWNLOAD Tenant>>>", tenant)
+        print("PATH>>",path)
         # tenant_id = "001"
 
         # tenant_dict = await self.session_manager.ensure_tenant(
@@ -27,8 +27,6 @@ class DownloadResource:
         tenant_dict = await self.session_manager.resolve_tenant({
             'data': tenant
         })
-        print("TENANT>>>>"*50)
-        print(tenant_dict)
         await self.session_manager.set_tenant(tenant_dict)
         response = web.StreamResponse()
         response['request'] = request

@@ -54,6 +54,7 @@ class SqlFactory(DirectoryFactory):
                  self.config['zones'].items()}
         connection = SchemaConnection(self.config['tenancy']['dsn'])
         return SchemaTenantSupplier(connection, zones)
+
     def migration_supplier(
             self, tenant_supplier: TenantSupplier
     ) -> SchemaMigrationSupplier:

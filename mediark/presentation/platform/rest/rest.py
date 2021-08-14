@@ -25,7 +25,6 @@ class RestApplication(web.Application):
 
         self.cleanup_ctx.append(self._http_client)
 
-        self._create_api()
         self.router.add_route(
             "get", r'/download/{tenant}/{path:(.*)}',
             getattr(DownloadResource(self.injector), "get", None))
@@ -38,6 +37,7 @@ class RestApplication(web.Application):
             "put", '/upload',
             getattr(UploadResource(self.injector), "put", None))
 
+        self._create_api()
 
     @staticmethod
     async def _http_client(app: web.Application):

@@ -43,7 +43,7 @@ async def test_directory_file_store_service_submit(
 
     assert image_path.is_file()
     assert uri == (
-        "image/png/2020/03/11/abca8e11-0719-44ab-bd3f-ed5aa1bd2918.png")
+       "image/png/2020/03/11/abca8e11-0719-44ab-bd3f-ed5aa1bd2918.png")
     assert image_path.read_bytes() == b'AAABBBCCCDDD'
 
 

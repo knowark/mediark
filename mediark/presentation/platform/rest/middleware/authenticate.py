@@ -8,7 +8,7 @@ from .....application.operation.managers import SessionManager
 
 def authenticate_middleware_factory(injector: Injectark) -> Callable:
     session_manager: SessionManager = injector['SessionManager']
-    secret = injector.config['secrets']['tokens']
+    secret = injector.config.get('secrets', {}).get('tokens', '')
 
     @web.middleware
     async def middleware(request: web.Request, handler: Callable):

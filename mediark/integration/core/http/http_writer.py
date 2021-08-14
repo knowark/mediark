@@ -11,6 +11,4 @@ class HttpResponseWriter:
         await self.response.prepare(self.response['request'])
 
     async def write(self, data: int) -> None:
-        print("WRITE>>>>"*50)
-        print(data)
         await self.response.write(data)
