@@ -24,14 +24,5 @@ class HttpFactory(BaseFactory):
             self.config['domain'], tenant_provider, repository_service
         )
 
-    # def mediark_informer(
-        # self, tenant_provider: TenantProvider,
-        # media_repository: MediaRepository,
-        # transactor: Transactor
-    # ) -> MediarkInformer:
-        # return transactor(HttpMediarkInformer)(
-            # self.config['domain'], tenant_provider,
-            # media_repository)
-
     def http_client_supplier(self) -> HttpClientSupplier:
         return HttpClientSupplier()

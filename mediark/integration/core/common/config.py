@@ -88,4 +88,3 @@ def sanitize(config):
         return {key: sanitize(value) for key, value in
                 config.items() if value and sanitize(value)}
     return config
-print(config)

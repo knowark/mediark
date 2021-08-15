@@ -30,25 +30,8 @@ class HttpMediarkInformer(StandardInformer):
                 'domain': domain
             }
         })
-        print("domain>>>", self.domain)
         tenant = self.tenant_provider.tenant
         media_download = f"{self.domain}/download/{tenant.slug}"
         result = self._prepend_download(media_download, result['data'])
 
         return {"data": result}
-    # async def search(self,
-                     # model: str,
-                     # domain: QueryDomain = None,
-                     # limit: int = 1000,
-                     # offset: int = 0) -> RecordList:
-        # print("ENTRA A BUSCAR HTTP INFORMER>>>"*50)
-        # print(domain)
-        # result = await super().search({
-            # 'meta': {
-                # 'model': 'Media',
-                # 'domain': domain
-            # }
-        # })
-        # tenant = self.tenant_provider.tenant
-        # media_download = f"{self.domain}/download/{tenant.slug}"
-        # return self._prepend_download(media_download, result['data'])

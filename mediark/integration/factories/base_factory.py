@@ -95,7 +95,8 @@ class BaseFactory(Factory):
     # Informers
 
     def standard_informer(
-            self, transactor: Transactor, repository_service: RepositoryService
+            self, transactor: Transactor,
+            repository_service: RepositoryService
     ) -> StandardInformer:
         return transactor(StandardInformer)(repository_service)
 
