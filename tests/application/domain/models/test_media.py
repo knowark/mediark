@@ -4,7 +4,7 @@ from mediark.application.domain.models import Media
 def test_media_instantiation():
     media = Media()
 
-    assert media.id == ''
+    assert media.id != ''
     assert media.name == ''
     assert media.type == ''
     assert media.reference == ''
