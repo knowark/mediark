@@ -58,6 +58,22 @@ config: Config = {
                 "database": "images.json"
             }
     },
+    "mail": {
+        "sender": os.environ.get(
+            'MEDIARK_MAIL_SENDER') or "",
+        "host": os.environ.get(
+            'MEDIARK_MAIL_HOST') or "",
+        "port": int(os.environ.get(
+            'MEDIARK_MAIL_PORT') or 0),
+        "username": os.environ.get(
+            'MEDIARK_MAIL_USERNAME') or "",
+        "password": os.environ.get(
+            'MEDIARK_MAIL_PASSWORD') or "",
+        "url": os.environ.get(
+            'MEDIARK_MAIL_URL') or "",
+        "path": os.environ.get(
+            'MEDIARK_MAIL_PATCH') or ""
+    },
     "cloud": {
             "swift": {
                 "auth_url":  "https://auth.cloud.ovh.net/v3/auth/tokens",

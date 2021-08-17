@@ -13,13 +13,14 @@ from ...application.domain.services import (
     CacheService, StandardCacheService,
     FileStoreService, MemoryFileStoreService)
 from ...application.operation.managers import (
-    SessionManager, MediaStorageManager)
+    SessionManager, MediaStorageManager, EmailManager)
 from ...application.operation.informers import (
     FileInformer,
     StandardInformer, StandardFileInformer)
 from ...application.general.suppliers import (
     TenantSupplier, MemoryTenantSupplier,
-    MigrationSupplier, MemoryMigrationSupplier)
+    MigrationSupplier, MemoryMigrationSupplier,
+    EmailSupplier, MemoryEmailSupplier)
 from ..core.common import Config
 
 
@@ -27,7 +28,7 @@ class BaseFactory(Factory):
     def __init__(self, config: Config) -> None:
         self.config = config
         self.public = [
-            'FileInformer', 'StandardInformer',
+            'FileInformer', 'StandardInformer', 'EmailManager'
             'MediaStorageManager', 'SessionManager'
         ]
 
@@ -53,6 +54,9 @@ class BaseFactory(Factory):
 
     def migration_supplier(self) -> MigrationSupplier:
         return MemoryMigrationSupplier()
+
+    def email_supplier(self) -> EmailSupplier:
+        return MemoryEmailSupplier()
 
     # Repositories
 
@@ -80,6 +84,11 @@ class BaseFactory(Factory):
         return transactor(MediaStorageManager)(
             media_repository, id_service,
             file_store_service)
+
+    def email_manager(self, transactor: Transactor,
+                      email_supplier: EmailSupplier,
+                          ) -> EmailManager:
+        return transactor(EmailManager)(email_supplier)
 
     # Services
 

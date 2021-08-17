@@ -14,6 +14,7 @@ test_tuples = [
         #suppliers
         ('TenantSupplier', 'MemoryTenantSupplier'),
         ('MigrationSupplier', 'MemoryMigrationSupplier'),
+        ('EmailSupplier', 'MemoryEmailSupplier'),
         #repositories
         ('MediaRepository', 'MemoryMediaRepository'),
         #service
@@ -22,6 +23,7 @@ test_tuples = [
         #managers
         ('SessionManager', 'SessionManager'),
         ('MediaStorageManager', 'MediaStorageManager'),
+        ('EmailManager', 'EmailManager'),
         #informers
         ('FileInformer', 'StandardFileInformer'),
         ('StandardInformer', 'StandardInformer'),
@@ -48,6 +50,7 @@ test_tuples = [
         ('MediaRepository', 'SqlMediaRepository'),
         ('TenantSupplier', 'SchemaTenantSupplier'),
         ('MigrationSupplier', 'SchemaMigrationSupplier'),
+        ('EmailSupplier', 'SqlEmailSupplier'),
     ]),
 ]
 
