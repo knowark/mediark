@@ -17,7 +17,6 @@
     }
   },
 
-
   "paths": {
     "/media": {
       "head": {
@@ -43,7 +42,7 @@
               "application/json": {
                 "schema": {
                   "allOf": [
-                    {"$ref": "#/components/schemas/Message"},
+                    {"$ref": "#/components/schemas/Media"},
                     {
                       "type": "object",
                       "properties": {
@@ -72,7 +71,7 @@
             "application/json": {
               "schema": {
                 "allOf": [
-                  {"$ref": "#/components/schemas/Message"},
+                  {"$ref": "#/components/schemas/Media"},
                   {
                     "type": "object",
                     "properties": {
@@ -124,20 +123,10 @@
         "tags": ["Download"],
         "responses": {
           "200": {
-            "description": "Download  metadata records",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Download"
-                  }
-                }
-              }
+            "description": "Download  metadata records"
             }
           }
         }
-      }
     },
 
 
@@ -151,7 +140,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Upload"
+                  "$ref": "#/components/schemas/Media"
                 }
               }
             }
@@ -172,7 +161,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Upload"
+                  "$ref": "#/components/schemas/Media"
                 }
               }
             }
@@ -186,6 +175,7 @@
       }
     }
   },
+
 
   "components": {
     "schemas": {

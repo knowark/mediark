@@ -24,7 +24,7 @@ Jinja2==2.11.3
 lockfile==0.12.2
 MarkupSafe==1.1.1
 migrark==0.6.0
-modelark==0.6.4
+modelark==0.6.5
 msgpack==0.6.2
 multidict==5.1.0
 packaging==20.3
