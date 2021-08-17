@@ -18,9 +18,11 @@ class SqlEmailSupplier(EmailSupplier):
     async def process(self, tenant: str, email: dict) -> None:
         template = email['template']
         context = email['context']
-        await super().notify(notification)
+        #await super().notify(notification)
 
-        context = {'url': self.url, **notification}
+        #context = {'url': self.url, **notification}
+
+        content = ""
 
         message = EmailMessage()
         message['From'] = self.sender
