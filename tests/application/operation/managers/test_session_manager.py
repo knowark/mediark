@@ -1,3 +1,4 @@
+import jwt
 from typing import Dict, cast
 from pytest import fixture
 from mediark.application.domain.common import (
@@ -65,6 +66,20 @@ async def test_session_manager_set_user(
     assert session_manager.auth_provider.user.name == 'jdacevedo'
 
 
+async def test_session_manager_set_system(
+        session_manager: SessionManager) -> None:
+
+    await session_manager.set_system({})
+    assert session_manager.auth_provider.user.name == 'system'
+
+
+async def test_session_manager_set_anonymous(
+        session_manager: SessionManager) -> None:
+
+    await session_manager.set_anonymous({})
+    assert session_manager.auth_provider.user.name == 'anonymous'
+
+
 async def test_session_manager_ensure_tenant(session_manager) -> None:
     await session_manager.ensure_tenant({'id': 'T001', 'name': 'Knowark'})
 
@@ -73,20 +88,3 @@ async def test_session_manager_ensure_tenant(session_manager) -> None:
     assert len(tenants) == 1
     assert tenants[0]['id'] == 'T001'
     assert tenants[0]['slug'] == 'knowark'
-
-async def test_session_manager_resolve_tenant(session_manager) -> None:
-    await session_manager.ensure_tenant({'id': 'T001', 'name': 'Knowark'})
-
-    tenants = session_manager.tenant_supplier.search_tenants([])
-
-    assert len(tenants) == 1
-    assert tenants[0]['id'] == 'T001'
-    assert tenants[0]['slug'] == 'knowark'
-
-    tenant_dict = await session_manager.resolve_tenant({
-        'data': 'Knowark'
-    })
-
-    assert len(tenants) == 1
-    assert tenant_dict['id'] == 'T001'
-    assert tenant_dict['slug'] == 'knowark'

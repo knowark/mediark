@@ -81,3 +81,19 @@ async def test_shell_provision(shell):
     result = await shell.provision(options)
 
     assert result is None
+
+async def test_shell_operate(shell):
+    options = {
+        'operation': 'EmailManager.send',
+        'entry': json.dumps({
+            'meta': {},
+            'data': {
+                'recipient': 'info@example.com',
+                'context': 'Prueba'
+            }
+        })
+    }
+
+    result = await shell.operate(options)
+
+    assert result is None

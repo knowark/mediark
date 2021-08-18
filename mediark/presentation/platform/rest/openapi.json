@@ -17,7 +17,6 @@
     }
   },
 
-
   "paths": {
     "/media": {
       "head": {
@@ -43,7 +42,7 @@
               "application/json": {
                 "schema": {
                   "allOf": [
-                    {"$ref": "#/components/schemas/Message"},
+                    {"$ref": "#/components/schemas/Media"},
                     {
                       "type": "object",
                       "properties": {
@@ -72,7 +71,7 @@
             "application/json": {
               "schema": {
                 "allOf": [
-                  {"$ref": "#/components/schemas/Message"},
+                  {"$ref": "#/components/schemas/Media"},
                   {
                     "type": "object",
                     "properties": {
@@ -124,20 +123,10 @@
         "tags": ["Download"],
         "responses": {
           "200": {
-            "description": "Download  metadata records",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Download"
-                  }
-                }
-              }
+            "description": "Download  metadata records"
             }
           }
         }
-      }
     },
 
 
@@ -151,7 +140,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Upload"
+                  "$ref": "#/components/schemas/Media"
                 }
               }
             }
@@ -172,7 +161,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Upload"
+                  "$ref": "#/components/schemas/Media"
                 }
               }
             }
@@ -184,8 +173,53 @@
           }
         }
       }
-    }
-  },
+    },
+
+  "/emails": {
+      "patch": {
+        "operationId": "emailPatchId",
+        "summary": "Set email",
+        "description": "Create or update Email records",
+        "tags": ["Email"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {"$ref": "#/components/schemas/Email"},
+                  {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Email"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [{
+          "name": "Action",
+          "description": "Specialized application actions",
+          "in": "header",
+          "schema": {
+            "type": "string",
+            "enum": ["default"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      }
+  }
+    },
 
   "components": {
     "schemas": {
@@ -213,6 +247,14 @@
           "data": {
             "type": "string"
           }
+        }
+      },
+      "Email":{
+        "recipent": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
         }
       }
     }

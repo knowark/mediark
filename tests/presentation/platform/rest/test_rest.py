@@ -83,7 +83,7 @@ async def test_media_delete(app, headers) -> None:
 
 async def test_media_delete_url(app, headers) -> None:
     id_ = "932eff07-175a-44b5-871b-4bdaae6ad054"
-    response = await app.delete(f'/media/{id_}', headers=headers)
+    response = await app.delete(f'/media/{id}', headers=headers)
     assert response.status == 200
 
 

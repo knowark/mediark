@@ -10,7 +10,8 @@ from ...integration.core.data.sql import (
 from ...integration.core import Config
 from ...application.general.suppliers import TenantSupplier
 from ...integration.drivers import (
-    SchemaTenantSupplier, SchemaMigrationSupplier, SchemaConnection)
+    SchemaTenantSupplier, SchemaMigrationSupplier, SchemaConnection,
+    HttpEmailSupplier)
 from ...application.domain.services.repositories import MediaRepository
 from ..core.data import SqlMediaRepository
 from .directory_factory import DirectoryFactory
@@ -54,6 +55,10 @@ class SqlFactory(DirectoryFactory):
                  self.config['zones'].items()}
         connection = SchemaConnection(self.config['tenancy']['dsn'])
         return SchemaTenantSupplier(connection, zones)
+
+    def email_supplier(self) -> HttpEmailSupplier:
+        config = {**self.config.get('mail',{})}
+        return HttpEmailSupplier(config)
 
     def migration_supplier(
             self, tenant_supplier: TenantSupplier

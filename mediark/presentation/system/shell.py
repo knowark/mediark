@@ -37,6 +37,13 @@ class Shell:
         serve_parser.add_argument('-p', '--port')
         serve_parser.set_defaults(func=self.serve)
 
+        # Operate
+        operate_parser = subparsers.add_parser(
+            'operate', help='Enter Operations.')
+        operate_parser.add_argument('operation')
+        operate_parser.add_argument('entry')
+        operate_parser.set_defaults(func=self.operate)
+
         if len(argv) == 0:
             self.parser.print_help()
             self.parser.exit()
@@ -56,3 +63,13 @@ class Shell:
         logger.info("Creating tenant:", tenant_dict)
         await self.injector['SessionManager'].ensure_tenant(tenant_dict)
         logger.info('END PROVISION')
+
+    async def operate(self, options: Dict[str, str]) -> None:
+        session_manager = self.injector['SessionManager']
+        await session_manager.set_system({})
+        manager, method = options['operation'].split('.')
+        print("ENTRA AL COMANDO")
+        entry = json.loads(options['entry'])
+        result = await getattr(self.injector[manager], method)(entry)
+        logger.info(json.dumps(result, indent=2))
+

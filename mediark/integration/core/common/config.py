@@ -58,6 +58,18 @@ config: Config = {
                 "database": "images.json"
             }
     },
+    "mail": {
+        "sender": os.environ.get(
+            'MEDIARK_MAIL_SENDER') or "",
+        "host": os.environ.get(
+            'MEDIARK_MAIL_HOST') or "",
+        "port": int(os.environ.get(
+            'MEDIARK_MAIL_PORT') or 0),
+        "username": os.environ.get(
+            'MEDIARK_MAIL_USERNAME') or "",
+        "password": os.environ.get(
+            'MEDIARK_MAIL_PASSWORD') or ""
+    },
     "cloud": {
             "swift": {
                 "auth_url":  "https://auth.cloud.ovh.net/v3/auth/tokens",
@@ -82,7 +94,6 @@ config: Config = {
         'client_max_size': 10 * 1024**2
     },
 }
-
 def sanitize(config):
     if type(config) is dict:
         return {key: sanitize(value) for key, value in

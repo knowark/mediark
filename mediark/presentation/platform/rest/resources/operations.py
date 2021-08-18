@@ -32,6 +32,14 @@ def operations():
                     'meta': {'model': 'Media'}
                 }
             }
+        },
+        'emailPatchId': {
+            'actions':{
+                'default':{
+                    'handler': 'EmailManager.send',
+                    'meta': {'model': 'Email'}
+                }
+            }
         }
     }
 
