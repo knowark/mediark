@@ -5,7 +5,8 @@ from ...application.domain.common import (
     AuthProvider, StandardAuthProvider)
 from ...application.domain.services.repositories import (
     RepositoryService,
-    MediaRepository, MemoryMediaRepository)
+    MediaRepository, MemoryMediaRepository,
+    EmailRepository, MemoryEmailRepository)
 from ...application.general.connector import (
     Connector, MemoryConnector, Transactor, MemoryTransactor)
 from ...application.domain.services import (
@@ -66,6 +67,12 @@ class BaseFactory(Factory):
         return MemoryMediaRepository(
             locator=tenant_provider, editor=auth_provider)
 
+    def email_repository(
+            self, tenant_provider: TenantProvider,
+            auth_provider: AuthProvider) -> EmailRepository:
+        return MemoryEmailRepository(
+            locator=tenant_provider, editor=auth_provider)
+
     # Managers
 
     def session_manager(
@@ -117,7 +124,8 @@ class BaseFactory(Factory):
             file_store_service, media_repository)
 
     def repository_service(
-        self, media_repository: MediaRepository) -> RepositoryService:
+        self, media_repository: MediaRepository,
+        email_repository: EmailRepository) -> RepositoryService:
 
         repositories = locals()
         repositories.pop('self')

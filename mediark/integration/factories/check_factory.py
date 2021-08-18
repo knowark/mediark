@@ -2,11 +2,12 @@ from injectark import Config
 from ...application.domain.common import (
     User, Tenant, TenantProvider, StandardTenantProvider,
     AuthProvider, StandardAuthProvider)
-from ...application.domain.models import Media
+from ...application.domain.models import Media, Email
 from ...application.domain.services import (
     FileStoreService)
 from ...application.domain.services.repositories import (
-    MediaRepository, MemoryMediaRepository)
+    MediaRepository, MemoryMediaRepository,
+    EmailRepository, MemoryEmailRepository)
 from ...application.general.suppliers import (
     TenantSupplier, MemoryTenantSupplier)
 from .http_factory import HttpFactory
@@ -46,6 +47,30 @@ class CheckFactory(HttpFactory):
             }
         })
         return media_repository
+
+    def email_repository(
+            self, tenant_provider: TenantProvider,
+            auth_provider: AuthProvider) -> EmailRepository:
+        email_repository = MemoryEmailRepository(
+            locator=tenant_provider, editor=auth_provider)
+        email_repository.load({
+            "default": {
+                "E001": Email(
+                    **{"id": "E001", "name": "activation",
+                       "template": (f"/opt/mediark/templates/mail/"
+                                    f"auth/activation.html"),
+                       "context":{
+                            "type": "activation",
+                            "subject": "New Account Activation",
+                            "recipient": "valenep@example.com",
+                            "owner": "Valentina",
+                            "token": "<verification_token>"
+                            }
+                       }
+                )
+            }
+        })
+        return email_repository
 
     def file_store_service(
             self, tenant_provider: TenantProvider

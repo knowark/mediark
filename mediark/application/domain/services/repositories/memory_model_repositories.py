@@ -1,6 +1,6 @@
 from modelark import (
     Repository, RepositoryResolver, MemoryRepository)
-from ...models import Media
+from ...models import Media, Email
 
 
 class RepositoryService(RepositoryResolver):
@@ -13,3 +13,11 @@ class MediaRepository(Repository):
 
 class MemoryMediaRepository(MemoryRepository, MediaRepository):
     """Memory Media Repository"""
+
+
+class EmailRepository(Repository):
+    model = Email
+
+
+class MemoryEmailRepository(MemoryRepository, EmailRepository):
+    """Memory Email Repository"""
