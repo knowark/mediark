@@ -12,8 +12,9 @@ from ...application.general.suppliers import TenantSupplier
 from ...integration.drivers import (
     SchemaTenantSupplier, SchemaMigrationSupplier, SchemaConnection,
     HttpEmailSupplier)
-from ...application.domain.services.repositories import MediaRepository
-from ..core.data import SqlMediaRepository
+from ...application.domain.services.repositories import (
+    MediaRepository, EmailRepository)
+from ..core.data import SqlMediaRepository, SqlEmailRepository
 from .directory_factory import DirectoryFactory
 
 
@@ -48,6 +49,15 @@ class SqlFactory(DirectoryFactory):
         sql_parser: SqlParser
     ) -> MediaRepository:
         return SqlMediaRepository(
+            tenant_provider, auth_provider, connection_manager, sql_parser)
+
+    def email_repository(
+        self, tenant_provider: TenantProvider,
+        auth_provider: AuthProvider,
+        connection_manager: Connector,
+        sql_parser: SqlParser
+    ) -> EmailRepository:
+        return SqlEmailRepository(
             tenant_provider, auth_provider, connection_manager, sql_parser)
 
     def tenant_supplier(self) -> TenantSupplier:

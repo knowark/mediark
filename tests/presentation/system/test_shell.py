@@ -86,12 +86,23 @@ async def test_shell_operate(shell):
     options = {
         'operation': 'EmailManager.send',
         'entry': json.dumps({
-            'meta': {},
-            'data': {
-                'recipient': 'info@example.com',
-                'context': 'Prueba'
+            'meta': {
+                "model": "Email"
+            },
+            'data':
+                [{
+                    "template": "mail/auth/activation.html",
+                    "context": {
+                        "type": "activation",
+                        "subject": "New Account Activation",
+                        "recipient": "valenep@example.com",
+                        "owner": "Valentina",
+                        "token": "<verification_token>"
+                    }
+                }]
+
             }
-        })
+        )
     }
 
     result = await shell.operate(options)

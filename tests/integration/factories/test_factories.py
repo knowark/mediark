@@ -17,6 +17,7 @@ test_tuples = [
         ('EmailSupplier', 'MemoryEmailSupplier'),
         #repositories
         ('MediaRepository', 'MemoryMediaRepository'),
+        ('EmailRepository', 'MemoryEmailRepository'),
         #service
         ('IdService', 'StandardIdService'),
         ('FileStoreService', 'MemoryFileStoreService'),
@@ -31,6 +32,7 @@ test_tuples = [
     ('CheckFactory', [
         ('TenantSupplier', 'MemoryTenantSupplier'),
         ('MediaRepository', 'MemoryMediaRepository'),
+        ('EmailRepository', 'MemoryEmailRepository'),
     ]),
     ('CloudFactory', [
         ('SwiftAuthSupplier', 'SwiftAuthSupplier'),
@@ -48,6 +50,7 @@ test_tuples = [
         ('Connector', 'SqlConnector'),
         ('Transactor', 'SqlTransactor'),
         ('MediaRepository', 'SqlMediaRepository'),
+        ('EmailRepository', 'SqlEmailRepository'),
         ('TenantSupplier', 'SchemaTenantSupplier'),
         ('MigrationSupplier', 'SchemaMigrationSupplier'),
         ('EmailSupplier', 'HttpEmailSupplier'),
