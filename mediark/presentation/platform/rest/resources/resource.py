@@ -45,6 +45,36 @@ class Resource:
         result = await handler({'meta': meta})
         return web.json_response(normalize(result))
 
+    async def patch(self, request: web.Request) -> web.Response:
+        entry = loads(await request.text())
+        action = entry.get('meta', {}).get('action','default')
+
+        resource = request.match_info['resource']
+        path = self.paths[f'/{resource}']['patch']
+
+        handler, fixed_meta = self.resolve_operation(
+            path['operationId'], action)
+
+        entry.setdefault('meta', {}).update(fixed_meta)
+        result = await handler(normalize(entry, 'snake'))
+
+        return web.json_response(normalize(result))
+
+    async def delete(self, request: web.Request) -> web.Response:
+        ids = await get_request_ids(request)
+        action = 'default'
+
+        resource = request.match_info['resource']
+        path = self.paths[f'/{resource}']['delete']
+
+        handler, fixed_meta = self.resolve_operation(
+            path['operationId'], action)
+
+        entry = {'meta': fixed_meta, 'data': ids}
+        result = await handler(entry)
+
+        return web.json_response(result)
+
 
     def resolve_operation(
         self, operationId: str, action: str) -> Tuple[Callable, Dict]:

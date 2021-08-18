@@ -3,7 +3,8 @@ from mediark.application.domain.common import (
     QueryParser, DataDict, DataValidationError,
     StandardTenantProvider, Tenant, RecordList,
     StandardAuthProvider, User)
-from mediark.application.general.suppliers import EmailSupplier
+from mediark.application.general.suppliers import (EmailSupplier,
+                                                   MemoryEmailSupplier)
 from mediark.application.operation.managers import EmailManager
 
 
@@ -29,31 +30,32 @@ def tenant_provider() -> StandardTenantProvider:
     tenant_provider.setup(Tenant(name="Default"))
     return tenant_provider
 
+
 @fixture
 def email_supplier() -> EmailSupplier:
     return MemoryEmailSupplier()
 
+
 @fixture
-def email_manager() -> EmailManager:
+def email_manager(email_supplier) -> EmailManager:
     return EmailManager(email_supplier)
 
-def test_email_manager_instantiation(email_manager) -> None:
-    assert hasattr(email_manager, 'process')
 
-async def test_email_manager_process(
+def test_email_manager_instantiation(email_manager) -> None:
+    assert hasattr(email_manager, 'send')
+
+async def test_email_manager_send(
     email_manager: EmailManager) -> None:
 
     payload = {
-            'email_to': 'info@example.com',
-            'title': 'Envio Directo',
-            'body': 'Mensaje directo sin abstracción'
+            'recipient': 'info@example.com',
+            'context': 'Envio Directo'
         }
 
 
-    await email_manager.process({
+    await email_manager.send({
                 "data": payload,
                 "meta":{
-                    "tenant": "knowark"
                 }
             })
 

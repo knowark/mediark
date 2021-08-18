@@ -1,1 +1,1 @@
-from .sql_email_supplier import SqlEmailSupplier
+from .http_email_supplier import HttpEmailSupplier

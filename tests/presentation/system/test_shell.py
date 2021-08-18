@@ -84,10 +84,13 @@ async def test_shell_provision(shell):
 
 async def test_shell_operate(shell):
     options = {
-        'operation': 'EmailManager.process',
+        'operation': 'EmailManager.send',
         'entry': json.dumps({
-            'meta': {'tenant':'knowark'},
-            'data': {}
+            'meta': {},
+            'data': {
+                'recipient': 'info@example.com',
+                'context': 'Prueba'
+            }
         })
     }
 

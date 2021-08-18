@@ -50,7 +50,7 @@ test_tuples = [
         ('MediaRepository', 'SqlMediaRepository'),
         ('TenantSupplier', 'SchemaTenantSupplier'),
         ('MigrationSupplier', 'SchemaMigrationSupplier'),
-        ('EmailSupplier', 'SqlEmailSupplier'),
+        ('EmailSupplier', 'HttpEmailSupplier'),
     ]),
 ]
 

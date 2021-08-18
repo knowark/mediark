@@ -68,11 +68,7 @@ config: Config = {
         "username": os.environ.get(
             'MEDIARK_MAIL_USERNAME') or "",
         "password": os.environ.get(
-            'MEDIARK_MAIL_PASSWORD') or "",
-        "url": os.environ.get(
-            'MEDIARK_MAIL_URL') or "",
-        "path": os.environ.get(
-            'MEDIARK_MAIL_PATCH') or ""
+            'MEDIARK_MAIL_PASSWORD') or ""
     },
     "cloud": {
             "swift": {
@@ -98,7 +94,6 @@ config: Config = {
         'client_max_size': 10 * 1024**2
     },
 }
-
 def sanitize(config):
     if type(config) is dict:
         return {key: sanitize(value) for key, value in

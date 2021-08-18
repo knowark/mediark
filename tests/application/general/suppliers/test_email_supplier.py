@@ -4,18 +4,16 @@ from mediark.application.general.suppliers import (
 
 def test_email_supplier_methods() -> None:
     methods = EmailSupplier.__abstractmethods__  # type: ignore
-    assert 'process' in methods
+    assert 'send' in methods
 
 async def test_memory_email_suplier_process() -> None:
     email_supplier = MemoryEmailSupplier()
 
-    email = {
-            'email_to': 'info@example.com',
-            'title': 'Envio Directo',
-            'body': 'Mensaje directo sin abstracción'
+    payload = {
+            'recipient': 'info@example.com',
+            'conext': 'Envio Directo'
         }
-    tenant = "knowark"
 
-    await email_supplier.process(tenant, email)
+    await email_supplier.send(payload)
 
-    assert email_supplier._process == True
+    assert email_supplier._send == True

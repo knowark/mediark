@@ -173,9 +173,53 @@
           }
         }
       }
-    }
-  },
+    },
 
+  "/emails": {
+      "patch": {
+        "operationId": "emailPatchId",
+        "summary": "Set email",
+        "description": "Create or update Email records",
+        "tags": ["Email"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {"$ref": "#/components/schemas/Email"},
+                  {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Email"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [{
+          "name": "Action",
+          "description": "Specialized application actions",
+          "in": "header",
+          "schema": {
+            "type": "string",
+            "enum": ["default"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      }
+  }
+    },
 
   "components": {
     "schemas": {
@@ -203,6 +247,14 @@
           "data": {
             "type": "string"
           }
+        }
+      },
+      "Email":{
+        "recipent": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
         }
       }
     }

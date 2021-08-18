@@ -4,9 +4,9 @@ from abc import ABC, abstractmethod
 
 class EmailSupplier(ABC):
     @abstractmethod
-    async def process(self, tenant: str, email: dict) -> None:
-        """Process method to be implemented."""
+    async def send(self, payload: dict) -> None:
+        """Send method to be implemented."""
 
 class MemoryEmailSupplier(EmailSupplier):
-    async def process(self, tenant: str, email: dict) -> None:
-        self._process = True
+    async def send(self, payload: dict) -> None:
+        self._send = True

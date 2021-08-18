@@ -68,6 +68,7 @@ class Shell:
         session_manager = self.injector['SessionManager']
         await session_manager.set_system({})
         manager, method = options['operation'].split('.')
+        print("ENTRA AL COMANDO")
         entry = json.loads(options['entry'])
         result = await getattr(self.injector[manager], method)(entry)
         logger.info(json.dumps(result, indent=2))

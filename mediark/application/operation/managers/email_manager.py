@@ -5,9 +5,7 @@ class EmailManager:
     def __init__(self, email_supplier: EmailSupplier) -> None:
         self.email_supplier = email_supplier
 
-    async def process(self, entry: dict) -> dict:
+    async def send(self, entry: dict) -> dict:
         meta, data = entry['meta'], entry['data']
-        tenant = meta['tenant']
-        await EmailSupplier.process(self, tenant, data)
-        #await self.email_supplier.process(tenant, data)
+        await self.email_supplier.send(data)
         return {"data": "Email send successfully"}

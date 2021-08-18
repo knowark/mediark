@@ -23,6 +23,9 @@ class RestApplication(web.Application):
         templates = str(Path(__file__).parent / 'resources')
         aiohttp_jinja2.setup(self, loader=FileSystemLoader(templates))
 
+        spec = json.loads(
+            (Path(__file__).parent / 'openapi.json').read_text())
+
         self.cleanup_ctx.append(self._http_client)
 
         self.router.add_route(
@@ -37,7 +40,23 @@ class RestApplication(web.Application):
             "put", '/upload',
             getattr(UploadResource(self.injector), "put", None))
 
-        self._create_api()
+        self.router.add_route(
+            "patch", '/media',
+            getattr(MediaResource(spec, self.injector), "patch", None))
+
+        self.router.add_route(
+            "patch", '/media/{id}',
+            getattr(MediaResource(spec, self.injector), "patch", None))
+
+        self.router.add_route(
+            "delete", '/media',
+            getattr(MediaResource(spec, self.injector), "delete", None))
+
+        self.router.add_route(
+            "delete", '/media/{id}',
+            getattr(MediaResource(spec, self.injector), "delete", None))
+
+        self._create_api(spec)
 
     @staticmethod
     async def _http_client(app: web.Application):
@@ -46,11 +65,10 @@ class RestApplication(web.Application):
         yield
         await session.close()
 
-    def _create_api(self) -> None:
-        spec = json.loads(
-            (Path(__file__).parent / 'openapi.json').read_text())
+    def _create_api(self, spec) -> None:
+        # spec = json.loads(
+            # (Path(__file__).parent / 'openapi.json').read_text())
 
-        mediaresource = MediaResource(spec, self.injector)
         resource = Resource(spec, self.injector)
 
         self.add_routes([
@@ -64,10 +82,10 @@ class RestApplication(web.Application):
 
             web.head('/{resource}', resource.head),
 
-            web.patch('/{resource}/{id}', mediaresource.patch),
-            web.patch('/{resource}', mediaresource.patch),
+            web.patch('/{resource}/{id}', resource.patch),
+            web.patch('/{resource}', resource.patch),
 
-            web.delete('/{resource}/{id}', mediaresource.delete),
-            web.delete('/{resource}', mediaresource.delete)
+            web.delete('/{resource}/{id}', resource.delete),
+            web.delete('/{resource}', resource.delete)
         ])
 

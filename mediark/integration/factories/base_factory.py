@@ -28,7 +28,7 @@ class BaseFactory(Factory):
     def __init__(self, config: Config) -> None:
         self.config = config
         self.public = [
-            'FileInformer', 'StandardInformer', 'EmailManager'
+            'FileInformer', 'StandardInformer', 'EmailManager',
             'MediaStorageManager', 'SessionManager'
         ]
 
@@ -88,7 +88,7 @@ class BaseFactory(Factory):
     def email_manager(self, transactor: Transactor,
                       email_supplier: EmailSupplier,
                           ) -> EmailManager:
-        return transactor(EmailManager)(email_supplier)
+        return EmailManager(email_supplier)
 
     # Services
 
