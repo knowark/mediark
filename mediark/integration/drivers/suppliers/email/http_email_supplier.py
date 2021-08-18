@@ -21,7 +21,7 @@ class HttpEmailSupplier(EmailSupplier):
         message = str(payload['context'])
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL(self.host, self.port, context=context) as server:
-            print(f'Loging into gmail with port {port}...')
+            print(f'Loging into gmail with port {self.port}...')
             server.login(self.sender, self.password)
 
             server.sendmail(self.sender, recipient, message)

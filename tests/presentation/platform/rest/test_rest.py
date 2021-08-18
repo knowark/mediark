@@ -83,7 +83,7 @@ async def test_media_delete(app, headers) -> None:
 
 async def test_media_delete_url(app, headers) -> None:
     id_ = "932eff07-175a-44b5-871b-4bdaae6ad054"
-    response = await app.delete(f'/media/{id}', headers=headers)
+    response = await app.delete(f'/media/{id_}', headers=headers)
     assert response.status == 200
 
 
@@ -167,3 +167,18 @@ async def test_media_get_unauthorized(app) -> None:
     assert response.status == 401
     data_dict = loads(content)
     assert 'errors' in data_dict
+
+# Emails
+
+async def test_email_patch(app, headers) -> None:
+    payload = dumps({
+                    "meta":{},
+                    "data": {
+                        'recipient': 'info@example.com',
+                        'context': 'Envio Directo'
+                        }
+                  })
+
+
+    response = await app.patch('/emails', data=payload, headers=headers)
+    assert response.status == 200
