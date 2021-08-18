@@ -68,7 +68,9 @@ config: Config = {
         "username": os.environ.get(
             'MEDIARK_MAIL_USERNAME') or "",
         "password": os.environ.get(
-            'MEDIARK_MAIL_PASSWORD') or ""
+            'MEDIARK_MAIL_PASSWORD') or "",
+        "path": os.environ.get(
+            'MEDIARK_MAIL_PATCH') or ""
     },
     "cloud": {
             "swift": {

@@ -171,13 +171,23 @@ async def test_media_get_unauthorized(app) -> None:
 # Emails
 
 async def test_email_patch(app, headers) -> None:
+    data = [{
+        "template": "mail/auth/activation.html",
+        "context": {
+            "type": "activation",
+            "subject": "New Account Activation",
+            "recipient": "valenep@example.com",
+            "owner": "Valentina",
+            "token": "<verification_token>"
+            }
+        }]
+
     payload = dumps({
-                    "meta":{},
-                    "data": {
-                        'recipient': 'info@example.com',
-                        'context': 'Envio Directo'
-                        }
-                  })
+                    "meta":{
+                        "model": "Email"
+                    },
+                    "data": data
+    })
 
 
     response = await app.patch('/emails', data=payload, headers=headers)
