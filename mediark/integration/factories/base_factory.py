@@ -14,7 +14,7 @@ from ...application.domain.services import (
     CacheService, StandardCacheService,
     FileStoreService, MemoryFileStoreService)
 from ...application.operation.managers import (
-    SessionManager, MediaStorageManager, EmailManager)
+    SessionManager, MediaStorageManager, EmailManager, SetupManager)
 from ...application.operation.informers import (
     FileInformer,
     StandardInformer, StandardFileInformer)
@@ -30,7 +30,7 @@ class BaseFactory(Factory):
         self.config = config
         self.public = [
             'FileInformer', 'StandardInformer', 'EmailManager',
-            'MediaStorageManager', 'SessionManager'
+            'MediaStorageManager', 'SessionManager', 'SetupManager'
         ]
 
     # Providers
@@ -98,6 +98,11 @@ class BaseFactory(Factory):
                           ) -> EmailManager:
         config = {**self.config.get('mail',{})}
         return EmailManager(config, email_supplier, repository_service)
+
+    def setup_manager(
+        self, migration_supplier: MigrationSupplier
+    ) -> SetupManager:
+        return SetupManager(migration_supplier)
 
     # Services
 

@@ -25,5 +25,5 @@ class SqlEmailRepository(SqlRepository, EmailRepository):
                  auth_provider: AuthProvider,
                  connection_manager: Connector,
                  parser: SqlParser) -> None:
-        super().__init__('email', Email, connection_manager,
+        super().__init__('emails', Email, connection_manager,
                          parser, tenant_provider, auth_provider)

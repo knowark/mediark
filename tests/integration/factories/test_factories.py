@@ -25,6 +25,7 @@ test_tuples = [
         ('SessionManager', 'SessionManager'),
         ('MediaStorageManager', 'MediaStorageManager'),
         ('EmailManager', 'EmailManager'),
+        ('SetupManager', 'SetupManager'),
         #informers
         ('FileInformer', 'StandardFileInformer'),
         ('StandardInformer', 'StandardInformer'),
