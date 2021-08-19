@@ -56,10 +56,6 @@ async def test_http_email_supplier_process(
                 }]
     await http_email_supplier.send(payload)
 
-    print("dir>>>",http_email_supplier.smtp.SMTP_SSL.call_args)
-
-    print("dir>>>",http_email_supplier.smtp.SMTP_SSL.call_args_list)
-
     call_args_list = http_email_supplier.smtp.SMTP_SSL.call_args
     assert call_args_list.args[0] == "smtp.dreamhost.com"
     assert call_args_list.args[1] == "465"
