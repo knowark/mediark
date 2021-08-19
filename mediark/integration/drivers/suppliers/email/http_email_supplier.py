@@ -49,5 +49,5 @@ class HttpEmailSupplier(EmailSupplier):
                 self.host, self.port, context=context) as server:
                 print(f'Loging  with port {self.port}...')
                 server.login(self.username, self.password)
-                server.sendmail(self.sender, recipient, message)
+                server.sendmail(self.sender, recipient, message.as_string())
 
