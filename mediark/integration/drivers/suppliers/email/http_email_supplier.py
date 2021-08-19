@@ -48,6 +48,6 @@ class HttpEmailSupplier(EmailSupplier):
             with self.smtp.SMTP_SSL(
                 self.host, self.port, context=context) as server:
                 print(f'Loging  with port {self.port}...')
-                server.login(self.sender, self.password)
+                server.login(self.username, self.password)
                 server.sendmail(self.sender, recipient, message)
 
