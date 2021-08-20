@@ -36,10 +36,10 @@ class HttpEmailSupplier(EmailSupplier):
             autoescape=select_autoescape(['html', 'xml']))
             html = env.get_template(file_name).render(**context)
 
-            recipient = context['recipient']
+            recipient = record['recipient']
 
             message = MIMEMultipart("alternative")
-            message["Subject"] = context['subject']
+            message["Subject"] = record['subject']
             message["From"] = self.sender
             message["To"] = recipient
             part2 = MIMEText(html, "html")

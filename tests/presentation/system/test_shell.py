@@ -87,17 +87,17 @@ async def test_shell_operate(shell):
         'operation': 'EmailManager.send',
         'entry': json.dumps({
             'meta': {
-                "model": "Email"
             },
             'data':
                 [{
-                    "template": "mail/auth/activation.html",
+                    "template": "mail/auth/registered.html",
+                    "recipient": "info@example.com",
+                    "subject": "New Registered",
+                    "type": "registered",
                     "context": {
-                        "type": "activation",
-                        "subject": "New Account Activation",
-                        "recipient": "valenep@example.com",
-                        "owner": "Valentina",
-                        "token": "<verification_token>"
+                        "user_name": "Info",
+                        "shop_url": "https://www.tempos.site",
+                        "unsubscribe_link": "https://www.tempos.site"
                     }
                 }]
 
