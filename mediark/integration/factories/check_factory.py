@@ -56,15 +56,16 @@ class CheckFactory(HttpFactory):
         email_repository.load({
             "default": {
                 "E001": Email(
-                    **{"id": "E001", "name": "activation",
-                       "template": (f"/opt/mediark/templates/mail/"
-                                    f"auth/activation.html"),
-                       "context":{
-                            "type": "activation",
-                            "subject": "New Account Activation",
-                            "recipient": "valenep@example.com",
-                            "owner": "Valentina",
-                            "token": "<verification_token>"
+                    **{"id": "E001",
+                       "name": "registered",
+                       "template": "mail/auth/registered.html",
+			"recipient": "info@example.com",
+			"subject": "New Register",
+			"type": "registered",
+                        "context": {
+                            "user_name": "Info",
+                            "shop_url": "https://www.tempos.site",
+                            "unsubscribe_link": "https://www.tempos.site"
                             }
                        }
                 )

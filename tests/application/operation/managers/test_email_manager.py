@@ -39,10 +39,6 @@ def email_repository(tenant_provider, auth_provider):
     return MemoryEmailRepository(
         QueryParser(), tenant_provider, auth_provider)
 
-@fixture
-def repository_service(email_repository):
-    return RepositoryService([email_repository])
-
 
 @fixture
 def email_supplier() -> EmailSupplier:
@@ -50,11 +46,11 @@ def email_supplier() -> EmailSupplier:
 
 
 @fixture
-def email_manager(email_supplier, repository_service) -> EmailManager:
+def email_manager(email_supplier, email_repository) -> EmailManager:
     return EmailManager({
         "path": "/opt/mediark/templates/"
     },
-    email_supplier, repository_service)
+    email_supplier, email_repository)
 
 
 def test_email_manager_instantiation(email_manager) -> None:
@@ -64,21 +60,20 @@ async def test_email_manager_send(
     email_manager: EmailManager) -> None:
 
     payload = [{
-        "template": "mail/auth/activation.html",
+        "template": "mail/auth/registered.html",
+        "recipient": "info@example.com",
+        "subject": "New Registered",
+        "type": "registered",
         "context": {
-            "type": "activation",
-            "subject": "New Account Activation",
-            "recipient": "valenep@example.com",
-            "owner": "Valentina",
-            "token": "<verification_token>"
+            "user_name": "Info",
+            "shop_url": "https://www.tempos.site",
+            "unsubscribe_link": "https://www.tempos.site"
             }
         }]
 
 
     await email_manager.send({
                 "data": payload,
-                "meta":{
-                    "model": "Email"
-                }
+                "meta":{}
             })
 

@@ -42,18 +42,19 @@ async def test_http_email_supplier_process(
 
 
     payload = [{
-                    "id": "E001",
-                    "template": "mail/auth/registered.html",
-                    "context": {
-                        "type": "registered",
-                        "user_name": "Pepe Perez",
-                        "shop_url": "tempos.site",
-                        "unsubscribe_link": "tempos.site",
-                        "subject": "Nuevo Registro",
-                        "recipient": "valenep@example.com",
-                        "owner": "Valentina"
-                    }
-                }]
+        "id": "001",
+        "template": "mail/auth/registered.html",
+        "recipient": "info@example.com",
+        "subject": "New Registered",
+        "type": "registered",
+        "context": {
+            "user_name": "Info",
+            "shop_url": "https://www.tempos.site",
+            "unsubscribe_link": "https://www.tempos.site"
+            }
+
+    }]
+
     await http_email_supplier.send(payload)
 
     call_args_list = http_email_supplier.smtp.SMTP_SSL.call_args
