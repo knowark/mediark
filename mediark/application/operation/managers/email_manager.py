@@ -17,4 +17,4 @@ class EmailManager:
 
         result = [vars(item) for item in await self.email_repository.add(items)]
         await self.email_supplier.send(result)
-        return {"data": "Email send successfully"}
+        return {"data": result}
