@@ -2,6 +2,8 @@
 
 app_user: "{{ app_user }}"
 
+app_name: "{{ app_user | title }}"
+
 app_home: /opt/{{ app_user }}
 
 # Directories
@@ -30,14 +32,6 @@ app_configuration_path: "{{ app_configuration_directory }}/config.json"
 
 app_database_path: "{{ app_data_directory }}/data.json"
 
-app_port: 8080
-
-app_port1: 6291
-
-app_port2: 6292
-
-app_port3: 6293
-
 # Database
 
 postgresql_version: 12
@@ -48,6 +42,12 @@ sites_available: "/etc/nginx/sites-available"
 
 sites_enabled: "/etc/nginx/sites-enabled"
 
-# Service 
+# Service
 
 service_path: "/etc/systemd/system"
+
+app_servers:
+  - 8090
+
+app_workers:
+  - 1
