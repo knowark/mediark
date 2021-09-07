@@ -100,10 +100,14 @@ class BaseFactory(Factory):
 
     def email_manager(self, transactor: Transactor,
                       email_supplier: EmailSupplier,
-                      email_repository: EmailRepository
-                          ) -> EmailManager:
+                      email_repository: EmailRepository,
+                      plan_supplier: PlanSupplier,
+                      tenant_provider: TenantProvider,
+                      auth_provider: AuthProvider
+                      ) -> EmailManager:
         config = {**self.config.get('mail',{})}
-        return EmailManager(config, email_supplier, email_repository)
+        return EmailManager(config, email_supplier, email_repository,
+                            plan_supplier, tenant_provider, auth_provider)
 
     def setup_manager(
         self, plan_supplier: PlanSupplier,

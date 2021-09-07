@@ -111,12 +111,13 @@ async def test_shell_schedule(shell, monkeypatch):
 
 async def test_shell_operate(shell):
     options = {
-        'operation': 'EmailManager.send',
+        'operation': 'EmailManager.request',
         'entry': json.dumps({
             'meta': {
             },
             'data':
                 [{
+                    "id": "001",
                     "template": "mail/auth/registered.html",
                     "recipient": "info@example.com",
                     "subject": "New Registered",
