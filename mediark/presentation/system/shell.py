@@ -6,6 +6,7 @@ from injectark import Injectark
 from typing import List
 from ...integration.core import Config
 from ..platform.rest import RestApplication
+from .scheduler import Scheduler
 
 
 logging.basicConfig(level=logging.INFO)
@@ -37,6 +38,16 @@ class Shell:
         serve_parser.add_argument('-p', '--port')
         serve_parser.set_defaults(func=self.serve)
 
+        # Work
+        work_parser = subparsers.add_parser(
+            'work', help='Start background worker.')
+        work_parser.set_defaults(func=self.work)
+
+        # Time
+        time_parser = subparsers.add_parser(
+            'time', help='Start system timer.')
+        time_parser.set_defaults(func=self.time)
+
         # Operate
         operate_parser = subparsers.add_parser(
             'operate', help='Enter Operations.')
@@ -56,6 +67,16 @@ class Shell:
         app = RestApplication(self.injector)
         await RestApplication.run(app, port)
         logger.info('END SERVE')
+
+    async def work(self, options_dict: Dict[str, str]) -> None:
+        logger.info('WORK')
+        await Scheduler(self.injector).run(options_dict)
+        logger.info('END WORK')
+
+    async def time(self, options_dict: Dict[str, str]) -> None:
+        logger.info('TIME')
+        await Scheduler(self.injector).run({'time': True})
+        logger.info('END TIME')
 
     async def provision(self, options: Dict[str, str]) -> None:
         logger.info('PROVISION')

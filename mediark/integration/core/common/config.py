@@ -95,6 +95,10 @@ config: Config = {
     'aiohttp': {
         'client_max_size': 10 * 1024**2
     },
+    'scheduler': {
+        'dsn': os.environ.get('MEDIARK_SCHEDULER_DSN') or (
+            "postgresql://mediark:mediark@localhost/mediark")
+    }
 }
 def sanitize(config):
     if type(config) is dict:
