@@ -23,8 +23,35 @@ def test_send_email_job_instantiation(injector):
 
 async def test_send_email_job_call(injector):
     job = SendEmailJob(injector)
+    payload = {
+        "meta": {
+            "authorization":  (
+            #     "tid": "001",
+            #     "uid": "001",
+            #     "tenant": "Knowark",
+            #     "name": "John Doe",
+            #     "email": "john@doe.com"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aWQiOiIwMDEiLCJ1aWQiOi"
+            "IwMDEiLCJ0ZW5hbnQiOiJLbm93YXJrIiwibmFtZSI6IkpvaG4gRG9lIiwiZW1ha"
+            "WwiOiJqb2huQGRvZS5jb20ifQ.udlkUWVOatst5IoDRlJsQVn"
+            "U_atCAltOelOJvRCr8BY"
+        )},
+        'data': {'email_id': '001'}
+    }
 
-    task = None  # TODO: task should be a simple dict.
-    result = await job(task)
+    task = Task(payload=payload)
+    result =  await job(task)
 
-    assert result == None
+    assert result == {}
+
+    payload = {
+        "meta": {
+            "authorization":  ""
+        },
+        'data': {'email_id': '001'}
+    }
+
+    task = Task(payload=payload)
+    result =  await job(task)
+
+    assert result == {'error': 'DecodeError: Not enough segments'}

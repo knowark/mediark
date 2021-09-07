@@ -15,6 +15,9 @@ config: Config = {
         "dsn": os.environ.get('MEDIARK_TENANCY_DSN') or (
             "postgresql://mediark:mediark@localhost/mediark")
     },
+    'secrets': {
+        'tokens': os.environ.get('SERTEMPOS_TOKENS_SECRET') or ''
+    },
     'zones': {
         "default": {
             "dsn": os.environ.get('MEDIARK_ZONES_DEFAULT_DSN') or (
