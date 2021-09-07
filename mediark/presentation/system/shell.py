@@ -26,6 +26,11 @@ class Shell:
     async def parse(self, argv: List[str]) -> Namespace:
         subparsers = self.parser.add_subparsers()
 
+        # Prepare
+        prepare_parser = subparsers.add_parser(
+            'prepare', help='Prepare the application infrastructure.')
+        prepare_parser.set_defaults(func=self.prepare)
+
         # Provision
         provision_parser = subparsers.add_parser(
             'provision', help='Provision new tenants.')
@@ -48,6 +53,13 @@ class Shell:
             'time', help='Start system timer.')
         time_parser.set_defaults(func=self.time)
 
+        # Schedule
+        schedule_parser = subparsers.add_parser(
+            'schedule', help='Start scheduler.')
+        schedule_parser.add_argument('-w', '--work', action='store_true')
+        schedule_parser.add_argument('-t', '--time', action='store_true')
+        schedule_parser.set_defaults(func=self.schedule)
+
         # Operate
         operate_parser = subparsers.add_parser(
             'operate', help='Enter Operations.')
@@ -60,6 +72,12 @@ class Shell:
             self.parser.exit()
 
         return self.parser.parse_args(argv)
+
+    async def prepare(self, options: Dict[str, str]) -> None:
+        logger.info('PREPARE')
+        await self.injector['SessionManager'].set_system({})
+        await self.injector['SetupManager'].prepare({})
+        logger.info('END PREPARE')
 
     async def serve(self, options: Dict[str, str]) -> None:
         logger.info('SERVE')
@@ -84,6 +102,12 @@ class Shell:
         logger.info("Creating tenant:", tenant_dict)
         await self.injector['SessionManager'].ensure_tenant(tenant_dict)
         logger.info('END PROVISION')
+
+    async def schedule(self, options: Dict[str, str]) -> None:
+        logger.info('SCHEDULE')
+        scheduler = Scheduler(self.injector)
+        await scheduler.run(options)
+        logger.info('END SCHEDULE')
 
     async def operate(self, options: Dict[str, str]) -> None:
         session_manager = self.injector['SessionManager']

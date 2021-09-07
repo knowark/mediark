@@ -21,7 +21,8 @@ from ...application.operation.informers import (
 from ...application.general.suppliers import (
     TenantSupplier, MemoryTenantSupplier,
     MigrationSupplier, MemoryMigrationSupplier,
-    EmailSupplier, MemoryEmailSupplier)
+    EmailSupplier, MemoryEmailSupplier,
+    PlanSupplier, MemoryPlanSupplier)
 from ..core.common import Config
 
 
@@ -58,6 +59,11 @@ class BaseFactory(Factory):
 
     def email_supplier(self) -> EmailSupplier:
         return MemoryEmailSupplier()
+
+    def plan_supplier(
+        self, connector: Connector,
+    ) -> PlanSupplier:
+        return MemoryPlanSupplier()
 
     # Repositories
 
@@ -100,9 +106,11 @@ class BaseFactory(Factory):
         return EmailManager(config, email_supplier, email_repository)
 
     def setup_manager(
-        self, migration_supplier: MigrationSupplier
+        self, plan_supplier: PlanSupplier,
+        migration_supplier: MigrationSupplier
     ) -> SetupManager:
-        return SetupManager(migration_supplier)
+        return SetupManager(
+            plan_supplier, migration_supplier)
 
     # Services
 

@@ -15,6 +15,7 @@ test_tuples = [
         ('TenantSupplier', 'MemoryTenantSupplier'),
         ('MigrationSupplier', 'MemoryMigrationSupplier'),
         ('EmailSupplier', 'MemoryEmailSupplier'),
+        ('PlanSupplier', 'MemoryPlanSupplier'),
         #repositories
         ('MediaRepository', 'MemoryMediaRepository'),
         ('EmailRepository', 'MemoryEmailRepository'),
@@ -55,6 +56,7 @@ test_tuples = [
         ('TenantSupplier', 'SchemaTenantSupplier'),
         ('MigrationSupplier', 'SchemaMigrationSupplier'),
         ('EmailSupplier', 'HttpEmailSupplier'),
+        ('PlanSupplier', 'SqlPlanSupplier'),
     ]),
 ]
 

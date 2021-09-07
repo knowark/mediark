@@ -44,6 +44,13 @@ async def test_shell_parse_empty_argv(shell):
     with raises(SystemExit) as e:
         result = await shell.parse([])
 
+async def test_shell_prepare(shell):
+    options = {}
+
+    result = await shell.prepare(options)
+
+    assert result is None
+
 
 async def test_shell_serve(shell, monkeypatch):
     called = False
@@ -81,6 +88,26 @@ async def test_shell_provision(shell):
     result = await shell.provision(options)
 
     assert result is None
+
+async def test_shell_schedule(shell, monkeypatch):
+    given_options = None
+
+    class MockScheduler:
+        def __init__(self, injector):
+            pass
+
+        async def run(self, options):
+            nonlocal given_options
+            given_options = options
+
+    monkeypatch.setattr(
+        shell_module, 'Scheduler', MockScheduler)
+
+    await shell.schedule({
+        'work': True
+    })
+
+    assert given_options == {'work': True}
 
 async def test_shell_operate(shell):
     options = {
