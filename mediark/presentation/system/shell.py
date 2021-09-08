@@ -6,6 +6,7 @@ from injectark import Injectark
 from typing import List
 from ...integration.core import Config
 from ..platform.rest import RestApplication
+from .scheduler import Scheduler
 
 
 logging.basicConfig(level=logging.INFO)
@@ -25,6 +26,11 @@ class Shell:
     async def parse(self, argv: List[str]) -> Namespace:
         subparsers = self.parser.add_subparsers()
 
+        # Prepare
+        prepare_parser = subparsers.add_parser(
+            'prepare', help='Prepare the application infrastructure.')
+        prepare_parser.set_defaults(func=self.prepare)
+
         # Provision
         provision_parser = subparsers.add_parser(
             'provision', help='Provision new tenants.')
@@ -36,6 +42,23 @@ class Shell:
             'serve', help='Start HTTP server.')
         serve_parser.add_argument('-p', '--port')
         serve_parser.set_defaults(func=self.serve)
+
+        # Work
+        work_parser = subparsers.add_parser(
+            'work', help='Start background worker.')
+        work_parser.set_defaults(func=self.work)
+
+        # Time
+        time_parser = subparsers.add_parser(
+            'time', help='Start system timer.')
+        time_parser.set_defaults(func=self.time)
+
+        # Schedule
+        schedule_parser = subparsers.add_parser(
+            'schedule', help='Start scheduler.')
+        schedule_parser.add_argument('-w', '--work', action='store_true')
+        schedule_parser.add_argument('-t', '--time', action='store_true')
+        schedule_parser.set_defaults(func=self.schedule)
 
         # Operate
         operate_parser = subparsers.add_parser(
@@ -50,6 +73,12 @@ class Shell:
 
         return self.parser.parse_args(argv)
 
+    async def prepare(self, options: Dict[str, str]) -> None:
+        logger.info('PREPARE')
+        await self.injector['SessionManager'].set_system({})
+        await self.injector['SetupManager'].prepare({})
+        logger.info('END PREPARE')
+
     async def serve(self, options: Dict[str, str]) -> None:
         logger.info('SERVE')
         port = int(options.get('port') or self.config['port'])
@@ -57,12 +86,28 @@ class Shell:
         await RestApplication.run(app, port)
         logger.info('END SERVE')
 
+    async def work(self, options_dict: Dict[str, str]) -> None:
+        logger.info('WORK')
+        await Scheduler(self.injector).run(options_dict)
+        logger.info('END WORK')
+
+    async def time(self, options_dict: Dict[str, str]) -> None:
+        logger.info('TIME')
+        await Scheduler(self.injector).run({'time': True})
+        logger.info('END TIME')
+
     async def provision(self, options: Dict[str, str]) -> None:
         logger.info('PROVISION')
         tenant_dict = json.loads(options['data'])
         logger.info("Creating tenant:", tenant_dict)
         await self.injector['SessionManager'].ensure_tenant(tenant_dict)
         logger.info('END PROVISION')
+
+    async def schedule(self, options: Dict[str, str]) -> None:
+        logger.info('SCHEDULE')
+        scheduler = Scheduler(self.injector)
+        await scheduler.run(options)
+        logger.info('END SCHEDULE')
 
     async def operate(self, options: Dict[str, str]) -> None:
         session_manager = self.injector['SessionManager']

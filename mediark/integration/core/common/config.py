@@ -15,6 +15,9 @@ config: Config = {
         "dsn": os.environ.get('MEDIARK_TENANCY_DSN') or (
             "postgresql://mediark:mediark@localhost/mediark")
     },
+    'secrets': {
+        'tokens': os.environ.get('SERTEMPOS_TOKENS_SECRET') or ''
+    },
     'zones': {
         "default": {
             "dsn": os.environ.get('MEDIARK_ZONES_DEFAULT_DSN') or (
@@ -95,6 +98,10 @@ config: Config = {
     'aiohttp': {
         'client_max_size': 10 * 1024**2
     },
+    'scheduler': {
+        'dsn': os.environ.get('MEDIARK_SCHEDULER_DSN') or (
+            "postgresql://mediark:mediark@localhost/mediark")
+    }
 }
 def sanitize(config):
     if type(config) is dict:

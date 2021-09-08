@@ -1,5 +1,7 @@
 upstream {{ app_user }} {
-    server 0.0.0.0:{{ app_port1 }} weight=1 fail_timeout=0;
+    {% for port in app_servers %}
+    server 0.0.0.0:{{ port }} weight=1 fail_timeout=0;
+    {% endfor %}
 }
 
 server {
@@ -13,7 +15,7 @@ server {
 
     large_client_header_buffers 4 16k;
     client_max_body_size 100M;
-    client_header_buffer_size 1M;    
+    client_header_buffer_size 1M;
 
     location / {
         proxy_set_header HOST $host;

@@ -8,10 +8,11 @@ from ...application.general.connector import (
 from ...integration.core.data.sql import (
     SqlConnector, SqlTransactor)
 from ...integration.core import Config
-from ...application.general.suppliers import TenantSupplier
+from ...application.general.suppliers import (
+    TenantSupplier, PlanSupplier)
 from ...integration.drivers import (
     SchemaTenantSupplier, SchemaMigrationSupplier, SchemaConnection,
-    HttpEmailSupplier)
+    HttpEmailSupplier, SqlPlanSupplier)
 from ...application.domain.services.repositories import (
     MediaRepository, EmailRepository)
 from ..core.data import SqlMediaRepository, SqlEmailRepository
@@ -76,3 +77,6 @@ class SqlFactory(DirectoryFactory):
         zones = {key: value['dsn'] for key, value in
                  self.config['zones'].items()}
         return SchemaMigrationSupplier(zones, tenant_supplier)
+
+    def plan_supplier(self, connector: Connector) -> PlanSupplier:
+        return SqlPlanSupplier(connector)

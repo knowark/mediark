@@ -1,53 +1,54 @@
-- name: "Deploy {{ app_user }}-1 Systemd Service"
+- name: "Deploy {{ app_user }} Systemd Server Service File"
   template:
-    src: service-1.j2
-    dest: "{{ service_path }}/{{ app_user }}-1@{{ app_port1 }}.service"
-    mode: 0755
+    src: "systemd/server.j2"
+    dest: "{{ service_path }}/{{ app_user }}-server@.service"
+    mode: 0644
 
-- name: "Deploy {{ app_user }}-2 Systemd Service"
+- name: "Deploy {{ app_user }} Systemd Worker Service File"
   template:
-    src: service-2.j2
-    dest: "{{ service_path }}/{{ app_user }}-2@{{ app_port2 }}.service"
-    mode: 0755
+    src: "systemd/worker.j2"
+    dest: "{{ service_path }}/{{ app_user }}-worker@.service"
+    mode: 0644
 
-- name: "Deploy {{ app_user }}-3 Systemd Service"
+- name: "Deploy {{ app_user }} Systemd Timer Service File"
   template:
-    src: service-3.j2
-    dest: "{{ service_path }}/{{ app_user }}-3@{{ app_port3 }}.service"
-    mode: 0755
+    src: "systemd/timer.j2"
+    dest: "{{ service_path }}/{{ app_user }}-timer.service"
+    mode: 0644
 
-- name: "Deploy {{ app_user }} Target Systemd Service"
-  template:               
-    src: service.target.j2
+- name: "Deploy {{ app_user }} Systemd Target Unit File"
+  template:
+    src: "systemd/target.j2"
     dest: "{{ service_path }}/{{ app_user }}.target"
-    mode: 0775               
+    mode: 0644
 
-- name: "Restart {{ app_user }} Service"
+- name: "Deploy Environment Variables Empty File"
+  template:
+    src: mediark.env.j2
+    dest: "/etc/opt/{{ app_user }}/{{ app_user }}.env"
+    mode: 0644
+    force: no
+
+- name: "Enable {{ app_user | title }} Server Services"
+  systemd:
+    name: "{{ app_user }}-server@{{ item }}.service"
+    enabled: true
+  loop: "{{ app_servers }}"
+
+- name: "Enable {{ app_user | title }} Worker Services"
+  systemd:
+    name: "{{ app_user }}-worker@{{ item }}.service"
+    enabled: true
+  loop: "{{ app_workers }}"
+
+- name: "Enable {{ app_user | title }} Timer Service"
+  systemd:
+    name: "{{ app_user }}-timer.service"
+    enabled: true
+
+- name: "Restart {{ app_user }} Target"
   systemd:
     name: "{{ app_user }}.target"
     enabled: true
     state: restarted
     daemon_reload: true
-
-- name: "Daemon Reload"
-  systemd:
-    daemon_reload: yes
-
-# Enable Services
-
-- name: "Enable {{ app_user }} Service Workers"
-  systemd:
-    name: "{{ item }}"
-    enabled: true
-  with_items:
-    - "{{ app_user }}-1@{{ app_port1 }}.service"
-    - "{{ app_user }}-2@{{ app_port2 }}.service"
-    - "{{ app_user }}-3@{{ app_port3 }}.service"
-
-# Environments File
-
-- name: "Deploy Environment Variables Empty File"
-  template:
-    src: mediark.j2
-    dest: "/etc/opt/{{ app_user }}/{{ app_user }}.env"
-    mode: 0644
