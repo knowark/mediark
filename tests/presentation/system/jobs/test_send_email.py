@@ -41,7 +41,6 @@ async def test_send_email_job_call(injector):
 
     task = Task(payload=payload)
     result =  await job(task)
-    print("resturn result job>>>>",result)
     assert result == {}
 
     payload = {
