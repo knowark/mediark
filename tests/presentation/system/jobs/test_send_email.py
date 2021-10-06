@@ -33,15 +33,14 @@ async def test_send_email_job_call(injector):
             #     "email": "john@doe.com"
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aWQiOiIwMDEiLCJ1aWQiOi"
             "IwMDEiLCJ0ZW5hbnQiOiJLbm93YXJrIiwibmFtZSI6IkpvaG4gRG9lIiwiZW1ha"
-            "WwiOiJqb2huQGRvZS5jb20ifQ.udlkUWVOatst5IoDRlJsQVn"
-            "U_atCAltOelOJvRCr8BY"
+            "WwiOiJqb2huQGRvZS5jb20ifQ."
+            "g1FpaSQ9y-ZPyc3GW4gxlen8oflJVVmdCxt36D7KsaE"
         )},
         'data': {'email_id': '001'}
     }
 
     task = Task(payload=payload)
     result =  await job(task)
-
     assert result == {}
 
     payload = {

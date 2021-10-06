@@ -14,12 +14,10 @@ class SendEmailJob:
         session_manager = self.injector['SessionManager']
         payload = task.payload
         authorization = payload['meta']['authorization']
-        secret = self.config.get('secrets', {}).get('tokens') or ""
 
         try:
 
-            auth_dict  = jwt.decode(authorization, secret, algorithms=['HS256'],
-                                  options={"verify_signature": bool(secret)})
+            auth_dict  = jwt.decode(authorization, "", algorithms=['HS256'])
 
             user_dict = extract_user(auth_dict)
             await session_manager.set_user(user_dict)

@@ -73,7 +73,7 @@ config: Config = {
         "password": os.environ.get(
             'MEDIARK_MAIL_PASSWORD') or "",
         "path": os.environ.get(
-            'MEDIARK_MAIL_PATH') or "/opt/mediark/templates"
+            'MEDIARK_MAIL_PATH') or "/opt/mediark/templates/tempos_templates"
     },
     "cloud": {
             "swift": {
