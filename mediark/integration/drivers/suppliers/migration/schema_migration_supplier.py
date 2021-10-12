@@ -13,8 +13,7 @@ class SchemaMigrationSupplier(MigrationSupplier):
         self.tenant_supplier = tenant_supplier
         self.template_schema = '__template__'
         self.migrations_path = str(
-            (Path(__file__).parent.parent.parent / 'data' /
-             'sql' / 'migrations').absolute())
+            (Path(__file__).parent / 'migrations').absolute())
 
     def migrate(self, tenant: str = '', version: str = '') -> None:
         domain = []

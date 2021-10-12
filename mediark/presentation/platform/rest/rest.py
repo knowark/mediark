@@ -66,8 +66,6 @@ class RestApplication(web.Application):
         await session.close()
 
     def _create_api(self, spec) -> None:
-        # spec = json.loads(
-            # (Path(__file__).parent / 'openapi.json').read_text())
 
         resource = Resource(spec, self.injector)
 
@@ -85,7 +83,5 @@ class RestApplication(web.Application):
             web.patch('/{resource}/{id}', resource.patch),
             web.patch('/{resource}', resource.patch),
 
-            web.delete('/{resource}/{id}', resource.delete),
-            web.delete('/{resource}', resource.delete)
         ])
 

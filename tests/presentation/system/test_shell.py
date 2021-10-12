@@ -44,6 +44,13 @@ async def test_shell_parse_empty_argv(shell):
     with raises(SystemExit) as e:
         result = await shell.parse([])
 
+async def test_shell_prepare(shell):
+    options = {}
+
+    result = await shell.prepare(options)
+
+    assert result is None
+
 
 async def test_shell_serve(shell, monkeypatch):
     called = False
@@ -82,18 +89,87 @@ async def test_shell_provision(shell):
 
     assert result is None
 
+async def test_shell_schedule(shell, monkeypatch):
+    given_options = None
+
+    class MockScheduler:
+        def __init__(self, injector):
+            pass
+
+        async def run(self, options):
+            nonlocal given_options
+            given_options = options
+
+    monkeypatch.setattr(
+        shell_module, 'Scheduler', MockScheduler)
+
+    await shell.schedule({
+        'work': True
+    })
+
+    assert given_options == {'work': True}
+
 async def test_shell_operate(shell):
     options = {
-        'operation': 'EmailManager.send',
+        'operation': 'EmailManager.request',
         'entry': json.dumps({
-            'meta': {},
-            'data': {
-                'recipient': 'info@example.com',
-                'context': 'Prueba'
+            'meta': {
+            },
+            'data':
+                [{
+                    "id": "001",
+                    "template": "mail/auth/registered.html",
+                    "recipient": "info@example.com",
+                    "subject": "New Registered",
+                    "type": "registered",
+                    "context": {
+                        "user_name": "Info",
+                        "shop_url": "https://www.tempos.site",
+                        "unsubscribe_link": "https://www.tempos.site"
+                    }
+                }]
+
             }
-        })
+        )
     }
 
     result = await shell.operate(options)
 
     assert result is None
+
+async def test_shell_work(shell, monkeypatch):
+    given_options = None
+
+    class MockScheduler:
+        def __init__(self, injector):
+            pass
+
+        async def run(self, options):
+            nonlocal given_options
+            given_options = options
+
+    monkeypatch.setattr(
+        shell_module, 'Scheduler', MockScheduler)
+
+    await shell.work({})
+
+    assert given_options == {}
+
+
+async def test_shell_time(shell, monkeypatch):
+    given_options = None
+
+    class MockScheduler:
+        def __init__(self, injector):
+            pass
+
+        async def run(self, options):
+            nonlocal given_options
+            given_options = options
+
+    monkeypatch.setattr(
+        shell_module, 'Scheduler', MockScheduler)
+
+    await shell.time({})
+
+    assert given_options == {'time': True}

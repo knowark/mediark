@@ -1,16 +1,12 @@
 [Unit]
-Description={{ app_user }} Service 2 on port %i
+Description={{ app_user | title }} Worker Service
 PartOf={{ app_user }}.target
-After={{ app_user }}.target
-
 
 [Service]
 EnvironmentFile=/etc/opt/{{ app_user }}/{{ app_user }}.env
 User={{ app_user }}
 Group={{ app_user }}
 WorkingDirectory=/opt/{{ app_user }}/{{ app_user }}
-ExecStart=/opt/{{ app_user }}/env/bin/python -u -m {{ app_user }} serve --port=%i
+ExecStart=/opt/{{ app_user }}/env/bin/python -u -m {{ app_user }} work
 Restart=on-failure
-
-[Install]
-WantedBy={{ app_user }}.target
+SyslogIdentifier={{ app_user }}

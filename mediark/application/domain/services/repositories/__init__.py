@@ -1,3 +1,4 @@
 from ...common import QueryDomain
 from .memory_model_repositories import(RepositoryService,
-    MediaRepository, MemoryMediaRepository)
+    MediaRepository, MemoryMediaRepository,
+    EmailRepository, MemoryEmailRepository)
