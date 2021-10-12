@@ -1,0 +1,15 @@
+[Unit]
+Description={{ app_user | title }} Target
+
+Requires={{ app_user }}-timer.service
+
+{% for item in app_servers %}
+Requires={{ app_user }}-server@{{ item }}.service
+{% endfor %}
+
+{% for item in app_workers %}
+Requires={{ app_user }}-worker@{{ item }}.service
+{% endfor %}
+
+[Install]
+WantedBy=multi-user.target

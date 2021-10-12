@@ -5,7 +5,8 @@ from ...application.domain.common import (
     AuthProvider, StandardAuthProvider)
 from ...application.domain.services.repositories import (
     RepositoryService,
-    MediaRepository, MemoryMediaRepository)
+    MediaRepository, MemoryMediaRepository,
+    EmailRepository, MemoryEmailRepository)
 from ...application.general.connector import (
     Connector, MemoryConnector, Transactor, MemoryTransactor)
 from ...application.domain.services import (
@@ -13,14 +14,15 @@ from ...application.domain.services import (
     CacheService, StandardCacheService,
     FileStoreService, MemoryFileStoreService)
 from ...application.operation.managers import (
-    SessionManager, MediaStorageManager, EmailManager)
+    SessionManager, MediaStorageManager, EmailManager, SetupManager)
 from ...application.operation.informers import (
     FileInformer,
     StandardInformer, StandardFileInformer)
 from ...application.general.suppliers import (
     TenantSupplier, MemoryTenantSupplier,
     MigrationSupplier, MemoryMigrationSupplier,
-    EmailSupplier, MemoryEmailSupplier)
+    EmailSupplier, MemoryEmailSupplier,
+    PlanSupplier, MemoryPlanSupplier)
 from ..core.common import Config
 
 
@@ -29,7 +31,7 @@ class BaseFactory(Factory):
         self.config = config
         self.public = [
             'FileInformer', 'StandardInformer', 'EmailManager',
-            'MediaStorageManager', 'SessionManager'
+            'MediaStorageManager', 'SessionManager', 'SetupManager'
         ]
 
     # Providers
@@ -58,12 +60,23 @@ class BaseFactory(Factory):
     def email_supplier(self) -> EmailSupplier:
         return MemoryEmailSupplier()
 
+    def plan_supplier(
+        self, connector: Connector,
+    ) -> PlanSupplier:
+        return MemoryPlanSupplier()
+
     # Repositories
 
     def media_repository(
             self, tenant_provider: TenantProvider,
             auth_provider: AuthProvider) -> MediaRepository:
         return MemoryMediaRepository(
+            locator=tenant_provider, editor=auth_provider)
+
+    def email_repository(
+            self, tenant_provider: TenantProvider,
+            auth_provider: AuthProvider) -> EmailRepository:
+        return MemoryEmailRepository(
             locator=tenant_provider, editor=auth_provider)
 
     # Managers
@@ -87,8 +100,21 @@ class BaseFactory(Factory):
 
     def email_manager(self, transactor: Transactor,
                       email_supplier: EmailSupplier,
-                          ) -> EmailManager:
-        return EmailManager(email_supplier)
+                      email_repository: EmailRepository,
+                      plan_supplier: PlanSupplier,
+                      tenant_provider: TenantProvider,
+                      auth_provider: AuthProvider
+                      ) -> EmailManager:
+        config = {**self.config.get('mail',{})}
+        return EmailManager(config, email_supplier, email_repository,
+                            plan_supplier, tenant_provider, auth_provider)
+
+    def setup_manager(
+        self, plan_supplier: PlanSupplier,
+        migration_supplier: MigrationSupplier
+    ) -> SetupManager:
+        return SetupManager(
+            plan_supplier, migration_supplier)
 
     # Services
 
@@ -117,7 +143,8 @@ class BaseFactory(Factory):
             file_store_service, media_repository)
 
     def repository_service(
-        self, media_repository: MediaRepository) -> RepositoryService:
+        self, media_repository: MediaRepository,
+        email_repository: EmailRepository) -> RepositoryService:
 
         repositories = locals()
         repositories.pop('self')

@@ -36,7 +36,7 @@ def operations():
         'emailPatchId': {
             'actions':{
                 'default':{
-                    'handler': 'EmailManager.send',
+                    'handler': 'EmailManager.request',
                     'meta': {'model': 'Email'}
                 }
             }

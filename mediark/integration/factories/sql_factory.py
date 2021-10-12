@@ -8,12 +8,14 @@ from ...application.general.connector import (
 from ...integration.core.data.sql import (
     SqlConnector, SqlTransactor)
 from ...integration.core import Config
-from ...application.general.suppliers import TenantSupplier
+from ...application.general.suppliers import (
+    TenantSupplier, PlanSupplier)
 from ...integration.drivers import (
     SchemaTenantSupplier, SchemaMigrationSupplier, SchemaConnection,
-    HttpEmailSupplier)
-from ...application.domain.services.repositories import MediaRepository
-from ..core.data import SqlMediaRepository
+    HttpEmailSupplier, SqlPlanSupplier)
+from ...application.domain.services.repositories import (
+    MediaRepository, EmailRepository)
+from ..core.data import SqlMediaRepository, SqlEmailRepository
 from .directory_factory import DirectoryFactory
 
 
@@ -50,6 +52,15 @@ class SqlFactory(DirectoryFactory):
         return SqlMediaRepository(
             tenant_provider, auth_provider, connection_manager, sql_parser)
 
+    def email_repository(
+        self, tenant_provider: TenantProvider,
+        auth_provider: AuthProvider,
+        connection_manager: Connector,
+        sql_parser: SqlParser
+    ) -> EmailRepository:
+        return SqlEmailRepository(
+            tenant_provider, auth_provider, connection_manager, sql_parser)
+
     def tenant_supplier(self) -> TenantSupplier:
         zones = {key: value['dsn'] for key, value in
                  self.config['zones'].items()}
@@ -66,3 +77,6 @@ class SqlFactory(DirectoryFactory):
         zones = {key: value['dsn'] for key, value in
                  self.config['zones'].items()}
         return SchemaMigrationSupplier(zones, tenant_supplier)
+
+    def plan_supplier(self, connector: Connector) -> PlanSupplier:
+        return SqlPlanSupplier(connector)
