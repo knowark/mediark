@@ -39,9 +39,11 @@ test_tuples = [
     ('CloudFactory', [
         ('SwiftAuthSupplier', 'SwiftAuthSupplier'),
         ('FileStoreService', 'SwiftFileStoreService'),
+        ('EmailSupplier', 'HttpEmailSupplier'),
     ]),
     ('DirectoryFactory', [
         ('FileStoreService', 'DirectoryFileStoreService'),
+        ('EmailSupplier', 'ConsoleEmailSupplier'),
     ]),
     ('HttpFactory', [
         ('StandardInformer', 'HttpMediarkInformer'),
@@ -55,7 +57,6 @@ test_tuples = [
         ('EmailRepository', 'SqlEmailRepository'),
         ('TenantSupplier', 'SchemaTenantSupplier'),
         ('MigrationSupplier', 'SchemaMigrationSupplier'),
-        ('EmailSupplier', 'HttpEmailSupplier'),
         ('PlanSupplier', 'SqlPlanSupplier'),
     ]),
 ]
