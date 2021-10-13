@@ -5,6 +5,8 @@ from ...application.domain.common import (
     TenantProvider, StandardTenantProvider)
 from ..core.suppliers import (
     SwiftAuthSupplier, SwiftFileStoreService)
+from ...integration.drivers import (
+    HttpEmailSupplier)
 from ..core.common import Config
 from ..core.http import HttpClientSupplier
 from .directory_factory import DirectoryFactory
@@ -29,3 +31,7 @@ class CloudFactory(SqlFactory):
     ) -> FileStoreService:
         return SwiftFileStoreService(
             tenant_provider, auth_supplier, client, self.config)
+
+    def email_supplier(self) -> HttpEmailSupplier:
+        config = {**self.config.get('mail',{})}
+        return HttpEmailSupplier(config)

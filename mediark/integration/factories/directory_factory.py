@@ -3,6 +3,8 @@ from ...application.domain.common import TenantProvider
 from ...application.domain.services import FileStoreService
 from ..core.suppliers import (
     DirectoryFileStoreService)
+from ..drivers.suppliers import (
+    ConsoleEmailSupplier, HttpEmailSupplier)
 from ..core.common import Config
 from .http_factory import HttpFactory
 
@@ -16,3 +18,6 @@ class DirectoryFactory(HttpFactory):
     ) -> FileStoreService:
         return DirectoryFileStoreService(
             tenant_provider, self.config)
+
+    def email_supplier(self) -> HttpEmailSupplier:
+        return ConsoleEmailSupplier()

@@ -1,1 +1,2 @@
 from .http_email_supplier import HttpEmailSupplier
+from .console_email_supplier import ConsoleEmailSupplier
