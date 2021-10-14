@@ -4,4 +4,5 @@
   vars:
     app_user: mediark
   roles:
+    - system
     - app
