@@ -1,4 +1,5 @@
 import jwt
+from datetime import datetime
 from ...domain.services import EmailRepository
 from ...domain.common import (TenantProvider, AuthProvider)
 from ...general.suppliers import (
@@ -39,7 +40,8 @@ class EmailManager:
                  "uid": user_id,
                  "tenant": tenant,
                  "name": user,
-                 "email": user_email
+                 "email": user_email,
+                 "exp": int(datetime.now().timestamp()) + 604800
         }
         token = jwt.encode(user_dict, "", algorithm="HS256").decode('utf-8')
 
