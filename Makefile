@@ -35,7 +35,8 @@ prepare:
 	python -m $(PROJECT) prepare
 
 restart:
-	systemctl daemon-reload && systemctl restart $(PROJECT).target && journalctl -f
+	systemctl daemon-reload && systemctl restart $(PROJECT).target \
+	&& journalctl -f
 
 push:
 	git push && git push --tags
