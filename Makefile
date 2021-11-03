@@ -31,6 +31,9 @@ serve-dev:
 deploy:
 	ansible-playbook -c local -i localhost, setup/deploy.yml
 
+prepare:
+	python -m $(PROJECT) prepare
+
 push:
 	git push && git push --tags
 
