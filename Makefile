@@ -32,7 +32,8 @@ deploy:
 	ansible-playbook -c local -i localhost, setup/deploy.yml
 
 prepare:
-	python -m $(PROJECT) prepare
+	bash -c \
+	'source /opt/$(PROJECT)/env/bin/activate && python -m $(PROJECT) prepare'
 
 restart:
 	systemctl daemon-reload && systemctl restart $(PROJECT).target \
