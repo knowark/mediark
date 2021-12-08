@@ -1,4 +1,4 @@
-from aiohttp import ClientSession
+from aiohttp import ClientSession, ClientTimeout
 
 
 class HttpClientSupplier:
@@ -9,7 +9,10 @@ class HttpClientSupplier:
     def __getattr__(self, name):
 
         if self.client is None:
-            self.client = ClientSession()
+            session_timeout = ClientTimeout(
+                total=None,sock_connect=None,sock_read=None)
+
+            self.client = ClientSession(timeout=session_timeout)
 
         # Proxy all attribute/method accesses to self.client
         # Because inheriting from ClientSession is discouraged in aiohttp

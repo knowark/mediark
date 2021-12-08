@@ -1,4 +1,5 @@
 import inspect
+import asyncio
 from typing import Dict, List, Callable, Any
 from contextvars import ContextVar
 from asyncpg import Connection, create_pool
@@ -72,7 +73,7 @@ class SqlTransactor(Transactor):
         async def transaction_method(*args, **kwargs):
             tenant = self.tenant_provider.tenant
             try:
-                connection = await connector.get(tenant.zone)
+                connection = await connector.get(tenant.zone, timeout=3)
                 transaction = connection.transaction()
                 await transaction.start()
                 result = await method(*args, **kwargs)
@@ -81,7 +82,7 @@ class SqlTransactor(Transactor):
                 await transaction.rollback()
                 raise
             finally:
-                await connector.put(connection, tenant.zone)
+                await connector.put(connection, tenant.zone, timeout=3)
 
             return result
 
