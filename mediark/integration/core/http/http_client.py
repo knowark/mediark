@@ -18,3 +18,7 @@ class HttpClientSupplier:
         # Because inheriting from ClientSession is discouraged in aiohttp
         # return getattr(object.__getattr__(self, 'client'), name)
         return getattr(self.client, name)
+
+    def __del__(self):
+        self.client and asyncio.run(self.client.close())
+
