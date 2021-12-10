@@ -4,7 +4,7 @@ aiohttp-jinja2==1.4.2
 aiosmtplib==1.1.6
 appdirs==1.4.3
 async-timeout==3.0.1
-asyncpg==0.22.0
+asyncpg==0.25.0
 attrs==20.3.0
 bump2version==1.0.1
 CacheControl==0.12.6
