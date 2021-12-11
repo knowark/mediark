@@ -107,6 +107,12 @@ def dummy_manager():
 
     return DummyManager
 
+async def test_sql_connector_get_not_pools(
+    connector):
+
+    result = await connector.get('not_pool')
+
+    assert result._transaction == None
 
 def test_sql_transactor_instantiation(sql_transactor):
     assert sql_transactor is not None

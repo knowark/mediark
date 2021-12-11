@@ -20,7 +20,8 @@ coverage-application:
 coverage:
 	export COVERAGE_FILE=$(COVFILE); pytest --cov-branch \
 	--cov=$(PROJECT) tests/ --cov-report term-missing -x -s -vv \
-	-W ignore::DeprecationWarning -o cache_dir=/tmp/mediark/cache
+	-W ignore::DeprecationWarning -W ignore ./mediark/integration/core/http\
+	/http_client.py -o cache_dir=/tmp/mediark/cache
 
 serve:
 	python -m $(PROJECT) serve

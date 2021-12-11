@@ -7,12 +7,16 @@ from mediark.integration.core.http import http_client
 @fixture
 def mock_http_client(monkeypatch):
     class MockClientSession:
-        def __init__(self) -> None:
+        def __init__(self, timeout) -> None:
             self.value = None
+            self.timeout = timeout
 
         async def get(self, url):
             self.value = url
             return ''
+
+        async def close(self):
+            pass
 
     monkeypatch.setattr(http_client, 'ClientSession', MockClientSession)
 
