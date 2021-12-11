@@ -30,6 +30,9 @@ def mock_pool(connection_database, monkeypatch):
         async def commit(self):
             self.committed = True
 
+        async def close(self):
+            pass
+
     class MockConnection(Connection):
         def __init__(self):
             self._transaction = None
@@ -43,6 +46,8 @@ def mock_pool(connection_database, monkeypatch):
             self.query = query
             self.records = records
             return []
+        async def close(self):
+            pass
 
     class MockPool:
         async def acquire(self):
@@ -51,6 +56,9 @@ def mock_pool(connection_database, monkeypatch):
 
         async def release(self, connection):
             self.released = connection
+
+        def get_size(self):
+            pass
 
     async def mock_create_pool(**options):
         return MockPool()

@@ -6,7 +6,12 @@ from unittest.mock import MagicMock, AsyncMock
 from mediark.integration.drivers.suppliers import HttpEmailSupplier
 from mediark.integration.drivers.suppliers.email import (
      http_email_supplier as http_email_supplier_module)
-from mediark.integration.drivers.suppliers.email.http_email_supplier import smtplib
+from mediark.integration.drivers.suppliers.email.http_email_supplier import (
+    smtplib)
+from mediark.integration.drivers.suppliers.email.http_email_supplier import (
+    jinja2)
+from mediark.integration.drivers.suppliers.email.http_email_supplier import (
+    email)
 
 
 @fixture
@@ -36,10 +41,40 @@ async def test_http_email_supplier_process(
         def __exit__(self, *_):
             pass
 
+    monkeypatch.setattr(
+            smtplib, 'SMTP_SSL', MockSMTP_SSL)
+
+    class MockJinja2(MagicMock(jinja2.Environment, autospec=True)):
+        def __enter__(self):
+            return MagicMock(Environment.get_template)
+
+        def __exit__(self, *_):
+            pass
 
     monkeypatch.setattr(
-        smtplib, 'SMTP_SSL', MockSMTP_SSL)
+            jinja2, 'Environment', MockJinja2)
 
+    class MockMultipart(MagicMock(
+            email.mime.multipart.MIMEMultipart, autospec=True)):
+        def __enter__(self):
+            return MagicMock(email.mime.multipart.MIMEMultipart)
+
+        def __exit__(self, *_):
+            pass
+
+    monkeypatch.setattr(
+            email.mime.multipart, 'MIMEMultipart', MockMultipart)
+
+    class MockText(MagicMock(
+            email.mime.text.MIMEText, autospec=True)):
+        def __enter__(self):
+            return MagicMock(email.mime.text.MIMEText)
+
+        def __exit__(self, *_):
+            pass
+
+    monkeypatch.setattr(
+            email.mime.text, 'MIMEText', MockText)
 
     payload = [{
         "id": "001",

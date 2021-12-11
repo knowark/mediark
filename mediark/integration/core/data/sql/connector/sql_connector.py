@@ -1,5 +1,6 @@
 import inspect
 import asyncio
+import logging
 from typing import Dict, List, Callable, Any
 from contextvars import ContextVar
 from asyncpg import Connection, create_pool
@@ -18,6 +19,7 @@ class SqlConnector(Connector):
         self.settings = settings
         self.pools: Dict[str, Pool] = {}
         self.default = default or self.settings[0]['name']
+        self.logger = logging.getLogger(__name__)
 
     async def get(self, pool: str = "") -> Connection:
         connection: Connection = connections_var.get(None)
@@ -26,9 +28,15 @@ class SqlConnector(Connector):
             if not self.pools:
                 await self._setup()
             pool = pool or self.default
-            print("Pools: ")
-            print(self.pools[pool].get_size())
-            connection = await self.pools[pool].acquire()
+            print("pool")
+            print(pool)
+            try:
+                self.logger.info(self.pools[pool].get_size())
+                connection = await self.pools[pool].acquire()
+            except Exception:
+                self.logger.exception("Failed acquire pools.")
+                await self._setup()
+                connection = await self.pools[self.default].acquire()
             connections_var.set(connection)
 
         return connection
@@ -91,3 +99,6 @@ class SqlTransactor(Transactor):
             return result
 
         return transaction_method
+
+    def __del__(self):
+        self.connector and asyncio.run(self.connector.close())
