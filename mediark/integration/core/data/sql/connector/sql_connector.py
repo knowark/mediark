@@ -28,8 +28,6 @@ class SqlConnector(Connector):
             if not self.pools:
                 await self._setup()
             pool = pool or self.default
-            print("pool")
-            print(pool)
             try:
                 self.logger.info(self.pools[pool].get_size())
                 connection = await self.pools[pool].acquire()
@@ -84,8 +82,6 @@ class SqlTransactor(Transactor):
             tenant = self.tenant_provider.tenant
             connection = await connector.get(tenant.zone)
             try:
-                print("Connection: ")
-                print(connection)
                 transaction = connection.transaction()
                 await transaction.start()
                 result = await method(*args, **kwargs)
@@ -99,6 +95,3 @@ class SqlTransactor(Transactor):
             return result
 
         return transaction_method
-
-    def __del__(self):
-        self.connector and asyncio.run(self.connector.close())
