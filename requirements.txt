@@ -36,7 +36,7 @@ progress==1.5
 psycopg2-binary==2.8.6
 py==1.10.0
 PyGreSQL==5.2.2
-PyJWT==1.7.1
+PyJWT==2.4.0
 pynvim==0.4.3
 pyparsing==2.4.6
 pytest==6.2.3
