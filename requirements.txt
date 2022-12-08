@@ -8,7 +8,7 @@ asyncpg==0.25.0
 attrs==20.3.0
 bump2version==1.0.1
 CacheControl==0.12.6
-certifi==2019.11.28
+certifi==2022.12.7
 chardet==3.0.4
 colorama==0.4.3
 contextlib2==0.6.0
